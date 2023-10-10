@@ -1,5 +1,6 @@
-
-def guarda(conn, cursor, sensor, consulta, navegador, cercador, posicio, titol, url, descripcio, llengua):
+import datetime;
+ 
+def guarda(conn, cursor, sensor, navegador, cercador, cerca, posicio, titol, url, descripcio, llengua):
 
     # conn -> Objecte de la connexió amb Postgres
     # cursor -> Objecte del cursor
@@ -14,8 +15,11 @@ def guarda(conn, cursor, sensor, consulta, navegador, cercador, posicio, titol, 
     # descripcio -> text
     # llengua -> charvar 2
 
+    now = datetime.datetime.now()
+
     # Executar la instrucció SQL per inserir dades a la base de dades
-    insert_query = "INSERT INTO cerques (sensor, hora, navegador, cercador, posicio, titol, url, descripcio, llengua) VALUES ({}, {}, {}, {}, {}, {}, {}, {}, {});".format(sensor, consulta, navegador, cercador, posicio, titol, url, descripcio, llengua)
+    insert_query = "INSERT INTO cerques (sensor, hora, navegador, cercador, cerca, posicio, titol, url, descripcio, llengua) VALUES ({}, {}, {}, {}, {}, {}, {}, {}, {}, {});".format(
+        sensor, now, navegador, cercador, cerca, posicio, titol, url, descripcio, llengua)
 
     # Executar la consulta amb els valors
     cursor.execute(insert_query)

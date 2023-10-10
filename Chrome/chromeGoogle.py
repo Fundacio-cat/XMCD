@@ -74,10 +74,6 @@ user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTM
 navegador = 1 # Firefox
 cercador = 1 # Google
 
-llengua = None # Definit a Null en aquest punt
-
-print (sensor, host, port, database, user, password)
-
 # Inicia el navegador
 
 # Mides
@@ -248,8 +244,9 @@ for cerca in cerques:
                 titol = dades['titol']
                 url = dades['url']
                 descripcio = dades['description']
+                llengua = None
 
-                baseDades.guarda(conn, cursor, sensor, consulta, navegador, cercador, resultats_desats, titol, link, description, llengua)
+                baseDades.guarda(conn, cursor, sensor, navegador, cercador, cerca, posicio, titol, link, description, llengua)
 
     # Torna a Google per a fer-hi la següent cerca
     browser.get('https://google.com')
