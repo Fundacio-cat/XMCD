@@ -2,8 +2,8 @@
 
 ################# Imports #################
 
-from credencials import obtenir_credentials
+from credencials import obtenir_credentials_oficina
 
-host, port, database, user, password = obtenir_credentials()
+sensor, host, port, database, user, password = obtenir_credentials_oficina()
 
-print (host, port, database, user, password)
+print (sensor, host, port, database, user, password)
