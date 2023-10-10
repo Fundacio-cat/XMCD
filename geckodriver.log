@@ -1,0 +1,92 @@
+1696947005385	geckodriver	INFO	Listening on 127.0.0.1:43651
+1696947005393	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/usr ... ss" "--remote-debugging-port" "56525" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofileTRsq5h"
+*** You are running in headless mode.
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1696947005987	Marionette	INFO	Marionette enabled
+1696947006051	Marionette	INFO	Listening on port 34375
+WebDriver BiDi listening on ws://127.0.0.1:56525
+Read port: 34375
+1696947006272	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+console.error: ({})
+DevTools listening on ws://127.0.0.1:56525/devtools/browser/5f5d4f75-ce20-4b3a-b5e0-ffa392396fd0
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+1696947056129	geckodriver	INFO	Listening on 127.0.0.1:56577
+1696947056138	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/usr ... ss" "--remote-debugging-port" "50299" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofileBbw50B"
+*** You are running in headless mode.
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1696947056705	Marionette	INFO	Marionette enabled
+1696947056765	Marionette	INFO	Listening on port 39021
+WebDriver BiDi listening on ws://127.0.0.1:50299
+Read port: 39021
+1696947056998	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+console.error: ({})
+DevTools listening on ws://127.0.0.1:50299/devtools/browser/497923e5-4ab3-4774-9c36-822309b47606
+console.warn: LoginRecipes: "Falling back to a synchronous message for: https://www.google.com."
+JavaScript warning: https://www.youtube.com/s/player/4a66ccde/www-embed-player.vflset/www-embed-player.js, line 845: Script terminated by timeout at:
+R@https://www.youtube.com/s/player/4a66ccde/www-embed-player.vflset/www-embed-player.js:845:17
+S@https://www.youtube.com/s/player/4a66ccde/www-embed-player.vflset/www-embed-player.js:864:133
+Bx<@https://www.youtube.com/s/player/4a66ccde/www-embed-player.vflset/www-embed-player.js:1855:98
+Qk/<@https://www.youtube.com/s/player/4a66ccde/www-embed-player.vflset/www-embed-player.js:848:63
+
+console.error: "update.locale" " file doesn't exist in either the application or GRE directories"
+1696947160139	geckodriver	INFO	Listening on 127.0.0.1:40995
+1696947160147	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/usr ... ss" "--remote-debugging-port" "51085" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofileJJHSw6"
+*** You are running in headless mode.
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1696947160715	Marionette	INFO	Marionette enabled
+1696947160771	Marionette	INFO	Listening on port 43579
+WebDriver BiDi listening on ws://127.0.0.1:51085
+Read port: 43579
+1696947161021	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+console.error: ({})
+DevTools listening on ws://127.0.0.1:51085/devtools/browser/076a36bc-641d-4291-a968-d107388a13f4
+console.warn: LoginRecipes: "Falling back to a synchronous message for: https://www.google.com."
+JavaScript warning: https://www.youtube.com/s/player/4a66ccde/player_ias.vflset/ca_ES/base.js, line 3026: Script terminated by timeout at:
+lK@https://www.youtube.com/s/player/4a66ccde/player_ias.vflset/ca_ES/base.js:3026:30
+g.nK@https://www.youtube.com/s/player/4a66ccde/player_ias.vflset/ca_ES/base.js:3029:50
+TOa@https://www.youtube.com/s/player/4a66ccde/player_ias.vflset/ca_ES/base.js:4395:475
+WOa@https://www.youtube.com/s/player/4a66ccde/player_ias.vflset/ca_ES/base.js:4386:140
+g.V0@https://www.youtube.com/s/player/4a66ccde/player_ias.vflset/ca_ES/base.js:6836:462
+g.V0.create@https://www.youtube.com/s/player/4a66ccde/player_ias.vflset/ca_ES/base.js:12279:192
+Zw/a.D@https://www.youtube.com/s/player/4a66ccde/www-embed-player.vflset/www-embed-player.js:1808:431
+Zw@https://www.youtube.com/s/player/4a66ccde/www-embed-player.vflset/www-embed-player.js:1809:12
+m.loadNewVideoConfig@https://www.youtube.com/s/player/4a66ccde/www-embed-player.vflset/www-embed-player.js:1803:175
+Vw/this.da<@https://www.youtube.com/s/player/4a66ccde/www-embed-player.vflset/www-embed-player.js:1801:453
+Qk/<@https://www.youtube.com/s/player/4a66ccde/www-embed-player.vflset/www-embed-player.js:848:63
+
+console.error: "update.locale" " file doesn't exist in either the application or GRE directories"
+1696947212270	geckodriver	INFO	Listening on 127.0.0.1:58651
+1696947212279	mozrunner::runner	INFO	Running command: MOZ_CRASHREPORTER="1" MOZ_CRASHREPORTER_NO_REPORT="1" MOZ_CRASHREPORTER_SHUTDOWN="1" MOZ_NO_REMOTE="1" "/usr ... ss" "--remote-debugging-port" "54665" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "/tmp/rust_mozprofiletFPkJg"
+*** You are running in headless mode.
+console.warn: services.settings: Ignoring preference override of remote settings server
+console.warn: services.settings: Allow by setting MOZ_REMOTE_SETTINGS_DEVTOOLS=1 in the environment
+1696947212879	Marionette	INFO	Marionette enabled
+1696947212938	Marionette	INFO	Listening on port 35883
+Read port: 35883
+WebDriver BiDi listening on ws://127.0.0.1:54665
+1696947213029	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+console.error: ({})
+DevTools listening on ws://127.0.0.1:54665/devtools/browser/8df2305c-ff7e-4c07-b57a-37262827426d
+console.warn: LoginRecipes: "Falling back to a synchronous message for: https://www.google.com."
+JavaScript warning: https://www.youtube.com/s/player/4a66ccde/www-embed-player.vflset/www-embed-player.js, line 848: Script terminated by timeout at:
+Qk/<@https://www.youtube.com/s/player/4a66ccde/www-embed-player.vflset/www-embed-player.js:848:47
+
+console.warn: LoginRecipes: "Falling back to a synchronous message for: https://www.google.com."
+console.error: "update.locale" " file doesn't exist in either the application or GRE directories"
+console.warn: LoginRecipes: "Falling back to a synchronous message for: https://www.google.com."
+console.warn: LoginRecipes: "Falling back to a synchronous message for: https://www.google.com."
+console.warn: LoginRecipes: "Falling back to a synchronous message for: https://www.google.com."
+console.warn: LoginRecipes: "Falling back to a synchronous message for: https://www.google.com."
+1696947276675	Marionette	INFO	Stopped listening on port 35883
