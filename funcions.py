@@ -100,3 +100,23 @@ def cerca_dades(element_cercar):
                 description = None
 
     return [link, titol, description]
+
+def cerca_cerca(conn, cursor, sensor):
+
+    # Executar la instrucció SQL per inserir dades a la base de dades
+    select_integral = "SELECT seguent_cerca('{}');".format(sensor)
+
+    # Executar la consulta amb els valors
+    cursor.execute(select_integral)
+
+    int_cerca = cursor.fetchone()[0]
+
+    # Executar la instrucció SQL per inserir dades a la base de dades
+    select_cerca = "SELECT consulta FROM cerques WHERE cerqId = {};".format(int_cerca)
+
+    # Executar la consulta amb els valors
+    cursor.execute(select_cerca)
+
+    cerca = cursor.fetchone()[0]
+
+    return cerca
