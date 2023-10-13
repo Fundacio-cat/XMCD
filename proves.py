@@ -1,6 +1,7 @@
 import os
 
-sensor = os.system('echo $NOM')
+# Llegeix la nova variable d'entorn
+nova_variable = os.environ.get('NOM')
 
-print (sensor)
-
+# Imprimeix la nova variable llegida
+print([nova_variable])
