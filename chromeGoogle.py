@@ -12,7 +12,7 @@ from selenium.webdriver.chrome.options import Options
 # Utilitats
 from datetime import datetime
 from time import sleep
-from os import remove
+from os import remove, system
 
 # Postgres
 import psycopg2
@@ -33,7 +33,7 @@ cerques = ['calendari laboral barcelona', 'canvi climàtic']
 ################# POSTGRESQL #################
 
 # Agafa les credencials per al sensor de la oficina
-sensor, host, port, database, user, password = obtenir_credentials_oficina()
+host, port, database, user, password = obtenir_credentials_oficina()
 
 configuracio = {
     'host': host,
@@ -65,6 +65,10 @@ else:
     print ("Connectat a la BD")
 
 ################# PROGRAMA #################
+
+# Cerca el nom de la màquina
+
+
 
 # Seleccionem un User Agent
 user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36'

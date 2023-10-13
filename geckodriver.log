@@ -178,3 +178,19 @@ console.warn: LoginRecipes: "Falling back to a synchronous message for: https://
 console.warn: LoginRecipes: "Falling back to a synchronous message for: https://www.google.com."
 1696948262883	Marionette	INFO	Stopped listening on port 33159
 Sandbox: Unexpected EOF, op 0 flags 00 path /proc/cpuinfo
+JavaScript warning: https://www.youtube.com/s/player/4a66ccde/www-embed-player.vflset/www-embed-player.js, line 1055: Script terminated by timeout at:
+Kn/this.done</<@https://www.youtube.com/s/player/4a66ccde/www-embed-player.vflset/www-embed-player.js:1055:146
+
+1696960408961	Marionette	INFO	Stopped listening on port 39021
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.
+Exiting due to channel error.

@@ -1,9 +1,6 @@
-# -*- coding: utf-8 -*-
+import os
 
-################# Imports #################
+sensor = os.system('echo $NOM')
 
-from credencials import obtenir_credentials_oficina
+print (sensor)
 
-sensor, host, port, database, user, password = obtenir_credentials_oficina()
-
-print (sensor, host, port, database, user, password)
