@@ -24,10 +24,6 @@ def guarda(conn, cursor, sensor, navegador, cercador, cerca, posicio, titol, url
 
     now = datetime.now()
 
-    # Neteja de les cometes per a que no peti al fer l'Insert
-    if cerca is not None:
-        cerca = cerca.replace("'", "''")
-
     if titol is not None:
         titol = titol.replace("'", "''")
 
