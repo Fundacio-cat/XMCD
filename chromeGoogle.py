@@ -67,7 +67,7 @@ else:
 sensor = environ.get('NOM')
 
 # Cerca el nom de la cerca a realitzar
-cerca = cerca_cerca(conn, cursor, sensor)
+int_cerca, cerca = cerca_cerca(conn, cursor, sensor)
 
 # Seleccionem un User Agent
 user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36'
@@ -249,6 +249,6 @@ while resultats_desats <= 10:
             descripcio = dades['description']
             llengua = "--"
 
-            guarda(conn, cursor, sensor, navegador, cercador, cerca, posicio, titol, url, descripcio, llengua)
+            guarda(conn, cursor, sensor, navegador, cercador, int_cerca, posicio, titol, url, descripcio, llengua)
                 
 browser.quit()

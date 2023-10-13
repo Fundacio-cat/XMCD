@@ -119,4 +119,4 @@ def cerca_cerca(conn, cursor, sensor):
 
     cerca = cursor.fetchone()[0]
 
-    return cerca
+    return int_cerca, cerca
