@@ -78,16 +78,12 @@ cercador = 1 # Google
 
 ### NAVEGADOR ###
 
-firefox_path = '/home/catalanet/firefox-115.3.1esr/firefox/firefox'
-geckodriver_path = './Firefox/geckodriver'
-
 # Inicia el navegador Firefox
 options = Options()
 options.headless = True
 options.set_preference("general.useragent.override", user_agent)
-options.binary_location = firefox_path
 
-servei = Service(geckodriver_path)
+servei = Service('./Firefox/geckodriver')
 browser = webdriver.Firefox(service=servei, options=options)
 
 # Fa la petició a Google per anar-hi des d'allà
