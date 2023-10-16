@@ -73,7 +73,7 @@ int_cerca, cerca = cerca_cerca(conn, cursor, sensor)
 user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36'
 
 # Definim les variables globals
-navegador = 1 # Firefox
+navegador = 1 # Chrome
 cercador = 1 # Google
 
 # Inicia el navegador
@@ -114,9 +114,6 @@ for button in buttons:
          pass
 
 resultats = {}
-
-# Camp de cerca a afegir a la BD
-consulta = cerca
 
 # Calen fer temps d'espera per a que es carreguin els elements
 sleep(temps_espera_cerques)
