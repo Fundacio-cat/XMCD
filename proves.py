@@ -1,59 +1,46 @@
-# Postgres
-import psycopg2
-from credencials import obtenir_credentials_oficina
+# -*- coding: utf-8 -*-
 
+################# Imports #################
 
-# Agafa les credencials per al sensor de la oficina
-host, port, database, user, password = obtenir_credentials_oficina()
+# Selenium
+from selenium import webdriver
+from selenium.webdriver.firefox.service import Service
+from selenium.webdriver.common.by import By
+from selenium.webdriver.firefox.options import Options
 
-configuracio = {
-    'host': host,
-    'port': port,
-    'database': database,
-    'user': user,
-    'password': password,
-}
+# Seleccionem un User Agent
+user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/118.0'
 
-# Connecta a la BD
-try:
-    conn = psycopg2.connect(**configuracio)
-    cursor = conn.cursor()
+# Definim valors per a la BD
+navegador = 2 # Firefox
+cercador = 1 # Google
 
-except psycopg2.Error as e:
-    print("Error en la connexió a PostgreSQL:", e)
-    conn = None
+### NAVEGADOR ###
 
-except:
-    print ("Error desconegut en la connexió")
-    conn = None
+#firefox_path = '/home/catalanet/firefox-115.3.1esr/firefox/firefox'
+geckodriver_path = './Firefox/geckodriver'
 
-# Si no s'ha pogut connectar a la BD surt del programa amb codi d'error
-if conn is None:
-    exit(1)
-else: 
-    print ("Connectat a la BD")
+# Inicia el navegador Firefox
+options = Options()
+options.headless = True
+options.set_preference("general.useragent.override", user_agent)
+#options.binary_location = firefox_path
 
+servei = Service(geckodriver_path)
+browser = webdriver.Firefox(service=servei, options=options)
 
-def cerca_cerca(conn, cursor, sensor):
+# Fa la petició a Google per anar-hi des d'allà
+browser.get('https://google.com')
 
-    # Executar la instrucció SQL per inserir dades a la base de dades
-    select_integral = "SELECT seguent_cerca('{}');".format(sensor)
+# Cerca tots els botons a la pàgina
+buttons = browser.find_elements(By.XPATH, '//button')
 
-    # Executar la consulta amb els valors
-    cursor.execute(select_integral)
+# Itera sobre els botons i si contenen el div amb el text Accepta-ho tot el prem
+for button in buttons:
+    try:
+        if button.find_element(By.XPATH, './/div[contains(text(), "Accepta-ho tot")]'):
+            button.click()
+    except:
+         pass
 
-    int_cerca = cursor.fetchone()[0]
-
-    # Executar la instrucció SQL per inserir dades a la base de dades
-    select_cerca = "SELECT consulta FROM cerques WHERE cerqId = {};".format(int_cerca)
-
-    # Executar la consulta amb els valors
-    cursor.execute(select_cerca)
-
-    cerca = cursor.fetchone()[0]
-
-    return cerca
-
-cerca = cerca_cerca(conn, cursor, 'kakkz')
-
-print ([cerca])
+browser.quit()
