@@ -27,8 +27,6 @@ directori_Imatges = './Firefox/Captures/' # Directori on desar les captures de p
 temps_espera_processos = 1 # Temps d'espera a cada un dels passos
 temps_espera_cerques = 5 # Temps d'espera entre cada una de les cerques
 
-cerques = ['augmentar brillantor apple', 'barcelona', 'biografia Gerard Romero', 'calendari escolar 2023', 'calendari laboral barcelona', 'canvi climàtic']
-
 ################# POSTGRESQL #################
 
 # Agafa les credencials per al sensor de la oficina
