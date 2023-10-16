@@ -76,13 +76,18 @@ user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101
 navegador = 2 # Firefox
 cercador = 1 # Google
 
+### NAVEGADOR ###
+
+firefox_path = '/home/pau/Baixades/firefox-115.3.1esr/firefox/firefox'
+geckodriver_path = './Firefox/geckodriver'
+
 # Inicia el navegador Firefox
 options = Options()
-options.headless = True
+options.headless = False
 options.set_preference("general.useragent.override", user_agent)
+options.binary_location = firefox_path
 
-ruta_firefox = '/home/catalanet/firefox-115.3.1esr/firefox/firefox'
-servei = Service(ruta_firefox)
+servei = Service(geckodriver_path)
 browser = webdriver.Firefox(service=servei, options=options)
 
 # Fa la petició a Google per anar-hi des d'allà
