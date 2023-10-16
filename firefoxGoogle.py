@@ -83,7 +83,7 @@ geckodriver_path = './Firefox/geckodriver'
 
 # Inicia el navegador Firefox
 options = Options()
-options.headless = False
+options.headless = True
 options.set_preference("general.useragent.override", user_agent)
 options.binary_location = firefox_path
 
