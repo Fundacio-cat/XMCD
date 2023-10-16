@@ -78,7 +78,7 @@ cercador = 1 # Google
 
 ### NAVEGADOR ###
 
-firefox_path = '/home/pau/Baixades/firefox-115.3.1esr/firefox/firefox'
+firefox_path = '/home/catalanet/firefox-115.3.1esr/firefox/firefox'
 geckodriver_path = './Firefox/geckodriver'
 
 # Inicia el navegador Firefox
