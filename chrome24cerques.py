@@ -64,7 +64,10 @@ else:
 ################# PROGRAMA #################
 
 # Cerca el nom de la màquina
-sensor = environ.get('NOM')
+with open('/etc/hostname', 'r') as file:
+    contingut = file.read()
+
+sensor = contingut[:5]
 
 # Seleccionem un User Agent
 user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36'
