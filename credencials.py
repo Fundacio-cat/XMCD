@@ -1,5 +1,5 @@
 
-def obtenir_credentials_oficina():
+def obtenir_credentials():
     host = '10.66.66.1'
     port = '51432'
     database = 'catalanet'

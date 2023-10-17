@@ -18,7 +18,7 @@ from os import remove, environ
 import psycopg2
 
 # Mòduls
-from credencials import obtenir_credentials_oficina
+from credencials import obtenir_credentials
 from funcions import guarda, cerca_dades, cerca_cerca
 
 ################# GLOBALS #################
@@ -30,7 +30,7 @@ temps_espera_cerques = 5 # Temps d'espera entre cada una de les cerques
 ################# POSTGRESQL #################
 
 # Agafa les credencials per al sensor de la oficina
-host, port, database, user, password = obtenir_credentials_oficina()
+host, port, database, user, password = obtenir_credentials()
 
 configuracio = {
     'host': host,
