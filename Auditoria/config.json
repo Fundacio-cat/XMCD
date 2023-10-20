@@ -1,0 +1,6 @@
+{
+    "directori_Imatges" : "./Chrome/Captures/",
+    "temps_espera_processos" : 1, 
+    "temps_espera_cerques" : 5,
+    "fitxer_logs": "monitor.log"
+}
