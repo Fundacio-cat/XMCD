@@ -33,3 +33,7 @@ def inicia_navegador(cursor):
         browser = 3
 
     return navegador, browser   
+
+def captura_pantalla(browser, nom):
+    # Guarda la captura de la pantalla principal
+    browser.save_screenshot(nom)

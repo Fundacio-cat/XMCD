@@ -51,7 +51,7 @@ def registra_error(conn, cursor, error):
             conn.close() 
 
 # Guarda a la base de dades els resultats de la cerca
-def guarda(conn, cursor, sensor, navegador, cercador, cerca, posicio, titol, url, descripcio, llengua):
+def guarda_bd(conn, cursor, sensor, navegador, cercador, cerca, posicio, titol, url, descripcio, llengua):
 
     # conn -> Objecte de la connexió amb Postgres
     # cursor -> Objecte del cursor

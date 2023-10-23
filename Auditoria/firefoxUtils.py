@@ -27,6 +27,7 @@ def inicia_navegador(cursor):
         # Inicia el navegador Firefox
         options = Options()
         options.add_argument(f'user-agent={user_agent}')
+        options.set_preference('intl.accept_languages', 'ca')
         servei = Service('./Controladors/geckodriver')
 
         try:
@@ -39,3 +40,7 @@ def inicia_navegador(cursor):
 
 
     return navegador, browser
+
+def captura_pantalla(browser, nom):
+    # Guarda la captura de la pantalla principal
+    browser.save_full_page_screenshot(nom)

@@ -3,10 +3,6 @@
 ### IMPORTS ###
 
 
-
-
-
-
 ### FUNCIONS ###
 
 def nom_sensor():

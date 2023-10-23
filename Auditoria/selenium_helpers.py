@@ -60,7 +60,7 @@ def cerca_dades(element_cercar):
 
     return [link, titol, description]
 
-def cerca_cerca(conn, cursor, sensor):
+def cerca_cerca(cursor, sensor):
 
     # Executar la instrucció SQL per inserir dades a la base de dades
     select_integral = "SELECT seguent_cerca('{}');".format(sensor)
