@@ -92,37 +92,46 @@ elif browser == 10:
     logging.error(f"No s'ha pogut iniciar correctament el driver del navegador {args.navegador}")
     sys.exit(10)
 
-### CERCA ###
-
-# Obté la cadena a buscar al cercador
-int_cerca, cerca = cerca_cerca(conn, cursor, sensor)
-
-# Definim el diccionari on es guardaran les dades
-resultats = {}
-
 ### CERCADOR ###
 
 # Iniciem el cercador
-cercador = inicia_cercador(browser, cerca)
+cercador = inicia_cercador(browser)
 
 # Control errors del cercador
 if browser == 20:
     logging.error(f"No s'ha pogut iniciar correctament el cercador {args.cercador}")
     sys.exit(20)
 elif browser == 21:
-    logging.error(f"No s'han pogut acceptar les cookies del cercador {args.cercador}")
+    logging.error(f"No s'han pogut acceptar les cookies del navegador {args.cercador}")
     sys.exit(21)
-elif browser == 22:
-    logging.error(f"No s'ha pogut realitzar la cerca {cerca} del cercador {args.cercador}")
-    sys.exit(22)
+
+### CERCA ###
+
+# Obté la cadena a buscar al cercador
+int_cerca, cerca = cerca_cerca(conn, cursor, sensor)
+
+resultats = {}
+
+# Definim el diccionari on es guardaran les dades
+resultats[cerca] = {}
 
 # Calen fer temps d'espera per a que es carreguin els elements
 sleep(temps_espera_cerques)
 
+# Busca el quadre de text per fer la cerca. Neteja el contingut i cerca
+try:
+    textarea = browser.find_element(By.TAG_NAME, value='textarea')
+    textarea.send_keys(cerca + Keys.ENTER)
+except:
+    logging.error(f"No s'ha pogut introduir la cerca {cerca}")
+    sys.exit(404)
+
+# Esperem a que carreguin els elements
+sleep(temps_espera_processos)
+
 # Obté els resultats
 logging.info(f"Cercant els resultats de {cerca}...")
 
-# Nº de resultats guardats
 resultats_desats = 1
 
 # Cal desar 10 resultats sempre
@@ -169,7 +178,7 @@ while resultats_desats <= 10:
                         link, titol, description = cerca_dades(a)
 
                         if link is not None:
-                            resultats[resultats_desats] = {'titol': titol, 'url': link, 'description': description}
+                            resultats[cerca].update({resultats_desats: {'titol': titol, 'url': link, 'description': description}})
                             resultats_desats += 1
 
                     # Un cop tenim 10 resultats.
@@ -183,7 +192,7 @@ while resultats_desats <= 10:
             else:
                 ############### Això podria ser una funció individual (guarda_resultat)
                 if link is not None:
-                    resultats[resultats_desats] = {'titol': titol, 'url': link, 'description': description}
+                    resultats[cerca].update({resultats_desats: {'titol': titol, 'url': link, 'description': description}})
                     resultats_desats += 1
 
     # Si no hi han 10 respostes cerca el botó de següent pàgina
@@ -209,7 +218,7 @@ while resultats_desats <= 10:
                     link, titol, description = cerca_dades(a)
 
                     if link is not None:
-                        resultats[resultats_desats] = {'titol': titol, 'url': link, 'description': description}
+                        resultats[cerca].update({resultats_desats: {'titol': titol, 'url': link, 'description': description}})
                         resultats_desats += 1
                 else:
                     browser.execute_script("window.history.go(-1)")
@@ -252,7 +261,7 @@ while resultats_desats <= 10:
     #Desa les dades
     else:
         logging.info(f"Guardant a la base de dades")
-        for posicio, dades in resultats.items():
+        for posicio, dades in resultats[cerca].items():
             titol = dades['titol']
             url = dades['url']
             descripcio = dades['description']

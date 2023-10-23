@@ -32,5 +32,4 @@ def inicia_navegador(cursor):
         # No hi ha user agent
         browser = 3
 
-
     return navegador, browser   
