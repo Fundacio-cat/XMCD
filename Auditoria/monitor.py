@@ -55,92 +55,60 @@ else:
 
 ### FUNCIONS ###
 
-def inicia_navegador(cursor, navegador):
-
-    if navegador == 'Chrome':
-
-        from selenium.webdriver.chrome.service import Service
-        from selenium.webdriver.chrome.options import Options 
-    
-        # El 1 està definit a la BD com a Chrome. Taula: navegadors
-        int_navegador = 1
-
-        # Seleccionem un User Agent
-        user_agent = cerca_userAgent(cursor, int_navegador)
-
-        if user_agent:
-            # Inicia el navegador
-            service = Service('/home/catalanet/XMCD/Auditoria/Controladors/chromedriver')
-            options = Options()
-            options.add_argument(f"user-agent={user_agent}")
-            try:
-                browser = webdriver.Chrome(service=service, options=options)
-            except:
-               browser = 10
-        else:
-            # No hi ha user agent
-            browser = 3
-
-    elif navegador == 'Firefox':
-
-        from selenium.webdriver.firefox.service import Service
-        from selenium.webdriver.firefox.options import Options
-
-        # El 2 està definit a la BD com a Firefox. Taula: navegadors
-        int_navegador = 2
-
-        # Seleccionem un User Agent
-        user_agent = cerca_userAgent(cursor, int_navegador)
-
-        if user_agent:
-            # Inicia el navegador Firefox
-            options = Options()
-            options.add_argument(f'user-agent={user_agent}')
-            options.set_preference('intl.accept_languages', 'ca')
-            servei = Service('/home/catalanet/XMCD/Auditoria/Controladors/geckodriver')
-
-            try:
-                browser = webdriver.Firefox(service=servei, options=options)
-            except:
-                browser = 10
-        else:
-            # No hi ha user agent
-            browser = 3
-
-    else:
-        logging.error(f"El navegador {navegador} no està acceptat")
-        sys.exit(2)
-
-    return int_navegador, browser   
-
-'''
 # Navegador
 if args.navegador == 'Chrome':
     # Fem l'import de les funcions de Chrome
-    from chromeUtils import inicia_navegador
+    from selenium.webdriver.chrome.service import Service
+    from selenium.webdriver.chrome.options import Options 
+
+    # El 1 està definit a la BD com a Chrome. Taula: navegadors
+    navegador = 1
+
+    # Seleccionem un User Agent
+    user_agent = cerca_userAgent(cursor, navegador)
+
+    if user_agent:
+        # Inicia el navegador
+        service = Service('/home/catalanet/XMCD/Auditoria/Controladors/chromedriver')
+        options = Options()
+        options.add_argument(f"user-agent={user_agent}")
+        try:
+            browser = webdriver.Chrome(service=service, options=options)
+        except:
+            browser = 10
+    else:
+        # No hi ha user agent
+        browser = 3
+
 elif args.navegador == 'Firefox':
-    from firefoxUtils import inicia_navegador
+    # Fem l'import de les funcions de Firefox
+    from selenium.webdriver.firefox.service import Service
+    from selenium.webdriver.firefox.options import Options
+
+    # El 2 està definit a la BD com a Firefox. Taula: navegadors
+    navegador = 2
+
+    # Seleccionem un User Agent
+    user_agent = cerca_userAgent(cursor, navegador)
+
+    if user_agent:
+        # Inicia el navegador Firefox
+        options = Options()
+        options.add_argument(f'user-agent={user_agent}')
+        options.set_preference('intl.accept_languages', 'ca')
+        servei = Service('/home/catalanet/XMCD/Auditoria/Controladors/geckodriver')
+
+        try:
+            browser = webdriver.Firefox(service=servei, options=options)
+        except:
+            browser = 10
+    else:
+        # No hi ha user agent
+        browser = 3
+
 else:
     logging.error(f"El navegador {args.navegador} no està acceptat")
     sys.exit(2)
-'''
-
-# Cercador
-if args.cercador == 'Google':
-    # Fem l'import de les funcions de Chrome
-    from googleUtils import inicia_cercador, guarda_resultats
-else:
-    logging.error(f"El navegador {args.navegador} no està acceptat")
-    sys.exit(2)
-
-### NAVEGADOR ###
-
-# Iniciem el navegador
-#navegador, browser = inicia_navegador(cursor)
-
-# Navegador 
-navegador, browser = inicia_navegador(cursor, args.navegador)
-
 
 # Control errors del navegador
 if browser == 3:
@@ -149,6 +117,14 @@ if browser == 3:
 elif browser == 10:
     logging.error(f"No s'ha pogut iniciar correctament el driver del navegador {args.navegador}")
     sys.exit(10)
+
+# Cercador
+if args.cercador == 'Google':
+    # Fem l'import de les funcions de Chrome
+    from googleUtils import inicia_cercador, guarda_resultats
+else:
+    logging.error(f"El navegador {args.navegador} no està acceptat")
+    sys.exit(2)
 
 ### CERCA ###
 
