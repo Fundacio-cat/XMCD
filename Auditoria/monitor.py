@@ -98,10 +98,10 @@ elif args.navegador == 'Firefox':
         options.set_preference('intl.accept_languages', 'ca')
         servei = Service('/home/catalanet/XMCD/Auditoria/Controladors/geckodriver')
 
-        try:
-            browser = webdriver.Firefox(service=servei, options=options)
-        except:
-            browser = 10
+        #try:
+        browser = webdriver.Firefox(service=servei, options=options)
+        #except:
+        #    browser = 10
     else:
         # No hi ha user agent
         browser = 3
