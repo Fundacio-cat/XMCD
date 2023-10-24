@@ -14,7 +14,7 @@ import argparse
 
 
 import json
-with open('config.json', 'r') as file:
+with open('./config.json', 'r') as file:
     globals = json.load(file)
 
 ### GLOBALS ###
