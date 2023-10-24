@@ -72,10 +72,10 @@ if args.navegador == 'Chrome':
         service = Service('/home/catalanet/XMCD/Auditoria/Controladors/chromedriver')
         options = Options()
         options.add_argument(f"user-agent={user_agent}")
-        try:
-            browser = webdriver.Chrome(service=service, options=options)
-        except:
-            browser = 10
+        #try:
+        browser = webdriver.Chrome(service=service, options=options)
+        #except:
+        #    browser = 10
     else:
         # No hi ha user agent
         browser = 3
@@ -98,10 +98,10 @@ elif args.navegador == 'Firefox':
         options.set_preference('intl.accept_languages', 'ca')
         servei = Service('/home/catalanet/XMCD/Auditoria/Controladors/geckodriver')
 
-        #try:
-        browser = webdriver.Firefox(service=servei, options=options)
-        #except:
-        #    browser = 10
+        try:
+            browser = webdriver.Firefox(service=servei, options=options)
+        except:
+            browser = 10
     else:
         # No hi ha user agent
         browser = 3
