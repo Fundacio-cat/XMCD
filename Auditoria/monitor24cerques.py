@@ -102,8 +102,6 @@ elif cercador == 21:
 
 for int_cerca, cerca in cerques.items():
 
-    print (int_cerca, cerca)
-
     cercador = executa_cerca(browser, cerca)
 
     if cercador == 22:
