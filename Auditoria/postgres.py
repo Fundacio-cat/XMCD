@@ -51,7 +51,7 @@ def registra_error(conn, cursor, error):
             conn.close() 
 
 # Guarda a la base de dades els resultats de la cerca
-def guarda_bd(conn, cursor, sensor, navegador, cercador, cerca, posicio, titol, url, descripcio, llengua):
+def guarda_bd(conn, cursor, sensor, navegador, cercador, cerca, posicio, titol, url, descripcio):
 
     # conn -> Objecte de la connexió amb Postgres
     # cursor -> Objecte del cursor
@@ -75,8 +75,8 @@ def guarda_bd(conn, cursor, sensor, navegador, cercador, cerca, posicio, titol, 
         descripcio = descripcio.replace("'", "''")
 
     # Executar la instrucció SQL per inserir dades a la base de dades
-    insert_query = "INSERT INTO resultats (sensor, hora, navegador, cercador, cerca, posicio, titol, url, descripcio, llengua) VALUES ('{}', '{}', {}, {}, '{}', {}, '{}', '{}', '{}', '{}');".format(
-        sensor, now, navegador, cercador, cerca, posicio, titol, url, descripcio, llengua)
+    insert_query = "INSERT INTO resultats (sensor, hora, navegador, cercador, cerca, posicio, titol, url, descripcio) VALUES ('{}', '{}', {}, {}, '{}', {}, '{}', '{}', '{}', '{}');".format(
+        sensor, now, navegador, cercador, cerca, posicio, titol, url, descripcio)
 
     # Executar la consulta amb els valors
     cursor.execute(insert_query)

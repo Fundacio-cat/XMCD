@@ -117,9 +117,8 @@ for posicio, dades in resultats.items():
     titol = dades['titol']
     url = dades['url']
     descripcio = dades['description']
-    llengua = "--"
 
-    guarda_bd(conn, cursor, sensor, navegador, cercador, int_cerca, posicio, titol, url, descripcio, llengua)
+    guarda_bd(conn, cursor, sensor, navegador, cercador, int_cerca, posicio, titol, url, descripcio)
 
 conn.close()
 browser.quit()

@@ -121,9 +121,8 @@ for int_cerca, cerca in cerques.items():
         titol = dades['titol']
         url = dades['url']
         descripcio = dades['description']
-        llengua = "--"
 
-        guarda_bd(conn, cursor, sensor, navegador, cercador, int_cerca, posicio, titol, url, descripcio, llengua)
+        guarda_bd(conn, cursor, sensor, navegador, cercador, int_cerca, posicio, titol, url, descripcio)
 
     # Torna a reiniciar per a la cerca
     browser.get('https://www.google.com')
