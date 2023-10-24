@@ -31,7 +31,6 @@ with open('/home/catalanet/XMCD/Auditoria/config.json', 'r') as file:
 
 ### GLOBALS ###
 
-directori_Imatges = globals['directori_Imatges']
 temps_espera_processos = globals['temps_espera_processos']
 temps_espera_cerques = globals['temps_espera_cerques']
 fitxer_logs = globals['fitxer_logs']
@@ -70,7 +69,6 @@ def inicia_cercador(browser):
     
     finally:
         return cercador
-    
 
 def executa_cerca(browser, cerca):
     # Busca el quadre de text per fer la cerca. Neteja el contingut i cerca
@@ -88,8 +86,10 @@ def guarda_resultats(browser, directori_Imatges, navegador, sensor, cerca):
 
     if navegador == 1: 
         from chromeUtils import captura_pantalla
+        directori_Imatges = '/home/catalanet/XMCD/Chrome/Captures/'
     elif navegador == 2:
         from firefoxUtils import captura_pantalla
+        directori_Imatges = '/home/catalanet/XMCD/Firefox/Captures/'
 
     resultats = {}
 
