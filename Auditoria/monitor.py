@@ -19,7 +19,7 @@ import argparse
 from postgres import cerca_userAgent
 
 import json
-with open('./config.json', 'r') as file:
+with open('/home/catalanet/XMCD/Auditoria/config.json', 'r') as file:
     globals = json.load(file)
 
 ### GLOBALS ###
@@ -70,7 +70,7 @@ def inicia_navegador(cursor, navegador):
 
         if user_agent:
             # Inicia el navegador
-            service = Service('./Controladors/chromedriver')
+            service = Service('/home/catalanet/XMCD/Auditoria/Controladors/chromedriver')
             options = Options()
             options.add_argument(f"user-agent={user_agent}")
             try:
@@ -80,8 +80,6 @@ def inicia_navegador(cursor, navegador):
         else:
             # No hi ha user agent
             browser = 3
-
-        return int_navegador, browser   
 
     elif navegador == 'Firefox':
 
@@ -99,7 +97,7 @@ def inicia_navegador(cursor, navegador):
             options = Options()
             options.add_argument(f'user-agent={user_agent}')
             options.set_preference('intl.accept_languages', 'ca')
-            servei = Service('./Controladors/geckodriver')
+            servei = Service('/home/catalanet/XMCD/Auditoria/Controladors/geckodriver')
 
             try:
                 browser = webdriver.Firefox(service=servei, options=options)
@@ -112,6 +110,8 @@ def inicia_navegador(cursor, navegador):
     else:
         logging.error(f"El navegador {navegador} no està acceptat")
         sys.exit(2)
+
+    return int_navegador, browser   
 
 '''
 # Navegador
@@ -192,5 +192,3 @@ conn.close()
 
 logging.info(f"Crawler finalitzat correctament")
 sys.exit(0)
-
-# Ara mateix el inicia navegador busca google.com a saco. Afegir a la taula cercadors el camp de text del link.
