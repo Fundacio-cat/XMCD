@@ -1,5 +1,5 @@
 {
-    "directori_Imatges" : "./Captures/",
+    "directori_Imatges" : "/home/catalanet/XMCD/Chrome/Captures/",
     "temps_espera_processos" : 1, 
     "temps_espera_cerques" : 5,
     "fitxer_logs": "monitor.log"
