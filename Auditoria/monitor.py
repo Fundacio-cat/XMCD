@@ -122,6 +122,7 @@ for posicio, dades in resultats.items():
     guarda_bd(conn, cursor, sensor, navegador, cercador, int_cerca, posicio, titol, url, descripcio, llengua)
 
 conn.close()
+browser.quit()
 
 logging.info(f"Crawler finalitzat correctament")
 sys.exit(0)

@@ -224,5 +224,4 @@ def guarda_resultats(browser, directori_Imatges, navegador, sensor, cerca):
 
         #Desa les dades
         else:
-            browser.quit()
             return resultats
