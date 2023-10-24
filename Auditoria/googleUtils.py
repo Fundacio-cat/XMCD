@@ -26,7 +26,7 @@ from datetime import datetime
 
 
 import json
-with open('config.json', 'r') as file:
+with open('/home/catalanet/XMCD/Auditoria/config.json', 'r') as file:
     globals = json.load(file)
 
 ### GLOBALS ###
