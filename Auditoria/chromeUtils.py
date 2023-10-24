@@ -21,7 +21,7 @@ def inicia_navegador(cursor):
 
     if user_agent:
         # Inicia el navegador
-        service = Service('./Controladors/chromedriver')
+        service = Service('/home/catalanet/XMCD/Auditoria/Controladors/chromedriver')
         options = Options()
         options.add_argument(f"user-agent={user_agent}")
         try:

@@ -28,7 +28,8 @@ def inicia_navegador(cursor):
         options = Options()
         options.add_argument(f'user-agent={user_agent}')
         options.set_preference('intl.accept_languages', 'ca')
-        servei = Service('./Controladors/geckodriver')
+        servei = Service('/home/catalanet/XMCD/Auditoria/Controladors/geckodriver')
+
 
         try:
             browser = webdriver.Firefox(service=servei, options=options)
