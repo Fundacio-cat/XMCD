@@ -23,7 +23,7 @@ from funcions import guarda, cerca_dades
 
 ################# GLOBALS #################
 
-directori_Imatges = './Chrome/Captures/' # Directori on desar les captures de pantalla
+directori_Imatges = '/home/catalanet/XMCD/Chrome/Captures/' # Directori on desar les captures de pantalla
 temps_espera_processos = 1 # Temps d'espera a cada un dels passos
 temps_espera_cerques = 5 # Temps d'espera entre cada una de les cerques
 
