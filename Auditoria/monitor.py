@@ -4,13 +4,6 @@
 
 # Selenium
 from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.chrome.options import Options 
-
-from selenium.webdriver import chrome
-
-from selenium.webdriver.firefox.service import Service
-from selenium.webdriver.firefox.options import Options
 
 # Mòduls
 from selenium_helpers import cerca_cerca
@@ -26,7 +19,7 @@ import argparse
 from postgres import cerca_userAgent
 
 import json
-with open('/home/catalanet/XMCD/Auditoria/config.json', 'r') as file:
+with open('./config.json', 'r') as file:
     globals = json.load(file)
 
 ### GLOBALS ###
@@ -65,6 +58,9 @@ else:
 def inicia_navegador(cursor, navegador):
 
     if navegador == 'Chrome':
+
+        from selenium.webdriver.chrome.service import Service
+        from selenium.webdriver.chrome.options import Options 
     
         # El 1 està definit a la BD com a Chrome. Taula: navegadors
         int_navegador = 1
@@ -74,15 +70,13 @@ def inicia_navegador(cursor, navegador):
 
         if user_agent:
             # Inicia el navegador
-            service = chrome.service.Service('/home/catalanet/XMCD/Auditoria/Controladors/chromedriver')
-            options = chrome.options.Options()
-            #service = Service('/home/catalanet/XMCD/Auditoria/Controladors/chromedriver')
-            #options = Options()
+            service = Service('./Controladors/chromedriver')
+            options = Options()
             options.add_argument(f"user-agent={user_agent}")
             try:
                 browser = webdriver.Chrome(service=service, options=options)
             except:
-                browser = 10
+               browser = 10
         else:
             # No hi ha user agent
             browser = 3
@@ -90,6 +84,9 @@ def inicia_navegador(cursor, navegador):
         return int_navegador, browser   
 
     elif navegador == 'Firefox':
+
+        from selenium.webdriver.firefox.service import Service
+        from selenium.webdriver.firefox.options import Options
 
         # El 2 està definit a la BD com a Firefox. Taula: navegadors
         int_navegador = 2
@@ -102,7 +99,7 @@ def inicia_navegador(cursor, navegador):
             options = Options()
             options.add_argument(f'user-agent={user_agent}')
             options.set_preference('intl.accept_languages', 'ca')
-            servei = Service('/home/catalanet/XMCD/Auditoria/Controladors/geckodriver')
+            servei = Service('./Controladors/geckodriver')
 
             try:
                 browser = webdriver.Firefox(service=servei, options=options)
