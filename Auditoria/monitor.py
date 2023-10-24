@@ -62,7 +62,7 @@ else:
 # Cercador
 if args.cercador == 'Google':
     # Fem l'import de les funcions de Chrome
-    from googleUtils import inicia_cercador, guarda_resultats
+    from googleUtils import inicia_cercador, guarda_resultats, executa_cerca
 else:
     logging.error(f"El navegador {args.navegador} no està acceptat")
     sys.exit(2)
@@ -80,15 +80,10 @@ elif browser == 10:
     logging.error(f"No s'ha pogut iniciar correctament el driver del navegador {args.navegador}")
     sys.exit(10)
 
-### CERCA ###
-
-# Obté la cadena a buscar al cercador
-int_cerca, cerca = cerca_cerca(cursor, sensor)
-
 ### CERCADOR ###
 
 # Iniciem el cercador
-cercador = inicia_cercador(browser, cerca)
+cercador = inicia_cercador(browser)
 
 # Control errors del cercador
 if browser == 20:
@@ -97,7 +92,15 @@ if browser == 20:
 elif browser == 21:
     logging.error(f"No s'han pogut acceptar les cookies del cercador {args.cercador}")
     sys.exit(21)
-elif browser == 22:
+
+### CERCA ###
+
+# Obté la cadena a buscar al cercador
+int_cerca, cerca = cerca_cerca(cursor, sensor)
+
+# Executem la cerca
+browser = executa_cerca(browser, cerca)
+if browser == 22:
     logging.error(f"No s'ha pogut realitzar la cerca {cerca} del cercador {args.cercador}")
     sys.exit(22)
 

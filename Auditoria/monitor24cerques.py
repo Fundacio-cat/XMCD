@@ -93,10 +93,10 @@ cerques = {2:"augmentar brillantor apple", 3:"barcelona", 4:"biografia Gerard Ro
 cercador = inicia_cercador(browser)
 
 # Control errors del cercador
-if browser == 20:
+if cercador == 20:
     logging.error(f"No s'ha pogut iniciar correctament el cercador {args.cercador}")
     sys.exit(20)
-elif browser == 21:
+elif cercador == 21:
     logging.error(f"No s'han pogut acceptar les cookies del cercador {args.cercador}")
     sys.exit(21)
 
@@ -125,9 +125,9 @@ for int_cerca, cerca in cerques.items():
         descripcio = dades['description']
         llengua = "--"
 
-        #guarda_bd(conn, cursor, sensor, navegador, cercador, int_cerca, posicio, titol, url, descripcio, llengua)
+        guarda_bd(conn, cursor, sensor, navegador, cercador, int_cerca, posicio, titol, url, descripcio, llengua)
 
-        browser.get('https://www.google.com')
+    browser.get('https://www.google.com')
 
 conn.close()
 
