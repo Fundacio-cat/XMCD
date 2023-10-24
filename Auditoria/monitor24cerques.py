@@ -63,7 +63,8 @@ else:
 # Cercador
 if args.cercador == 'Google':
     # Fem l'import de les funcions de Chrome
-    from googleUtils import inicia_cercador, guarda_resultats
+    from googleUtils import inicia_cercador, guarda_resultats, executa_cerca
+
 else:
     logging.error(f"El navegador {args.navegador} no està acceptat")
     sys.exit(2)
@@ -88,23 +89,24 @@ elif browser == 10:
 
 cerques = {2:"augmentar brillantor apple", 3:"barcelona", 4:"biografia Gerard Romero",5:"calendari escolar 2023",6:"calendari laboral barcelona",8:"canvi climàtic",9:"catalunya",10:"ciutat de les arts",11:"comprar entrades portaventura",12:"convertir pdf a jpg",13:"decathlon",14:"eivissa",15:"el caire egipte",16:"entrades valencia fc",17:"futbol club barcelona",18:"impostos barcelona",19:"limfòcit",20:"morad",22:"que es la Kings League",24:"Rússia",25:"t casual",26:"Tossa de Mar",27:"Vicio hamburgueseria",28:"zoo tobogan"}
 
+# Iniciem el cercador
+cercador = inicia_cercador(browser)
+
+# Control errors del cercador
+if browser == 20:
+    logging.error(f"No s'ha pogut iniciar correctament el cercador {args.cercador}")
+    sys.exit(20)
+elif browser == 21:
+    logging.error(f"No s'han pogut acceptar les cookies del cercador {args.cercador}")
+    sys.exit(21)
+
 for int_cerca, cerca in cerques.items():
 
     print (int_cerca, cerca)
 
-    ### CERCADOR ###
+    cercador = executa_cerca(browser, cerca)
 
-    # Iniciem el cercador
-    cercador = inicia_cercador(browser, cerca)
-
-    # Control errors del cercador
-    if browser == 20:
-        logging.error(f"No s'ha pogut iniciar correctament el cercador {args.cercador}")
-        sys.exit(20)
-    elif browser == 21:
-        logging.error(f"No s'han pogut acceptar les cookies del cercador {args.cercador}")
-        sys.exit(21)
-    elif browser == 22:
+    if cercador == 22:
         logging.error(f"No s'ha pogut realitzar la cerca {cerca} del cercador {args.cercador}")
         sys.exit(22)
 
@@ -123,7 +125,9 @@ for int_cerca, cerca in cerques.items():
         descripcio = dades['description']
         llengua = "--"
 
-        guarda_bd(conn, cursor, sensor, navegador, cercador, int_cerca, posicio, titol, url, descripcio, llengua)
+        #guarda_bd(conn, cursor, sensor, navegador, cercador, int_cerca, posicio, titol, url, descripcio, llengua)
+
+        browser.get('https://www.google.com')
 
 conn.close()
 

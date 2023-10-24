@@ -37,7 +37,7 @@ temps_espera_cerques = globals['temps_espera_cerques']
 fitxer_logs = globals['fitxer_logs']
 
 
-def inicia_cercador(browser, cerca):
+def inicia_cercador(browser):
 
     try:
         # El 1 està definit a la BD com a Google. Taula: cercadors
@@ -64,20 +64,25 @@ def inicia_cercador(browser, cerca):
         if not acceptat:
             cercador = 21
 
-        else:
-            # Busca el quadre de text per fer la cerca. Neteja el contingut i cerca
-            try:
-                textarea = browser.find_element(By.TAG_NAME, value='textarea')
-                textarea.send_keys(cerca + Keys.ENTER)
-            except:
-                cercador = 22
-
     except:
         # Error de petició del cercador
         cercador = 20
     
     finally:
         return cercador
+    
+
+def executa_cerca(browser, cerca):
+    # Busca el quadre de text per fer la cerca. Neteja el contingut i cerca
+    try:
+        textarea = browser.find_element(By.TAG_NAME, value='textarea')
+        textarea.send_keys(cerca + Keys.ENTER)
+        cercador = 1
+
+    except:
+        cercador = 22
+    
+    return cercador
 
 def guarda_resultats(browser, directori_Imatges, navegador, sensor, cerca):
 
