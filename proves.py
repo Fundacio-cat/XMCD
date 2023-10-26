@@ -48,15 +48,64 @@ sleep(2)
 # Obté el codi de la pàgina fins a "<g-section-with-header"
 body = browser.find_element(By.XPATH, '//body')
 page_source = body.get_attribute("innerHTML")
+# Guarda el contingut HTML en un fitxer
+with open('./divs.html', 'w', encoding='utf-8') as file:
+    file.write(page_source)
+
+soup = BeautifulSoup(page_source, 'html.parser')
+
+# Troba tots els elements amb la classe 'g-section-with-header'
+elements_g_section = soup.find_all('g-section-with-header')
+
+# Imprimeix o processa els elements trobats
+for element in elements_g_section:
+
+    with open('./divs.html', 'w', encoding='utf-8') as file:
+        file.write(str(element))
+
+    try:
+        # Div on ha d'estar el títol de les noticies. En aquest nivell o inferior
+        text_noticies = element.find('div').find('div').find('div').find('div')
+    except:
+        text_noticies = None
+
+    if "Notícies destacades" in str(text_noticies):
+
+        # Agafem tots els div de les noticies
+        divs = element.find_all('div', recursive=False)
+
+        # Es salta el primer div, és el del text de notícies        
+        for noticia in divs[1:]:
+
+            with open('./news.html', 'a', encoding='utf-8') as file:
+                file.write(str(noticia))
+                file.write('\nNext\n')
+                
+            # Enllaç de les notícies
+            link_noticia = noticia.find('a')['href']
+
+            print (link_noticia)
 
 
+
+                
+
+'''
 # A Google els resultats son tots els títols <h3>
 # Busquem tots els elements <a> que contenen un <h3>
-resultats_cerca = browser.find_elements(By.XPATH, '//g-section-with-header')
+resultats_cerca = browser.find_elements(By.XPATH, '//div[@aria-level="2"]/span')
 
 # Agafem els resultats
 for resultat in resultats_cerca:
 
-    print (resultat)
-
     print (resultat.get_attribute("innerHTML"))
+
+    if "Notícies destacades" in resultat.get_attribute("innerHTML"):
+
+        print ("Estic dins de les notícies!")
+
+        div_noticies = resultat.find_element(By.XPATH, './parent::div/parent::div/parent::div/parent::div/parent::g-section-with-header')
+        #div_noticies = resultat.find_element(By.XPATH, './parent::div/parent::div/parent::div/parent::g-section-with-header')
+
+        print (div_noticies.get_attribute("innerHTML"))
+'''

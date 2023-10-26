@@ -95,10 +95,7 @@ elif browser == 21:
 ### CERCA ###
 
 # Obté la cadena a buscar al cercador
-#int_cerca, cerca = cerca_cerca(cursor, sensor)
-
-int_cerca = 3
-cerca = 'barcelona'
+int_cerca, cerca = cerca_cerca(cursor, sensor)
 
 # Executem la cerca
 browser = executa_cerca(browser, cerca)
