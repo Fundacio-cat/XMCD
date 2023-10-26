@@ -3,8 +3,7 @@
 ################# IMPORTS #################
 
 # Mòduls
-from selenium_helpers import cerca_cerca
-from postgres import connecta_bd, guarda_bd
+from postgres import connecta_bd, guarda_bd, cerca_cerca
 from utils import nom_sensor
 
 # Globals
@@ -96,7 +95,10 @@ elif browser == 21:
 ### CERCA ###
 
 # Obté la cadena a buscar al cercador
-int_cerca, cerca = cerca_cerca(cursor, sensor)
+#int_cerca, cerca = cerca_cerca(cursor, sensor)
+
+int_cerca = 3
+cerca = 'barcelona'
 
 # Executem la cerca
 browser = executa_cerca(browser, cerca)
@@ -118,10 +120,12 @@ for posicio, dades in resultats.items():
     url = dades['url']
     descripcio = dades['description']
 
-    guarda_bd(conn, cursor, sensor, navegador, cercador, int_cerca, posicio, titol, url, descripcio)
+    noticia = False
+
+    guarda_bd(conn, cursor, sensor, navegador, cercador, int_cerca, posicio, titol, url, descripcio, noticia)
 
 conn.close()
-browser.quit()
+#browser.quit()
 
 logging.info(f"Crawler finalitzat correctament")
 sys.exit(0)

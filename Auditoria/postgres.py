@@ -51,7 +51,7 @@ def registra_error(conn, cursor, error):
             conn.close() 
 
 # Guarda a la base de dades els resultats de la cerca
-def guarda_bd(conn, cursor, sensor, navegador, cercador, cerca, posicio, titol, url, descripcio):
+def guarda_bd(conn, cursor, sensor, navegador, cercador, cerca, posicio, titol, url, descripcio, noticia):
 
     # conn -> Objecte de la connexió amb Postgres
     # cursor -> Objecte del cursor
@@ -75,8 +75,8 @@ def guarda_bd(conn, cursor, sensor, navegador, cercador, cerca, posicio, titol, 
         descripcio = descripcio.replace("'", "''")
 
     # Executar la instrucció SQL per inserir dades a la base de dades
-    insert_query = "INSERT INTO resultats (sensor, hora, navegador, cercador, cerca, posicio, titol, url, descripcio) VALUES ('{}', '{}', {}, {}, '{}', {}, '{}', '{}', '{}', '{}');".format(
-        sensor, now, navegador, cercador, cerca, posicio, titol, url, descripcio)
+    insert_query = "INSERT INTO resultats (sensor, hora, navegador, cercador, cerca, posicio, titol, url, descripcio, noticia) VALUES ('{}', '{}', {}, {}, '{}', {}, '{}', '{}', '{}', '{}');".format(
+        sensor, now, navegador, cercador, cerca, posicio, titol, url, descripcio, noticia)
 
     # Executar la consulta amb els valors
     cursor.execute(insert_query)
@@ -95,3 +95,23 @@ def cerca_userAgent(cursor, navegador):
         return useragent
     else:
         return None
+    
+def cerca_cerca(cursor, sensor):
+
+    # Executar la instrucció SQL per inserir dades a la base de dades
+    select_integral = "SELECT seguent_cerca('{}');".format(sensor)
+
+    # Executar la consulta amb els valors
+    cursor.execute(select_integral)
+
+    int_cerca = cursor.fetchone()[0]
+
+    # Executar la instrucció SQL per inserir dades a la base de dades
+    select_cerca = "SELECT consulta FROM cerques WHERE cerqId = {};".format(int_cerca)
+
+    # Executar la consulta amb els valors
+    cursor.execute(select_cerca)
+
+    cerca = cursor.fetchone()[0]
+
+    return int_cerca, cerca

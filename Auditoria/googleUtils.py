@@ -71,16 +71,18 @@ def inicia_cercador(browser):
         return cercador
 
 def executa_cerca(browser, cerca):
+
+    sleep(temps_espera_processos)
+
     # Busca el quadre de text per fer la cerca. Neteja el contingut i cerca
     try:
         textarea = browser.find_element(By.TAG_NAME, value='textarea')
         textarea.send_keys(cerca + Keys.ENTER)
-        cercador = 1
 
     except:
-        cercador = 22
-    
-    return cercador
+        browser = 22
+    finally:
+        return browser
 
 def guarda_resultats(browser, directori_Imatges, navegador, sensor, cerca):
 

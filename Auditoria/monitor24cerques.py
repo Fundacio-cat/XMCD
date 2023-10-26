@@ -3,8 +3,7 @@
 ################# IMPORTS #################
 
 # Mòduls
-from selenium_helpers import cerca_cerca
-from postgres import connecta_bd, guarda_bd
+from postgres import connecta_bd, guarda_bd, cerca_cerca
 from utils import nom_sensor
 
 # Globals

@@ -3,29 +3,35 @@
 from selenium.webdriver.common.by import By
 from bs4 import BeautifulSoup
 
+
+# Defineix si un títol h3 està dins d'un mòdul de "Més preguntes"
+def h3_modul_preguntes(h3):
+
+    try:
+        div_preguntes = h3.find_element(By.XPATH, './parent::span/parent::div/parent::div/parent::div/parent::div/parent::div/parent::div/parent::div/parent::div/parent::div/parent::div/parent::div/parent::div/parent::div/parent::div/parent::div/parent::div')
+        div_mes_preguntes = div_preguntes.find_element(By.XPATH, './div/div[1]/div/div')
+        mes_preguntes = div_mes_preguntes.find_element(By.XPATH, './/span')
+        if "preguntes" in mes_preguntes.text.lower():
+            es_pregunta = True
+        else:
+            es_pregunta = False
+
+    # No està dins un contenidor de Més preguntes
+    except:
+        mes_preguntes = None
+        es_pregunta = False
+
+    return mes_preguntes, es_pregunta
+
 def cerca_dades(element_cercar):
 
     link = None
     titol = None
     description = None
 
-    # Si està dins d'un contenidor que conté la cadena "preguntes" ho descarta.
-    # Més preguntes // Preguntes relacionades amb la teva cerca
-    try:
-        div_preguntes = element_cercar.find_element(By.XPATH, './parent::span/parent::div/parent::div/parent::div/parent::div/parent::div/parent::div/parent::div/parent::div/parent::div/parent::div/parent::div/parent::div/parent::div/parent::div/parent::div/parent::div')
-        div_mes_preguntes = div_preguntes.find_element(By.XPATH, './div/div[1]/div/div')
-        mes_preguntes = div_mes_preguntes.find_element(By.XPATH, './/span')
-        if "preguntes" in mes_preguntes.text.lower():
-            afegit_google = True
-        else:
-            afegit_google = False
+    mes_preguntes, es_pregunta = h3_modul_preguntes(element_cercar)
 
-    # No està dins un contenidor de Més preguntes
-    except:
-        mes_preguntes = None
-        afegit_google = False
-
-    if not afegit_google:
+    if not es_pregunta:
 
         # Guardem les URL
         link = element_cercar.get_attribute('href')
@@ -37,6 +43,7 @@ def cerca_dades(element_cercar):
 
         # Obtenim la descripció
         try:
+
             # Accedeix a l'element pare 3 vegades
             div_pare = element_cercar.find_element(By.XPATH, './parent::span/parent::div/parent::div/parent::div/parent::div/parent::div')
 
@@ -53,29 +60,57 @@ def cerca_dades(element_cercar):
                 description = spans[len(spans)-1].text
 
         except:
-            if mes_preguntes is not None:
-                description = mes_preguntes.text
-            else:
-                description = None
+            try:
+                # Altre accés de les descripcions
+                div_pare = element_cercar.find_element(By.XPATH, './parent::span/parent::div/parent::div/parent::div/parent::div')
+                div_descripcio = div_pare.find_element(By.XPATH, './div[3]')
+                description = div_descripcio.text
+
+                if description == '':
+                    div_descripcio = div_pare.find_element(By.XPATH, './div[2]')
+                    description = div_descripcio.text
+
+            except:
+                if mes_preguntes is not None:
+                    description = mes_preguntes.text
+                else:
+                    description = None
+
 
     return [link, titol, description]
 
-def cerca_cerca(cursor, sensor):
+def num_links_anteriors_noticies(browser):
+    # Busquem tots els elements <a> que contenen un <h3>
+    resultats_cerca = browser.find_elements(By.XPATH, '//a[h3[@class]]')
 
-    # Executar la instrucció SQL per inserir dades a la base de dades
-    select_integral = "SELECT seguent_cerca('{}');".format(sensor)
+    preguntes = 0
+    # Agafem els resultats
+    for resultat in resultats_cerca:
+        descripcio, pregunta_google = h3_modul_preguntes(resultat)
 
-    # Executar la consulta amb els valors
-    cursor.execute(select_integral)
+        if pregunta_google == True:
+            preguntes +=1
 
-    int_cerca = cursor.fetchone()[0]
+    # Obté el codi de la pàgina fins a "<g-section-with-header"
+    body = browser.find_element(By.XPATH, '//body')
+    page_source = body.get_attribute("innerHTML")
 
-    # Executar la instrucció SQL per inserir dades a la base de dades
-    select_cerca = "SELECT consulta FROM cerques WHERE cerqId = {};".format(int_cerca)
+    # Cerca on estan les noticies
+    index = page_source.find('Notícies destacades')
+    # Agafa el codi de la pàgina anterior a les notícies
+    if index != -1:
+        page_source = page_source[:index]
 
-    # Executar la consulta amb els valors
-    cursor.execute(select_cerca)
+    soup = BeautifulSoup(page_source, 'html.parser')
+    # Troba tots els elements h3
+    elements_h3 = soup.find_all('h3')
+    # Compta el nombre d'elements h3
+    nombre_elements_h3 = len(elements_h3)
 
-    cerca = cursor.fetchone()[0]
+    if nombre_elements_h3 > preguntes:
+        titols_anteriors = nombre_elements_h3 - preguntes
+    else:
+        titols_anteriors = nombre_elements_h3
 
-    return int_cerca, cerca
+    return titols_anteriors
+
