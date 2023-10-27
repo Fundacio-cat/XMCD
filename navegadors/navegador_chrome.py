@@ -25,16 +25,12 @@ class ChromeNavegador(NavegadorBase):
             
             service = Service(driver_path)
 
-            print (driver_path)
-            print (user_agent)
-
-            #try:
-            print ("Intento navegador")
-            browser = webdriver.Chrome(service=service, options=options)
-            #except Exception as e:
-            #    self.config.write_log(
-            #        f"Error iniciant el navegador Chrome: {e}", level=logging.ERROR)
-            #    raise ValueError("Error iniciant el navegador Chrome")
+            try:
+                browser = webdriver.Chrome(service=service, options=options)
+            except Exception as e:
+                self.config.write_log(
+                    f"Error iniciant el navegador Chrome: {e}", level=logging.ERROR)
+                raise ValueError("Error iniciant el navegador Chrome")
         else:
             self.config.write_log(
                 "No hi ha user agent disponible.", level=logging.ERROR)

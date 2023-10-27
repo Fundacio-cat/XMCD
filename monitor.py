@@ -70,7 +70,7 @@ def executa_crawler(config: Config, cerca: str, id_cerca: int):
         for posicio, dades in resultats.items():
             logging.info(
                 f"Guardant a la base de dades la posició {posicio}, amb el sensor {config.sensor}")
-            repo.mock_guarda_bd(
+            repo.guarda_bd(
                 id_cerca,
                 posicio,
                 dades.get('titol', ''),
@@ -82,7 +82,6 @@ def executa_crawler(config: Config, cerca: str, id_cerca: int):
         config.write_log(
             f"Error en l'execució del crawler per la cerca {cerca}: {e}", level=logging.ERROR)
 
-'''
 if __name__ == "__main__":
     args = parseja_arguments()
     # inicialitza configuració, base de dades, sensor, cercador i navegador
@@ -130,47 +129,3 @@ if __name__ == "__main__":
 
         config.write_log("Crawler finalitzat", level=logging.INFO)
         sys.exit(0)
-'''
-
-if __name__ == "__main__":
-    args = parseja_arguments()
-    # inicialitza configuració, base de dades, sensor, cercador i navegador
-    # es posa tot a la configuració
-    config = Config.carrega_config('./config.json')
-    repo = inicia_base_dades(config)
-
-    sensor = obtenir_sensor()
-    config.set_repository(repo)
-    config.set_sensor(sensor)
-
-    # Crea el navegador i el cercador
-    navegador = crea_navegador(args.navegador, config)
-    config.set_navegador(navegador)
-
-    cercador = crea_cercador(args.cercador, config)
-    config.set_cercador(cercador)
-    nombre_cerques = getattr(config, 'nombre_de_cerques_per_execucio', 1)
-    for _ in range(nombre_cerques):
-        id_cerca, cerca = repo.seguent_cerca(sensor)
-        if cerca:
-            executa_crawler(config, cerca, id_cerca)
-        else:
-            config.write_log("No s'ha obtingut cap cerca",
-                                level=logging.WARNING)
-            break
-
-    # Intenta tancar el navegador i la connexió amb la base de dades, independentment de si hi ha hagut errors o no.
-    try:
-        navegador.tanca_navegador()
-    except Exception as e:
-        config.write_log(
-            f"Error tancant el navegador: {e}", level=logging.ERROR)
-
-    try:
-        repo.close_connection()
-    except Exception as e:
-        config.write_log(
-            f"Error tancant la connexió amb la BD: {e}", level=logging.ERROR)
-
-    config.write_log("Crawler finalitzat", level=logging.INFO)
-    sys.exit(0)
