@@ -27,9 +27,7 @@ class Config:
 
     def __post_init__(self):
         self.configure_logging()
-        self.current_directory = os.getcwd()+"/XMCD"
-
-        print ("Estic a: ", self.current_directory)
+        self.current_directory = os.getcwd()
 
     def configure_logging(self):
         """Configura el logging amb els paràmetres desitjats."""
