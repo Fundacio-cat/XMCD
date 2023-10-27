@@ -16,6 +16,8 @@ class ChromeNavegador(NavegadorBase):
         id_navegador_db = 1
         user_agent = self.repository.cerca_userAgent(id_navegador_db)
 
+        print (user_agent)
+
         if user_agent:
             options = Options()
             options.add_argument(f"user-agent={user_agent}")
