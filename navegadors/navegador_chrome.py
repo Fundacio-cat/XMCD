@@ -25,6 +25,9 @@ class ChromeNavegador(NavegadorBase):
             
             service = Service(driver_path)
 
+            print (driver_path)
+            print (user_agent)
+
             try:
                 print ("Intento navegador")
                 browser = webdriver.Chrome(service=service, options=options)
