@@ -62,14 +62,14 @@ def crea_cercador(tipus: str, config: Config):
     return GoogleCercador(config) if tipus == "Google" else BingCercador(config)
 
 
-def executa_crawler(cercador, cerca: str, id_cerca: int, repo: Repository):
+def executa_crawler(config: Config, cerca: str, id_cerca: int):
     try:
-        resultats = cercador.guarda_resultats(cerca)
+        resultats = config.cercador.guarda_resultats(cerca)
         logging.info(
             f"Guardant a la base de dades els resultats per la cerca {cerca}")
         for posicio, dades in resultats.items():
             logging.info(
-                f"Guardant a la base de dades la posició {posicio}, amb el sensor {repo.config.sensor}")
+                f"Guardant a la base de dades la posició {posicio}, amb el sensor {config.sensor}")
             repo.mock_guarda_bd(
                 id_cerca,
                 posicio,
@@ -104,7 +104,7 @@ if __name__ == "__main__":
         for _ in range(nombre_cerques):
             id_cerca, cerca = repo.seguent_cerca(sensor)
             if cerca:
-                executa_crawler(cercador, cerca, id_cerca, repo)
+                executa_crawler(config, cerca, id_cerca)
             else:
                 config.write_log("No s'ha obtingut cap cerca",
                                  level=logging.WARNING)
