@@ -16,8 +16,6 @@ class ChromeNavegador(NavegadorBase):
         id_navegador_db = 1
         user_agent = self.repository.cerca_userAgent(id_navegador_db)
 
-        print (user_agent)
-
         if user_agent:
             options = Options()
             options.add_argument(f"user-agent={user_agent}")
@@ -25,11 +23,10 @@ class ChromeNavegador(NavegadorBase):
             driver_path = os.path.join(
                 self.config.current_directory, "Controladors", self.config.CHROME_DRIVER_PATH)
             
-            print (driver_path)
-
             service = Service(driver_path)
 
             try:
+                print ("Intento navegador")
                 browser = webdriver.Chrome(service=service, options=options)
             except Exception as e:
                 self.config.write_log(
