@@ -27,7 +27,7 @@ class Config:
 
     def __post_init__(self):
         self.configure_logging()
-        self.current_directory = os.getcwd()
+        self.current_directory = os.getcwd()+"/XMCD"
 
         print ("Estic a: ", self.current_directory)
 
