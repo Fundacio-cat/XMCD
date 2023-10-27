@@ -22,6 +22,9 @@ class ChromeNavegador(NavegadorBase):
             # posar driver_path = config.current_directory+"/Controladors/" + config.CHROME_DRIVER_PATH
             driver_path = os.path.join(
                 self.config.current_directory, "Controladors", self.config.CHROME_DRIVER_PATH)
+            
+            print (driver_path)
+
             service = Service(driver_path)
 
             try:
