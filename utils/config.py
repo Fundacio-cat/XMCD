@@ -29,6 +29,8 @@ class Config:
         self.configure_logging()
         self.current_directory = os.getcwd()
 
+        print ("Estic a: ", self.current_directory)
+
     def configure_logging(self):
         """Configura el logging amb els paràmetres desitjats."""
         level = getattr(logging, self.nivell_logging.upper(), None)
