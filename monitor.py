@@ -87,7 +87,7 @@ if __name__ == "__main__":
     args = parseja_arguments()
     # inicialitza configuració, base de dades, sensor, cercador i navegador
     # es posa tot a la configuració
-    config = Config.carrega_config('config.json')
+    config = Config.carrega_config('./config.json')
     repo = inicia_base_dades(config)
     try:
         sensor = obtenir_sensor()
