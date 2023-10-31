@@ -70,7 +70,7 @@ def executa_crawler(config: Config, cerca: str, id_cerca: int):
         for posicio, dades in resultats.items():
             logging.info(
                 f"Guardant a la base de dades la posició {posicio}, amb el sensor {config.sensor}")
-            repo.guarda_bd(
+            repo.mock_guarda_bd(
                 id_cerca,
                 posicio,
                 dades.get('titol', ''),

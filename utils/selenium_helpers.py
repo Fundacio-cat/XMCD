@@ -79,6 +79,7 @@ def cerca_dades(element_cercar):
 
     return [link, titol, description]
 
+# Retorna el número de titols que hi han anteriors a que apareguin les noticies. 
 def num_links_anteriors_noticies(browser):
     # Busquem tots els elements <a> que contenen un <h3>
     resultats_cerca = browser.find_elements(By.XPATH, '//a[h3[@class]]')
@@ -114,3 +115,82 @@ def num_links_anteriors_noticies(browser):
 
     return titols_anteriors
 
+# Agafa totes les notícies de la pàgina i les retorna amb format diccionari
+def hi_ha_noticies(browser):
+
+    # Obté el codi de la pàgina fins a "<g-section-with-header"
+    body = browser.find_element(By.XPATH, '//body')
+    page_source = body.get_attribute("innerHTML")
+    soup = BeautifulSoup(page_source, 'html.parser')
+
+    # Troba tots els elements amb la classe 'g-section-with-header'
+    elements_g_section = soup.find_all('g-section-with-header')
+
+    # Imprimeix o processa els elements trobats
+    for element in elements_g_section:
+
+        div_pare = element.find_parent('div').find_parent('div')
+
+        # Cerca el div on ha d'estar el text descriptiu del bloc
+        try:
+            # Div on ha d'estar el títol de les noticies. En aquest nivell o inferior
+            div_text_noticies = div_pare.find('div').find('div').find('div')
+        except:
+            div_text_noticies = None
+
+        if "Notícies destacades" in str(div_text_noticies):
+
+            return True
+        
+    return False
+
+# Agafa totes les notícies de la pàgina. Entra un diccionari i un index de nº de noticies i afegeix les noticies a aquest diccionari.
+def agafa_noticies(browser, resultats_desats, resultats):
+
+    # Obté el codi de la pàgina fins a "<g-section-with-header"
+    body = browser.find_element(By.XPATH, '//body')
+    page_source = body.get_attribute("innerHTML")
+    soup = BeautifulSoup(page_source, 'html.parser')
+
+    # Troba tots els elements amb la classe 'g-section-with-header'
+    elements_g_section = soup.find_all('g-section-with-header')
+
+    # Imprimeix o processa els elements trobats
+    for element in elements_g_section:
+
+        div_pare = element.find_parent('div').find_parent('div')
+
+        # Cerca el div on ha d'estar el text descriptiu del bloc
+        try:
+            # Div on ha d'estar el títol de les noticies. En aquest nivell o inferior
+            div_text_noticies = div_pare.find('div').find('div').find('div')
+        except:
+            div_text_noticies = None
+
+        if "Notícies destacades" in str(div_text_noticies):
+
+            with open('./divs.html', 'w', encoding='utf-8') as file:
+                file.write(str(div_text_noticies))
+
+            # El aria-level 2 és el text de notícies. Les notícies estan per sota del 2 sempre. El més avall que he vist és lvl 4.
+            for i in range(3,5):
+
+                list_noticies = div_pare.find_all('div', {'aria-level': f'{i}'})
+
+                for noticia in list_noticies:
+
+                    # De tot l'element ens basem en el títol
+                    titol = noticia.text.replace('\n', '')
+
+                    # Descripció
+                    div_descripcio = noticia.find_parent('div').find_all('div')
+                    descripcio = div_descripcio[2].find('span').text.replace('\n', '')
+
+                    # Enllaç
+                    link = noticia.find_parent('div').find_parent('div').find_parent('div').find('a').get('href')
+
+                    if titol != '' and descripcio != '' and link != '':
+                        resultats[resultats_desats] = {"titol":titol, "descripcio:":descripcio, "link":link}
+                        resultats_desats += 1
+
+    return (resultats, resultats_desats)
