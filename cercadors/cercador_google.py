@@ -31,9 +31,6 @@ class GoogleCercador(CercadorBase):
                         acceptat = True
                         break  # Afegeix un break aquí per sortir del bucle un cop acceptat
                 except NoSuchElementException:
-                    # Aquest except captura l'excepció si no es troba l'element
-                    self.config.write_log(
-                        "No s'ha trobat el botó d'acceptar cookies", level=logging.ERROR)
                     pass
             if not acceptat:
                 self.config.write_log(
