@@ -1,0 +1,8 @@
+# Ignorar directoris Python (generalment generats per virtualenv o pip)
+__pycache__/
+venv/
+env/
+
+# Ignorar fitxers de Chrome i Firefox
+Chrome/
+Firefox/
