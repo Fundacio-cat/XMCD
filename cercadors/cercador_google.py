@@ -1,9 +1,13 @@
+import os
+import logging
 from cercadors.cercador_base import CercadorBase
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from selenium.common.exceptions import NoSuchElementException, WebDriverException
 from datetime import datetime
 import logging
 from utils.selenium_helpers import cerca_dades
+from utils.utils import assegura_directori_existeix
 from time import sleep
 
 from os.path import sep
@@ -25,15 +29,34 @@ class GoogleCercador(CercadorBase):
                     if button.find_element(By.XPATH, './/div[contains(text(), "Accepta-ho tot")]'):
                         button.click()
                         acceptat = True
-                except:
+                        break  # Afegeix un break aquí per sortir del bucle un cop acceptat
+                except NoSuchElementException:
+                    # Aquest except captura l'excepció si no es troba l'element
+                    self.config.write_log(
+                        "No s'ha trobat el botó d'acceptar cookies", level=logging.ERROR)
                     pass
             if not acceptat:
-                # raise error "No s'han pogut acceptar les cookies de Google"
+                self.config.write_log(
+                    "No s'ha pogut acceptar les cookies de Google", level=logging.ERROR)
                 raise ValueError(
                     "No s'han pogut acceptar les cookies de Google")
-        except:
-            # raise error No s'ha pogut iniciar el cercador
-            raise ValueError("No s'ha pogut iniciar el cercador")
+        except Exception as e:
+            try:
+                # Intenta obtenir la informació de la versió del navegador i del driver
+                browser_version = self.browser.capabilities['browserVersion']
+                driver_version = self.browser.capabilities['chrome']['chromedriverVersion'].split(' ')[
+                    0]
+                error_message = f"Error iniciant el cercador: " \
+                                f"Versió del navegador Chrome: {browser_version}\n" \
+                                f"Versió del ChromeDriver: {driver_version}"
+            except WebDriverException:
+                # Si no es pot obtenir la informació de la versió, utilitza un missatge genèric
+                error_message = f"Error iniciant el cercador: {e}\n" \
+                                "No s'ha pogut obtenir la informació de la versió del navegador o del driver."
+
+            self.config.write_log(error_message, level=logging.ERROR)
+            raise ValueError(error_message) from e
+
         return id_cercador_db
 
     def composa_nom_captura(self, cerca, suffix=None):
@@ -49,6 +72,10 @@ class GoogleCercador(CercadorBase):
             nom_captura = f"{nom_base}_{suffix}.png"
         else:
             nom_captura = f"{nom_base}.png"
+
+        assegura_directori_existeix(os.path.dirname(nom_captura))
+        print(nom_captura)
+
         return nom_captura
 
     def guarda_resultats(self, cerca):

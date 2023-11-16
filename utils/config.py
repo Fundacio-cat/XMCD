@@ -27,8 +27,8 @@ class Config:
 
     def __post_init__(self):
         self.configure_logging()
-        #self.current_directory = os.getcwd() # No funciona al executar-se amb CRON
-        self.current_directory = '/home/catalanet/XMCD'
+        self.current_directory = os.getcwd()  # No funciona al executar-se amb CRON
+        # self.current_directory = '/home/catalanet/XMCD'
 
     def configure_logging(self):
         """Configura el logging amb els paràmetres desitjats."""

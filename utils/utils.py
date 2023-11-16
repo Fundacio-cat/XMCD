@@ -1,4 +1,5 @@
 import socket
+import os
 
 
 def nom_sensor():
@@ -21,3 +22,14 @@ def nom_sensor():
         # Registra l'error si es produeix algun problema obtenint el nom del host.
         print(f"Error obtenint el nom del sensor: {e}")
         return None
+
+
+def assegura_directori_existeix(directori):
+    """
+    Crea un directori si no existeix.
+
+    Arguments:
+    - directori (str): El directori que es vol crear.
+    """
+    if not os.path.exists(directori):
+        os.makedirs(directori)

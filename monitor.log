@@ -1,0 +1,152 @@
+2023-11-16 10:33:45,794 [INFO] [config.py:62] - Sensor PUNTC iniciat correctament (Cridat des de C:\Users\puntcat\projects\XMCD\last\XMCD\monitor.py línia 99 funció <module>)
+2023-11-16 10:33:45,794 [INFO] [config.py:62] - Creant el navegador Chrome ... (Cridat des de C:\Users\puntcat\projects\XMCD\last\XMCD\monitor.py línia 102 funció <module>)
+2023-11-16 10:33:47,933 [INFO] [config.py:62] - Navegador Chrome creat correctament (Cridat des de C:\Users\puntcat\projects\XMCD\last\XMCD\monitor.py línia 107 funció <module>)
+2023-11-16 10:33:47,933 [INFO] [config.py:62] - Creant el cercador Google ... (Cridat des de C:\Users\puntcat\projects\XMCD\last\XMCD\monitor.py línia 110 funció <module>)
+2023-11-16 10:33:49,135 [ERROR] [config.py:62] - No s'ha trobat el botó d'acceptar cookies (Cridat des de C:\Users\puntcat\projects\XMCD\last\XMCD\cercadors\cercador_google.py línia 35 funció inicia_cercador)
+2023-11-16 10:33:49,148 [ERROR] [config.py:62] - No s'ha trobat el botó d'acceptar cookies (Cridat des de C:\Users\puntcat\projects\XMCD\last\XMCD\cercadors\cercador_google.py línia 35 funció inicia_cercador)
+2023-11-16 10:33:49,159 [ERROR] [config.py:62] - No s'ha trobat el botó d'acceptar cookies (Cridat des de C:\Users\puntcat\projects\XMCD\last\XMCD\cercadors\cercador_google.py línia 35 funció inicia_cercador)
+2023-11-16 10:33:49,168 [ERROR] [config.py:62] - No s'ha trobat el botó d'acceptar cookies (Cridat des de C:\Users\puntcat\projects\XMCD\last\XMCD\cercadors\cercador_google.py línia 35 funció inicia_cercador)
+2023-11-16 10:33:49,233 [INFO] [config.py:62] - Cercador Google creat correctament (Cridat des de C:\Users\puntcat\projects\XMCD\last\XMCD\monitor.py línia 115 funció <module>)
+2023-11-16 10:33:49,234 [INFO] [config.py:62] - Nombre de cerques per executar: 2 (Cridat des de C:\Users\puntcat\projects\XMCD\last\XMCD\monitor.py línia 120 funció <module>)
+2023-11-16 10:33:56,014 [INFO] [cercador_google.py:114] - Obtenint la segona pàgina de aquafaba...
+2023-11-16 10:33:57,791 [INFO] [cercador_google.py:132] - S'han agafat els 10 resultats a la segona pàgina de aquafaba...
+2023-11-16 10:33:58,873 [INFO] [cercador_google.py:170] - Valorant els resultats de aquafaba...
+2023-11-16 10:33:58,874 [INFO] [monitor.py:70] - Guardant a la base de dades els resultats per la cerca aquafaba
+2023-11-16 10:33:58,874 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 1, amb el sensor PUNTC
+2023-11-16 10:33:58,991 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 2, amb el sensor PUNTC
+2023-11-16 10:33:59,113 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 3, amb el sensor PUNTC
+2023-11-16 10:33:59,229 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 4, amb el sensor PUNTC
+2023-11-16 10:33:59,340 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 5, amb el sensor PUNTC
+2023-11-16 10:33:59,452 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 6, amb el sensor PUNTC
+2023-11-16 10:33:59,562 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 7, amb el sensor PUNTC
+2023-11-16 10:33:59,669 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 8, amb el sensor PUNTC
+2023-11-16 10:33:59,781 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 9, amb el sensor PUNTC
+2023-11-16 10:33:59,895 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 10, amb el sensor PUNTC
+2023-11-16 10:34:06,409 [INFO] [cercador_google.py:114] - Obtenint la segona pàgina de augmentar brillantor apple...
+2023-11-16 10:34:08,091 [INFO] [cercador_google.py:132] - S'han agafat els 10 resultats a la segona pàgina de augmentar brillantor apple...
+2023-11-16 10:34:09,156 [INFO] [cercador_google.py:170] - Valorant els resultats de augmentar brillantor apple...
+2023-11-16 10:34:09,157 [INFO] [monitor.py:70] - Guardant a la base de dades els resultats per la cerca augmentar brillantor apple
+2023-11-16 10:34:09,157 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 1, amb el sensor PUNTC
+2023-11-16 10:34:09,231 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 2, amb el sensor PUNTC
+2023-11-16 10:34:09,347 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 3, amb el sensor PUNTC
+2023-11-16 10:34:09,455 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 4, amb el sensor PUNTC
+2023-11-16 10:34:09,570 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 5, amb el sensor PUNTC
+2023-11-16 10:34:09,677 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 6, amb el sensor PUNTC
+2023-11-16 10:34:09,782 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 7, amb el sensor PUNTC
+2023-11-16 10:34:09,886 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 8, amb el sensor PUNTC
+2023-11-16 10:34:09,991 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 9, amb el sensor PUNTC
+2023-11-16 10:34:10,099 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 10, amb el sensor PUNTC
+2023-11-16 10:34:12,800 [INFO] [config.py:62] - Crawler finalitzat (Cridat des de C:\Users\puntcat\projects\XMCD\last\XMCD\monitor.py línia 150 funció <module>)
+2023-11-16 10:34:59,478 [INFO] [config.py:62] - Sensor PUNTC iniciat correctament (Cridat des de C:\Users\puntcat\projects\XMCD\last\XMCD\monitor.py línia 99 funció <module>)
+2023-11-16 10:34:59,480 [INFO] [config.py:62] - Creant el navegador Chrome ... (Cridat des de C:\Users\puntcat\projects\XMCD\last\XMCD\monitor.py línia 102 funció <module>)
+2023-11-16 10:35:01,540 [INFO] [config.py:62] - Navegador Chrome creat correctament (Cridat des de C:\Users\puntcat\projects\XMCD\last\XMCD\monitor.py línia 107 funció <module>)
+2023-11-16 10:35:01,540 [INFO] [config.py:62] - Creant el cercador Google ... (Cridat des de C:\Users\puntcat\projects\XMCD\last\XMCD\monitor.py línia 110 funció <module>)
+2023-11-16 10:35:02,910 [ERROR] [config.py:62] - No s'ha trobat el botó d'acceptar cookies (Cridat des de C:\Users\puntcat\projects\XMCD\last\XMCD\cercadors\cercador_google.py línia 35 funció inicia_cercador)
+2023-11-16 10:35:02,921 [ERROR] [config.py:62] - No s'ha trobat el botó d'acceptar cookies (Cridat des de C:\Users\puntcat\projects\XMCD\last\XMCD\cercadors\cercador_google.py línia 35 funció inicia_cercador)
+2023-11-16 10:35:02,929 [ERROR] [config.py:62] - No s'ha trobat el botó d'acceptar cookies (Cridat des de C:\Users\puntcat\projects\XMCD\last\XMCD\cercadors\cercador_google.py línia 35 funció inicia_cercador)
+2023-11-16 10:35:02,940 [ERROR] [config.py:62] - No s'ha trobat el botó d'acceptar cookies (Cridat des de C:\Users\puntcat\projects\XMCD\last\XMCD\cercadors\cercador_google.py línia 35 funció inicia_cercador)
+2023-11-16 10:35:03,003 [INFO] [config.py:62] - Cercador Google creat correctament (Cridat des de C:\Users\puntcat\projects\XMCD\last\XMCD\monitor.py línia 115 funció <module>)
+2023-11-16 10:35:03,003 [INFO] [config.py:62] - Nombre de cerques per executar: 2 (Cridat des de C:\Users\puntcat\projects\XMCD\last\XMCD\monitor.py línia 120 funció <module>)
+2023-11-16 10:35:09,775 [INFO] [cercador_google.py:114] - Obtenint la segona pàgina de aquafaba...
+2023-11-16 10:35:11,499 [INFO] [cercador_google.py:132] - S'han agafat els 10 resultats a la segona pàgina de aquafaba...
+2023-11-16 10:35:12,560 [INFO] [cercador_google.py:170] - Valorant els resultats de aquafaba...
+2023-11-16 10:35:12,560 [INFO] [monitor.py:70] - Guardant a la base de dades els resultats per la cerca aquafaba
+2023-11-16 10:35:12,561 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 1, amb el sensor PUNTC
+2023-11-16 10:35:12,635 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 2, amb el sensor PUNTC
+2023-11-16 10:35:12,753 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 3, amb el sensor PUNTC
+2023-11-16 10:35:12,861 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 4, amb el sensor PUNTC
+2023-11-16 10:35:12,971 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 5, amb el sensor PUNTC
+2023-11-16 10:35:13,078 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 6, amb el sensor PUNTC
+2023-11-16 10:35:13,184 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 7, amb el sensor PUNTC
+2023-11-16 10:35:13,297 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 8, amb el sensor PUNTC
+2023-11-16 10:35:13,405 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 9, amb el sensor PUNTC
+2023-11-16 10:35:13,517 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 10, amb el sensor PUNTC
+2023-11-16 10:35:19,692 [INFO] [cercador_google.py:114] - Obtenint la segona pàgina de augmentar brillantor apple...
+2023-11-16 10:35:21,679 [INFO] [cercador_google.py:132] - S'han agafat els 10 resultats a la segona pàgina de augmentar brillantor apple...
+2023-11-16 10:35:22,751 [INFO] [cercador_google.py:170] - Valorant els resultats de augmentar brillantor apple...
+2023-11-16 10:35:22,751 [INFO] [monitor.py:70] - Guardant a la base de dades els resultats per la cerca augmentar brillantor apple
+2023-11-16 10:35:22,752 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 1, amb el sensor PUNTC
+2023-11-16 10:35:22,988 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 2, amb el sensor PUNTC
+2023-11-16 10:35:23,151 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 3, amb el sensor PUNTC
+2023-11-16 10:35:23,392 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 4, amb el sensor PUNTC
+2023-11-16 10:35:23,734 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 5, amb el sensor PUNTC
+2023-11-16 10:35:24,047 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 6, amb el sensor PUNTC
+2023-11-16 10:35:24,289 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 7, amb el sensor PUNTC
+2023-11-16 10:35:24,631 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 8, amb el sensor PUNTC
+2023-11-16 10:35:24,832 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 9, amb el sensor PUNTC
+2023-11-16 10:35:24,943 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 10, amb el sensor PUNTC
+2023-11-16 10:35:27,581 [INFO] [config.py:62] - Crawler finalitzat (Cridat des de C:\Users\puntcat\projects\XMCD\last\XMCD\monitor.py línia 150 funció <module>)
+2023-11-16 10:36:44,410 [INFO] [config.py:62] - Sensor PUNTC iniciat correctament (Cridat des de C:\Users\puntcat\projects\XMCD\last\XMCD\monitor.py línia 99 funció <module>)
+2023-11-16 10:36:44,411 [INFO] [config.py:62] - Creant el navegador Chrome ... (Cridat des de C:\Users\puntcat\projects\XMCD\last\XMCD\monitor.py línia 102 funció <module>)
+2023-11-16 10:36:46,411 [INFO] [config.py:62] - Navegador Chrome creat correctament (Cridat des de C:\Users\puntcat\projects\XMCD\last\XMCD\monitor.py línia 107 funció <module>)
+2023-11-16 10:36:46,411 [INFO] [config.py:62] - Creant el cercador Google ... (Cridat des de C:\Users\puntcat\projects\XMCD\last\XMCD\monitor.py línia 110 funció <module>)
+2023-11-16 10:36:47,691 [ERROR] [config.py:62] - No s'ha trobat el botó d'acceptar cookies (Cridat des de C:\Users\puntcat\projects\XMCD\last\XMCD\cercadors\cercador_google.py línia 35 funció inicia_cercador)
+2023-11-16 10:36:47,707 [ERROR] [config.py:62] - No s'ha trobat el botó d'acceptar cookies (Cridat des de C:\Users\puntcat\projects\XMCD\last\XMCD\cercadors\cercador_google.py línia 35 funció inicia_cercador)
+2023-11-16 10:36:47,715 [ERROR] [config.py:62] - No s'ha trobat el botó d'acceptar cookies (Cridat des de C:\Users\puntcat\projects\XMCD\last\XMCD\cercadors\cercador_google.py línia 35 funció inicia_cercador)
+2023-11-16 10:36:47,725 [ERROR] [config.py:62] - No s'ha trobat el botó d'acceptar cookies (Cridat des de C:\Users\puntcat\projects\XMCD\last\XMCD\cercadors\cercador_google.py línia 35 funció inicia_cercador)
+2023-11-16 10:36:47,780 [INFO] [config.py:62] - Cercador Google creat correctament (Cridat des de C:\Users\puntcat\projects\XMCD\last\XMCD\monitor.py línia 115 funció <module>)
+2023-11-16 10:36:47,780 [INFO] [config.py:62] - Nombre de cerques per executar: 2 (Cridat des de C:\Users\puntcat\projects\XMCD\last\XMCD\monitor.py línia 120 funció <module>)
+2023-11-16 10:36:54,846 [INFO] [cercador_google.py:114] - Obtenint la segona pàgina de barcelona...
+2023-11-16 10:36:58,549 [INFO] [cercador_google.py:132] - S'han agafat els 10 resultats a la segona pàgina de barcelona...
+2023-11-16 10:36:59,592 [INFO] [cercador_google.py:170] - Valorant els resultats de barcelona...
+2023-11-16 10:36:59,592 [INFO] [monitor.py:70] - Guardant a la base de dades els resultats per la cerca barcelona
+2023-11-16 10:36:59,593 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 1, amb el sensor PUNTC
+2023-11-16 10:36:59,664 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 2, amb el sensor PUNTC
+2023-11-16 10:36:59,769 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 3, amb el sensor PUNTC
+2023-11-16 10:36:59,880 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 4, amb el sensor PUNTC
+2023-11-16 10:36:59,996 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 5, amb el sensor PUNTC
+2023-11-16 10:37:00,107 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 6, amb el sensor PUNTC
+2023-11-16 10:37:00,213 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 7, amb el sensor PUNTC
+2023-11-16 10:37:00,324 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 8, amb el sensor PUNTC
+2023-11-16 10:37:00,440 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 9, amb el sensor PUNTC
+2023-11-16 10:37:00,549 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 10, amb el sensor PUNTC
+2023-11-16 10:37:05,647 [INFO] [cercador_google.py:170] - Valorant els resultats de biografia Gerard Romero...
+2023-11-16 10:37:05,647 [INFO] [monitor.py:70] - Guardant a la base de dades els resultats per la cerca biografia Gerard Romero
+2023-11-16 10:37:05,647 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 1, amb el sensor PUNTC
+2023-11-16 10:37:05,758 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 2, amb el sensor PUNTC
+2023-11-16 10:37:05,864 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 3, amb el sensor PUNTC
+2023-11-16 10:37:05,969 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 4, amb el sensor PUNTC
+2023-11-16 10:37:06,076 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 5, amb el sensor PUNTC
+2023-11-16 10:37:06,179 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 6, amb el sensor PUNTC
+2023-11-16 10:37:06,284 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 7, amb el sensor PUNTC
+2023-11-16 10:37:06,390 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 8, amb el sensor PUNTC
+2023-11-16 10:37:06,494 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 9, amb el sensor PUNTC
+2023-11-16 10:37:06,609 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 10, amb el sensor PUNTC
+2023-11-16 10:37:09,243 [INFO] [config.py:62] - Crawler finalitzat (Cridat des de C:\Users\puntcat\projects\XMCD\last\XMCD\monitor.py línia 150 funció <module>)
+2023-11-16 10:37:17,401 [INFO] [config.py:62] - Sensor PUNTC iniciat correctament (Cridat des de C:\Users\puntcat\projects\XMCD\last\XMCD\monitor.py línia 99 funció <module>)
+2023-11-16 10:37:17,402 [INFO] [config.py:62] - Creant el navegador Chrome ... (Cridat des de C:\Users\puntcat\projects\XMCD\last\XMCD\monitor.py línia 102 funció <module>)
+2023-11-16 10:37:19,386 [INFO] [config.py:62] - Navegador Chrome creat correctament (Cridat des de C:\Users\puntcat\projects\XMCD\last\XMCD\monitor.py línia 107 funció <module>)
+2023-11-16 10:37:19,386 [INFO] [config.py:62] - Creant el cercador Google ... (Cridat des de C:\Users\puntcat\projects\XMCD\last\XMCD\monitor.py línia 110 funció <module>)
+2023-11-16 10:37:21,079 [ERROR] [config.py:62] - No s'ha trobat el botó d'acceptar cookies (Cridat des de C:\Users\puntcat\projects\XMCD\last\XMCD\cercadors\cercador_google.py línia 35 funció inicia_cercador)
+2023-11-16 10:37:21,091 [ERROR] [config.py:62] - No s'ha trobat el botó d'acceptar cookies (Cridat des de C:\Users\puntcat\projects\XMCD\last\XMCD\cercadors\cercador_google.py línia 35 funció inicia_cercador)
+2023-11-16 10:37:21,101 [ERROR] [config.py:62] - No s'ha trobat el botó d'acceptar cookies (Cridat des de C:\Users\puntcat\projects\XMCD\last\XMCD\cercadors\cercador_google.py línia 35 funció inicia_cercador)
+2023-11-16 10:37:21,109 [ERROR] [config.py:62] - No s'ha trobat el botó d'acceptar cookies (Cridat des de C:\Users\puntcat\projects\XMCD\last\XMCD\cercadors\cercador_google.py línia 35 funció inicia_cercador)
+2023-11-16 10:37:21,169 [INFO] [config.py:62] - Cercador Google creat correctament (Cridat des de C:\Users\puntcat\projects\XMCD\last\XMCD\monitor.py línia 115 funció <module>)
+2023-11-16 10:37:21,169 [INFO] [config.py:62] - Nombre de cerques per executar: 2 (Cridat des de C:\Users\puntcat\projects\XMCD\last\XMCD\monitor.py línia 120 funció <module>)
+2023-11-16 10:37:26,262 [INFO] [cercador_google.py:114] - Obtenint la segona pàgina de calendari escolar 2023...
+2023-11-16 10:37:27,872 [INFO] [cercador_google.py:132] - S'han agafat els 10 resultats a la segona pàgina de calendari escolar 2023...
+2023-11-16 10:37:28,930 [INFO] [cercador_google.py:170] - Valorant els resultats de calendari escolar 2023...
+2023-11-16 10:37:28,932 [INFO] [monitor.py:70] - Guardant a la base de dades els resultats per la cerca calendari escolar 2023
+2023-11-16 10:37:28,932 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 1, amb el sensor PUNTC
+2023-11-16 10:37:29,009 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 2, amb el sensor PUNTC
+2023-11-16 10:37:29,125 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 3, amb el sensor PUNTC
+2023-11-16 10:37:29,234 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 4, amb el sensor PUNTC
+2023-11-16 10:37:29,342 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 5, amb el sensor PUNTC
+2023-11-16 10:37:29,447 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 6, amb el sensor PUNTC
+2023-11-16 10:37:29,554 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 7, amb el sensor PUNTC
+2023-11-16 10:37:29,660 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 8, amb el sensor PUNTC
+2023-11-16 10:37:29,769 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 9, amb el sensor PUNTC
+2023-11-16 10:37:29,877 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 10, amb el sensor PUNTC
+2023-11-16 10:37:33,861 [INFO] [cercador_google.py:170] - Valorant els resultats de calendari laboral barcelona...
+2023-11-16 10:37:33,861 [INFO] [monitor.py:70] - Guardant a la base de dades els resultats per la cerca calendari laboral barcelona
+2023-11-16 10:37:33,861 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 1, amb el sensor PUNTC
+2023-11-16 10:37:33,929 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 2, amb el sensor PUNTC
+2023-11-16 10:37:34,041 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 3, amb el sensor PUNTC
+2023-11-16 10:37:34,152 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 4, amb el sensor PUNTC
+2023-11-16 10:37:34,260 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 5, amb el sensor PUNTC
+2023-11-16 10:37:34,372 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 6, amb el sensor PUNTC
+2023-11-16 10:37:34,483 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 7, amb el sensor PUNTC
+2023-11-16 10:37:34,592 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 8, amb el sensor PUNTC
+2023-11-16 10:37:34,702 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 9, amb el sensor PUNTC
+2023-11-16 10:37:34,808 [INFO] [monitor.py:73] - Guardant a la base de dades la posició 10, amb el sensor PUNTC
+2023-11-16 10:37:37,411 [INFO] [config.py:62] - Crawler finalitzat (Cridat des de C:\Users\puntcat\projects\XMCD\last\XMCD\monitor.py línia 150 funció <module>)

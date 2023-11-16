@@ -22,6 +22,8 @@ def parseja_arguments():
                         help='Quin navegador? Chrome / Firefox')
     parser.add_argument('cercador', choices=CERCADORS_PERMESOS,
                         help='Quin cercador? Google / Bing')
+    parser.add_argument('-c', '--config', default='config.json',
+                        help='Ruta al fitxer de configuració. Per defecte és "config.json".')
     return parser.parse_args()
 
 
@@ -70,7 +72,7 @@ def executa_crawler(config: Config, cerca: str, id_cerca: int):
         for posicio, dades in resultats.items():
             logging.info(
                 f"Guardant a la base de dades la posició {posicio}, amb el sensor {config.sensor}")
-            repo.mock_guarda_bd(
+            repo.guarda_bd(
                 id_cerca,
                 posicio,
                 dades.get('titol', ''),
@@ -82,24 +84,42 @@ def executa_crawler(config: Config, cerca: str, id_cerca: int):
         config.write_log(
             f"Error en l'execució del crawler per la cerca {cerca}: {e}", level=logging.ERROR)
 
+
 if __name__ == "__main__":
     args = parseja_arguments()
     # inicialitza configuració, base de dades, sensor, cercador i navegador
     # es posa tot a la configuració
-    config = Config.carrega_config('./config.json')
+    # Carrega la configuració utilitzant el fitxer especificat o el fitxer per defecte
+    config = Config.carrega_config(args.config)
     repo = inicia_base_dades(config)
     try:
         sensor = obtenir_sensor()
         config.set_repository(repo)
         config.set_sensor(sensor)
-
+        config.write_log(
+            f"Sensor {sensor} iniciat correctament", level=logging.INFO)
         # Crea el navegador i el cercador
+        config.write_log(
+            f"Creant el navegador {args.navegador} ...", level=logging.INFO
+        )
         navegador = crea_navegador(args.navegador, config)
         config.set_navegador(navegador)
-
+        config.write_log(
+            f"Navegador {args.navegador} creat correctament", level=logging.INFO
+        )
+        config.write_log(
+            f"Creant el cercador {args.cercador} ...", level=logging.INFO
+        )
         cercador = crea_cercador(args.cercador, config)
         config.set_cercador(cercador)
+        config.write_log(
+            f"Cercador {args.cercador} creat correctament", level=logging.INFO
+        )
+
         nombre_cerques = getattr(config, 'nombre_de_cerques_per_execucio', 1)
+        config.write_log(
+            f"Nombre de cerques per executar: {nombre_cerques}", level=logging.INFO)
+
         for _ in range(nombre_cerques):
             id_cerca, cerca = repo.seguent_cerca(sensor)
             if cerca:
