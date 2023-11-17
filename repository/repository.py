@@ -109,7 +109,8 @@ class Repository:
     def seguent_cerca(self, sensor):
         try:
             # Executar la instrucció SQL per obtenir l'ID de la següent cerca
-            select_integral = "SELECT seguent_cerca('{}');".format(sensor)
+            select_integral = "SELECT següent_cerca_per_sensor('{}');".format(
+                sensor)
             self.cursor.execute(select_integral)
             int_cerca = self.cursor.fetchone()[0]
 
