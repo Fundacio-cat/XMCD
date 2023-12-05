@@ -4,6 +4,8 @@ venv/
 env/
 .vscode/
 Captures/
+logs/
+*.log
 
 # Ignorar fitxers de Chrome i Firefox
 Chrome/
