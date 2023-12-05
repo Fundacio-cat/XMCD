@@ -15,6 +15,7 @@ class ChromeNavegador(NavegadorBase):
         # Configura el valor de self.navegador com a 1 (Chrome)
         id_navegador_db = 1
         name = "Chrome"
+        name = "Chrome"
         user_agent = self.repository.cerca_userAgent(id_navegador_db)
 
         if user_agent:
@@ -45,4 +46,5 @@ class ChromeNavegador(NavegadorBase):
             self.config.write_log(
                 "No hi ha user agent disponible.", level=logging.ERROR)
             raise ValueError("No hi ha user agent disponible.")
+        return id_navegador_db, name, browser
         return id_navegador_db, name, browser
