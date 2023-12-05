@@ -6,6 +6,8 @@ env/
 Captures/
 logs/
 *.log
+__pycache__/
+
 
 # Ignorar fitxers de Chrome i Firefox
 Chrome/
