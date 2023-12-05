@@ -14,19 +14,20 @@ class ChromeNavegador(NavegadorBase):
         browser = None
         # Configura el valor de self.navegador com a 1 (Chrome)
         id_navegador_db = 1
+        name = "Chrome"
         user_agent = self.repository.cerca_userAgent(id_navegador_db)
 
         if user_agent:
             options = Options()
             options.add_argument(f"user-agent={user_agent}")
             # NO FUNCIONA:
-            #options.add_argument("--lang=en")
-            #options.add_argument("--headless")
+            # options.add_argument("--lang=en")
+            # options.add_argument("--headless")
             # NO S'HA PROVAT REALMENT
-            #options.add_argument("--no-sandbox")
-            #options.add_argument("--disable-dev-shm-usage")
-            #options.add_argument("--disable-gpu")
-            #options.add_argument("--remote-debugging-port=9222")
+            # options.add_argument("--no-sandbox")
+            # options.add_argument("--disable-dev-shm-usage")
+            # options.add_argument("--disable-gpu")
+            # options.add_argument("--remote-debugging-port=9222")
 
             # posar driver_path = config.current_directory+"/Controladors/" + config.CHROME_DRIVER_PATH
             driver_path = os.path.join(
@@ -44,4 +45,4 @@ class ChromeNavegador(NavegadorBase):
             self.config.write_log(
                 "No hi ha user agent disponible.", level=logging.ERROR)
             raise ValueError("No hi ha user agent disponible.")
-        return id_navegador_db, browser
+        return id_navegador_db, name, browser

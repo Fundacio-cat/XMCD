@@ -12,6 +12,7 @@ class FirefoxNavegador(NavegadorBase):
         browser = None
         # Configura el valor de self.navegador com a 1 (Chrome)
         id_navegador_db = 2
+        name = "Firefox"
         user_agent = self.repository.cerca_userAgent(id_navegador_db)
 
         if user_agent:
@@ -31,4 +32,4 @@ class FirefoxNavegador(NavegadorBase):
             self.config.write_log(
                 "No hi ha user agent disponible.", level=logging.ERROR)
             raise ValueError("No hi ha user agent disponible.")
-        return id_navegador_db, browser
+        return id_navegador_db, name, browser

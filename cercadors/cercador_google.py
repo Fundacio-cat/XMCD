@@ -20,12 +20,15 @@ class GoogleCercador(CercadorBase):
     def inicia_cercador(self):
         # Configura el valor de self.navegador com a 1 (Chrome)
         id_cercador_db = 1
+        cercador_name = "Google"
         try:
             acceptat = False
-            self.browser.get('https://www.google.com')
+            self.browser.get("https://www.google.cat/?hl=ca")
             buttons = self.browser.find_elements(By.XPATH, '//button')
             for button in buttons:
                 try:
+                    # print el  text de button
+                    # print(button.text)
                     if button.find_element(By.XPATH, './/div[contains(text(), "Accepta-ho tot")]'):
                         button.click()
                         acceptat = True
@@ -54,7 +57,7 @@ class GoogleCercador(CercadorBase):
             self.config.write_log(error_message, level=logging.ERROR)
             raise ValueError(error_message) from e
 
-        return id_cercador_db
+        return id_cercador_db, cercador_name
 
     def composa_nom_captura(self, cerca, suffix=None):
         # Obtenim el directori actual del fitxer de configuració
