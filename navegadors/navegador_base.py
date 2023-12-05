@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from selenium.webdriver.remote.webdriver import WebDriver
-from typing import Tuple, Union
+from typing import Tuple
 from utils.config import Config
 
 
@@ -13,13 +13,13 @@ class NavegadorBase(ABC):
         try:
             self.config = config
             self.repository = config.repository
-            self.id_navegador_db, self.browser = self.init_navegador()
+            self.id_navegador_db, self.name, self.browser = self.init_navegador()
         except:
             raise ValueError(
                 "Error de configuració del navegador. No es troba el repository")
 
     @abstractmethod
-    def init_navegador(self) -> Tuple[int, WebDriver]:
+    def init_navegador(self) -> Tuple[int, str, WebDriver]:
         """
         Inicialitza el navegador.
         """

@@ -20,10 +20,12 @@ class Config:
     database: str = None
     user: str = None
     password: str = None
+    base_url: str = None
     repository = None
     sensor = None
     navegador = None
     cercador = None
+    api_client = None
 
     def __post_init__(self):
         self.configure_logging()
@@ -97,3 +99,7 @@ class Config:
     def set_cercador(self, cercador):
         """Estableix el cercador per a la configuració."""
         self.cercador = cercador
+
+    def set_api_client(self, api_client):
+        """Estableix el client de l'API per a la configuració."""
+        self.api_client = api_client
