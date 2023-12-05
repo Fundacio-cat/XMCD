@@ -14,5 +14,13 @@ if __name__ == "__main__":
 
     # Reemplaça amb l'URL de la teva API
     status_code, response_text = client.create_resultat(
-        "sensr1", "chrome", "Google", 1, 1, "titol", "url", "descripcio", "ca", True)
+        1, 1, "Títol", "https://www.example.com", "Descripció", "true")
+
     print(f"Status Code: {status_code}, Response: {response_text}")
+
+    # test obtenir_user_agent
+    user_agent = client.obtenir_user_agent("Chrome")
+    if user_agent:
+        print(f"User Agent: {user_agent}")
+    else:
+        print("No s'ha trobat el user agent o hi ha hagut un error.")

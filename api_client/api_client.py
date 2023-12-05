@@ -15,8 +15,8 @@ class ApiClient:
         data = {
             "sensor": self.config.sensor,
             "hora": datetime.now().isoformat(),  # O una data específica en format ISO 8601
-            "navegador": self.config.navegador.name,
-            "cercador": self.config.cercador.name,
+            "navegador": "Chrome",
+            "cercador": "Google",
             "cercaId": cerca_id,
             "posicio": posicio,
             "titol": titol,
