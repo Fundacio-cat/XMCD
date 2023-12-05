@@ -1,8 +1,7 @@
 #!/bin/bash
 #
-# /home/catalanet/XMCD/executar_catalanet.sh
+# /home/catalanet/XMCD/executa_catalanet.bash
 # Llançament de consultes aleatòries
-# Configuració inicial: 1 cada 30 minuts entre setmana de 9 a 19
 # Versió 0.0.1
 #
 home_catalanet_monitor=/home/catalanet/XMCD
