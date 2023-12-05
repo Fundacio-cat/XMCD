@@ -31,9 +31,16 @@ class ApiClient:
         url = f"{self.base_url}/v1/seguent_cerca/{sensor}"
         response = requests.get(url)
         if response.status_code == 200:
-            cerca_data = response.json()
             # Retorna només el camp 'consulta'
             consulta = response.content.decode('utf-8')
             return json.loads(consulta).get("consulta")
         else:
             return None  # O gestionar l'error com consideris
+
+    def obtenir_user_agent(self, nom_navegador):
+        url = f"{self.base_url}/v1/useragent/{nom_navegador}"
+        response = requests.get(url)
+        if response.status_code == 200:
+            return response.text  # Retorna el user agent com a text
+        else:
+            return None  # O gestiona l'error com consideris
