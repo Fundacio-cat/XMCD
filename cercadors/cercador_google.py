@@ -23,7 +23,7 @@ class GoogleCercador(CercadorBase):
         cercador_name = "Google"
         try:
             acceptat = False
-            self.browser.get("https://www.google.cat/?hl=ca")
+            self.browser.get("https://www.google.com")
             buttons = self.browser.find_elements(By.XPATH, '//button')
             for button in buttons:
                 try:

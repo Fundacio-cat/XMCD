@@ -15,7 +15,15 @@ class ChromeNavegador(NavegadorBase):
         # Configura el valor de self.navegador com a 1 (Chrome)
         id_navegador_db = 1
         name = "Chrome"
-        user_agent = self.repository.cerca_userAgent(id_navegador_db)
+        try:
+            user_agent = self.repository.cerca_userAgent(id_navegador_db)
+            mock_user_agent = self.api_client.obtenir_user_agent(name)
+            print(f"Mock user agent: {mock_user_agent}")
+            print(f"User agent: {user_agent}")
+        except Exception as e:
+            self.config.write_log(
+                f"Error obtenint el user agent: {e}", level=logging.ERROR)
+            raise ValueError("Error obtenint el user agent")
 
         if user_agent:
             options = Options()
