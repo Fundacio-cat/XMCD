@@ -14,6 +14,9 @@ from repository.repository import Repository
 NAVEGADORS_PERMESOS = ["Chrome", "Firefox"]
 CERCADORS_PERMESOS = ["Google", "Bing"]
 
+navegador_firefox = None
+navegador_chrome = None
+
 
 def parseja_arguments():
     parser = argparse.ArgumentParser(
@@ -56,6 +59,11 @@ def crea_navegador(tipus: str, config: Config):
     return ChromeNavegador(config) if tipus == "Chrome" else FirefoxNavegador(config)
 
 
+def crea_navegadors(config: Config):
+    navegador_firefox = FirefoxNavegador(config)
+    navegador_chrome = ChromeNavegador(config)
+
+
 def crea_cercador(tipus: str, config: Config):
     if tipus not in CERCADORS_PERMESOS:
         config.write_log(
@@ -64,8 +72,13 @@ def crea_cercador(tipus: str, config: Config):
     return GoogleCercador(config) if tipus == "Google" else BingCercador(config)
 
 
-def executa_crawler(config: Config, cerca: str, id_cerca: int):
+def executa_crawler(config: Config, cerca: str, id_cerca: int, navegador_id: int):
     try:
+        if (navegador_id == 1):
+            config.set_navegador(navegador_chrome)
+        else:
+            config.set_navegador(navegador_firefox)
+
         resultats = config.cercador.guarda_resultats(cerca)
         logging.info(
             f"Guardant a la base de dades els resultats per la cerca {cerca}")
@@ -102,11 +115,16 @@ if __name__ == "__main__":
         config.write_log(
             f"Creant el navegador {args.navegador} ...", level=logging.INFO
         )
-        navegador = crea_navegador(args.navegador, config)
-        config.set_navegador(navegador)
+        # navegador = crea_navegador(args.navegador, config)
+        # config.set_navegador(navegador)
+        # config.write_log(
+        # f"Navegador {args.navegador} creat correctament", level=logging.INFO
+        # )
+        crea_navegadors(config)
         config.write_log(
-            f"Navegador {args.navegador} creat correctament", level=logging.INFO
+            f"Navegadors creats correctament", level=logging.INFO
         )
+
         config.write_log(
             f"Creant el cercador {args.cercador} ...", level=logging.INFO
         )
@@ -121,9 +139,9 @@ if __name__ == "__main__":
             f"Nombre de cerques per executar: {nombre_cerques}", level=logging.INFO)
 
         for _ in range(nombre_cerques):
-            id_cerca, cerca = repo.seguent_cerca(sensor)
+            id_cerca, cerca, navegador_id = repo.seguent_cerca_v2(sensor)
             if cerca:
-                executa_crawler(config, cerca, id_cerca)
+                executa_crawler(config, cerca, id_cerca, navegador_id)
             else:
                 config.write_log("No s'ha obtingut cap cerca",
                                  level=logging.WARNING)
@@ -136,7 +154,8 @@ if __name__ == "__main__":
     finally:
         # Intenta tancar el navegador i la connexió amb la base de dades, independentment de si hi ha hagut errors o no.
         try:
-            navegador.tanca_navegador()
+            navegador_chrome.tanca_navegador()
+            navegador_firefox.tanca_navegador()
         except Exception as e:
             config.write_log(
                 f"Error tancant el navegador: {e}", level=logging.ERROR)
