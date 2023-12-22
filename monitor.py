@@ -11,23 +11,16 @@ from cercadors.cercador_google import GoogleCercador
 from cercadors.cercador_bing import BingCercador
 from repository.repository import Repository
 
-NAVEGADORS_PERMESOS = ["Chrome", "Firefox"]
 CERCADORS_PERMESOS = ["Google", "Bing"]
-
-navegador_firefox = None
-navegador_chrome = None
-
 
 def parseja_arguments():
     parser = argparse.ArgumentParser(
-        description='Rebutja quin navegador i cercador utilitzarà per paràmetre')
-    #parser.add_argument('navegador', choices=NAVEGADORS_PERMESOS, help='Quin navegador? Chrome / Firefox')
+        description='Rebutja quin cercador utilitzarà per paràmetre')
     parser.add_argument('cercador', choices=CERCADORS_PERMESOS,
                         help='Quin cercador? Google / Bing')
     parser.add_argument('-c', '--config', default='config.json',
                         help='Ruta al fitxer de configuració. Per defecte és "config.json".')
     return parser.parse_args()
-
 
 def inicia_base_dades(config: Config) -> Repository:
     try:
@@ -35,17 +28,13 @@ def inicia_base_dades(config: Config) -> Repository:
         repo.connecta_bd()
         return repo
     except Exception as e:
-        config.write_log(
-            f"Error en la connexió a PostgreSQL: {e}", level=logging.ERROR)
+        config.write_log(f"Error en la connexió a PostgreSQL: {e}", level=logging.ERROR)
         sys.exit(503)
-
 
 def obtenir_sensor() -> str:
     sensor = nom_sensor()
     if not sensor:
-        config.write_log(
-            "No s'ha pogut obtenir el nom del sensor", level=logging.ERROR)
-
+        config.write_log("No s'ha pogut obtenir el nom del sensor", level=logging.ERROR)
         sys.exit(1)
     return sensor
 
@@ -63,7 +52,6 @@ def crea_cercador(tipus: str, config: Config):
             f"El cercador {tipus} no està suportat", level=logging.ERROR)
         sys.exit(1)
     return GoogleCercador(config) if tipus == "Google" else BingCercador(config)
-
 
 def executa_crawler(config: Config, cerca: str, id_cerca: int):
     try:
