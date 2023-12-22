@@ -125,6 +125,7 @@ class Repository:
                 f"Error en la connexió a PostgreSQL: {db_error}", level=logging.ERROR)
             return None, None
 
+    '''
     def seguent_cerca_v2(self, sensor):
         try:
             # Executar la instrucció SQL per obtenir l'ID de la següent cerca
@@ -142,6 +143,30 @@ class Repository:
         except psycopg2.Error as db_error:
             self.config.write_log(
                 f"Error en la connexió a PostgreSQL: {db_error}", level=logging.ERROR)
+            return None, None, None
+    '''
+
+    def seguent_cerca_v2(self, sensor):
+        try:
+            # Executar la instrucció SQL per obtenir l'ID de la següent cerca
+            select_integral = "SELECT * FROM següent_cerca_per_sensor_v2(%s);"
+            self.cursor.execute(select_integral, (sensor,))  # Utilitza paràmetres per prevenir injeccions SQL
+            result = self.cursor.fetchone()  # Guarda tot el resultat en una variable
+            if result:
+                int_cerca, int_cercador, _ = result  # Desempaqueta els valors
+    
+                # Executar la instrucció SQL per obtenir la consulta de cerca
+                select_cerca = "SELECT consulta FROM cerques WHERE cerqId = %s;"
+                self.cursor.execute(select_cerca, (int_cerca,))
+                cerca = self.cursor.fetchone()
+                if cerca:
+                    return int_cerca, cerca[0], int_cercador  # Retorna els valors
+                else:
+                    return None, None, None
+            else:
+                return None, None, None  # Retorna None si no hi ha resultats
+        except psycopg2.Error as db_error:
+            self.config.write_log(f"Error en la connexió a PostgreSQL: {db_error}", level=logging.ERROR)
             return None, None, None
 
     def close_connection(self):
