@@ -21,8 +21,7 @@ navegador_chrome = None
 def parseja_arguments():
     parser = argparse.ArgumentParser(
         description='Rebutja quin navegador i cercador utilitzarà per paràmetre')
-    parser.add_argument('navegador', choices=NAVEGADORS_PERMESOS,
-                        help='Quin navegador? Chrome / Firefox')
+    #parser.add_argument('navegador', choices=NAVEGADORS_PERMESOS, help='Quin navegador? Chrome / Firefox')
     parser.add_argument('cercador', choices=CERCADORS_PERMESOS,
                         help='Quin cercador? Google / Bing')
     parser.add_argument('-c', '--config', default='config.json',
@@ -61,8 +60,14 @@ def crea_navegador(tipus: str, config: Config):
 
 def crea_navegadors(config: Config):
     navegador_firefox = FirefoxNavegador(config)
+    print ("He iniciat i tancat Firefox")
     navegador_chrome = ChromeNavegador(config)
+    print ("He iniciat i tancat Chrome")
 
+
+
+
+    return [navegador_firefox, navegador_chrome]
 
 def crea_cercador(tipus: str, config: Config):
     if tipus not in CERCADORS_PERMESOS:
@@ -72,7 +77,7 @@ def crea_cercador(tipus: str, config: Config):
     return GoogleCercador(config) if tipus == "Google" else BingCercador(config)
 
 
-def executa_crawler(config: Config, cerca: str, id_cerca: int, navegador_id: int):
+def executa_crawler(config: Config, cerca: str, id_cerca: int, navegador_id: int, navegador_firefox: FirefoxNavegador, navegador_chrome: ChromeNavegador):
     try:
         if (navegador_id == 1):
             config.set_navegador(navegador_chrome)
@@ -112,15 +117,14 @@ if __name__ == "__main__":
         config.write_log(
             f"Sensor {sensor} iniciat correctament", level=logging.INFO)
         # Crea el navegador i el cercador
-        config.write_log(
-            f"Creant el navegador {args.navegador} ...", level=logging.INFO
-        )
+        # config.write_log(f"Creant el navegador {args.navegador} ...", level=logging.INFO)
+
         # navegador = crea_navegador(args.navegador, config)
         # config.set_navegador(navegador)
         # config.write_log(
         # f"Navegador {args.navegador} creat correctament", level=logging.INFO
         # )
-        crea_navegadors(config)
+        navegador_firefox, navegador_chrome = crea_navegadors(config)
         config.write_log(
             f"Navegadors creats correctament", level=logging.INFO
         )
@@ -141,7 +145,8 @@ if __name__ == "__main__":
         for _ in range(nombre_cerques):
             id_cerca, cerca, navegador_id = repo.seguent_cerca_v2(sensor)
             if cerca:
-                executa_crawler(config, cerca, id_cerca, navegador_id)
+                print (id_cerca, cerca, navegador_id)
+                executa_crawler(config, cerca, id_cerca, navegador_id, navegador_firefox, navegador_chrome)
             else:
                 config.write_log("No s'ha obtingut cap cerca",
                                  level=logging.WARNING)
