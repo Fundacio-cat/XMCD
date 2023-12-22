@@ -59,15 +59,7 @@ def crea_navegador(tipus: str, config: Config):
 
 
 def crea_navegadors(config: Config):
-    navegador_firefox = FirefoxNavegador(config)
-    print ("He iniciat i tancat Firefox")
-    navegador_chrome = ChromeNavegador(config)
-    print ("He iniciat i tancat Chrome")
-
-
-
-
-    return [navegador_firefox, navegador_chrome]
+    return [FirefoxNavegador(config), ChromeNavegador(config)]
 
 def crea_cercador(tipus: str, config: Config):
     if tipus not in CERCADORS_PERMESOS:
@@ -125,6 +117,11 @@ if __name__ == "__main__":
         # f"Navegador {args.navegador} creat correctament", level=logging.INFO
         # )
         navegador_firefox, navegador_chrome = crea_navegadors(config)
+
+        # Aquí hauríem de definir el tipus de navegador segons si és Firefox o Chrome. 
+        config.set_navegador(navegador_firefox)
+        #config.set_navegador(navegador_chrome)        
+
         config.write_log(
             f"Navegadors creats correctament", level=logging.INFO
         )
@@ -132,6 +129,9 @@ if __name__ == "__main__":
         config.write_log(
             f"Creant el cercador {args.cercador} ...", level=logging.INFO
         )
+
+        #####
+
         cercador = crea_cercador(args.cercador, config)
         config.set_cercador(cercador)
         config.write_log(
