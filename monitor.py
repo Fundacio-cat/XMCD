@@ -49,18 +49,14 @@ def obtenir_sensor() -> str:
         sys.exit(1)
     return sensor
 
-
-def crea_navegador(tipus: str, config: Config):
-    if tipus not in NAVEGADORS_PERMESOS:
-        config.write_log(
-            f"El navegador {tipus} no està suportat", level=logging.ERROR)
-        sys.exit(1)
-    return ChromeNavegador(config) if tipus == "Chrome" else FirefoxNavegador(config)
-
-
-def crea_navegadors(config: Config):
-    return [FirefoxNavegador(config), ChromeNavegador(config)]
-
+def crea_navegador(navegador_id: int, config: Config):
+    if navegador_id == 1:
+        config.write_log(f"Creant el navegador Chrome", level=logging.INFO)
+        return ChromeNavegador(config) 
+    else:
+        config.write_log(f"Creant el navegador Firefox", level=logging.INFO)
+        return FirefoxNavegador(config)
+    
 def crea_cercador(tipus: str, config: Config):
     if tipus not in CERCADORS_PERMESOS:
         config.write_log(
@@ -69,19 +65,13 @@ def crea_cercador(tipus: str, config: Config):
     return GoogleCercador(config) if tipus == "Google" else BingCercador(config)
 
 
-def executa_crawler(config: Config, cerca: str, id_cerca: int, navegador_id: int, navegador_firefox: FirefoxNavegador, navegador_chrome: ChromeNavegador):
+def executa_crawler(config: Config, cerca: str, id_cerca: int):
     try:
-        if (navegador_id == 1):
-            config.set_navegador(navegador_chrome)
-        else:
-            config.set_navegador(navegador_firefox)
-
         resultats = config.cercador.guarda_resultats(cerca)
         logging.info(
             f"Guardant a la base de dades els resultats per la cerca {cerca}")
         for posicio, dades in resultats.items():
-            logging.info(
-                f"Guardant a la base de dades la posició {posicio}, amb el sensor {config.sensor}")
+            logging.info(f"Guardant a la base de dades la posició {posicio}, amb el sensor {config.sensor}")
             repo.guarda_bd(
                 id_cerca,
                 posicio,
@@ -91,8 +81,7 @@ def executa_crawler(config: Config, cerca: str, id_cerca: int, navegador_id: int
                 False
             )
     except Exception as e:
-        config.write_log(
-            f"Error en l'execució del crawler per la cerca {cerca}: {e}", level=logging.ERROR)
+        config.write_log(f"Error en l'execució del crawler per la cerca {cerca}: {e}", level=logging.ERROR)
 
 
 if __name__ == "__main__":
@@ -103,56 +92,34 @@ if __name__ == "__main__":
     config = Config.carrega_config(args.config)
     repo = inicia_base_dades(config)
     try:
+
+        ### Sensor ###
         sensor = obtenir_sensor()
         config.set_repository(repo)
         config.set_sensor(sensor)
-        config.write_log(
-            f"Sensor {sensor} iniciat correctament", level=logging.INFO)
-        # Crea el navegador i el cercador
-        # config.write_log(f"Creant el navegador {args.navegador} ...", level=logging.INFO)
+        config.write_log(f"Sensor {sensor} iniciat correctament", level=logging.INFO)
 
-        # navegador = crea_navegador(args.navegador, config)
-        # config.set_navegador(navegador)
-        # config.write_log(
-        # f"Navegador {args.navegador} creat correctament", level=logging.INFO
-        # )
-        navegador_firefox, navegador_chrome = crea_navegadors(config)
+        # Pregunta a quina navegador ha de realitzar la consulta
+        config.write_log(f"Obtenint la cerca i el navegador", level=logging.INFO)
+        id_cerca, cerca, navegador_id = repo.seguent_cerca_v2(sensor)
 
-        # Aquí hauríem de definir el tipus de navegador segons si és Firefox o Chrome. 
-        # És així perquè el crea_cercador requereix d'una instància de navegador per a, 
-        # si és Google acceptar les Cookies entre altres. 
-        config.set_navegador(navegador_firefox)
-        #config.set_navegador(navegador_chrome)        
+        ### Navegador ###
+        navegador = crea_navegador(navegador_id, config)
+        config.set_navegador(navegador)
+        config.write_log(f"Navegador {navegador_id} creat correctament", level=logging.INFO)
 
-        config.write_log(
-            f"Navegadors creats correctament", level=logging.INFO
-        )
-
-        config.write_log(
-            f"Creant el cercador {args.cercador} ...", level=logging.INFO
-        )
-
-        #####
-
+        ### Cercador ###
+        config.write_log(f"Creant el cercador {args.cercador} ...", level=logging.INFO)
         cercador = crea_cercador(args.cercador, config)
         config.set_cercador(cercador)
-        config.write_log(
-            f"Cercador {args.cercador} creat correctament", level=logging.INFO
-        )
+        config.write_log(f"Cercador {args.cercador} creat correctament", level=logging.INFO)
 
-        nombre_cerques = getattr(config, 'nombre_de_cerques_per_execucio', 1)
-        config.write_log(
-            f"Nombre de cerques per executar: {nombre_cerques}", level=logging.INFO)
+        ### Cerca ###
+        if cerca:
+            executa_crawler(config, cerca, id_cerca)
+        else:
+            config.write_log("No s'ha obtingut cap cerca", level=logging.WARNING)
 
-        for _ in range(nombre_cerques):
-            id_cerca, cerca, navegador_id = repo.seguent_cerca_v2(sensor)
-            if cerca:
-                print (id_cerca, cerca, navegador_id)
-                executa_crawler(config, cerca, id_cerca, navegador_id, navegador_firefox, navegador_chrome)
-            else:
-                config.write_log("No s'ha obtingut cap cerca",
-                                 level=logging.WARNING)
-                break
 
     except Exception as e:
         config.write_log(f"Error durant l'execució: {e}", level=logging.ERROR)
@@ -161,8 +128,7 @@ if __name__ == "__main__":
     finally:
         # Intenta tancar el navegador i la connexió amb la base de dades, independentment de si hi ha hagut errors o no.
         try:
-            navegador_chrome.tanca_navegador()
-            navegador_firefox.tanca_navegador()
+            navegador.tanca_navegador()
         except Exception as e:
             config.write_log(
                 f"Error tancant el navegador: {e}", level=logging.ERROR)
