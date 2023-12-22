@@ -119,6 +119,8 @@ if __name__ == "__main__":
         navegador_firefox, navegador_chrome = crea_navegadors(config)
 
         # Aquí hauríem de definir el tipus de navegador segons si és Firefox o Chrome. 
+        # És així perquè el crea_cercador requereix d'una instància de navegador per a, 
+        # si és Google acceptar les Cookies entre altres. 
         config.set_navegador(navegador_firefox)
         #config.set_navegador(navegador_chrome)        
 
