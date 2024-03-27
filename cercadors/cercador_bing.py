@@ -18,23 +18,34 @@ class BingCercador(CercadorBase):
     def __init__(self, config):
         super().__init__(config)
 
+
     def inicia_cercador(self):
 
         id_cercador_db = 2
 
         try:
-            # Aqui arriba
-            acceptat = False
+            cookies_acceptades = False
             self.browser.get("https://www.bing.com/?setlang=ca")
             sleep(5)
-            boto_cookies = self.browser.find_element(By.ID, "bnp_btn_accept")
-            if boto_cookies:
-                boto_cookies.click()
-                acceptat=True
+            cont = 0
+            while True:
+                try:
+                    # Cerca el botó de les cookies i el clica
+                    boto_cookies = self.browser.find_element(By.ID, "bnp_btn_accept")
+                    boto_cookies.click()
+                    cookies_acceptades=True
+                    break
+                except:
+                    if cont == 10:
+                        break
+                    sleep(1)
+                    cont += 1
 
-            if not acceptat:
+            if not cookies_acceptades:
+                # Acceptar les cookies no es necessari a Bing per fer la cerca
                 self.config.write_log("No s'ha pogut acceptar les cookies de Bing", level=logging.ERROR)
-                raise ValueError("No s'han pogut acceptar les cookies de Google")
+                #raise ValueError("No s'han pogut acceptar les cookies de Google")
+
         except Exception as e:
             try:
                 # Intenta obtenir la informació de la versió del navegador i del driver
@@ -53,7 +64,7 @@ class BingCercador(CercadorBase):
             raise ValueError(error_message) from e
 
         return id_cercador_db
-
+        
     def composa_nom_captura(self, cerca, suffix=None):
         # Obtenim el directori actual del fitxer de configuració
         current_directory = self.config.current_directory

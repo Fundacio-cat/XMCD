@@ -11,5 +11,5 @@ __pycache__/
 # Ignorar fitxers de Chrome i Firefox
 Chrome/
 Firefox/
-
+git.sh
 
