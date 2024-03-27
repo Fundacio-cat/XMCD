@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from selenium.webdriver.common.by import By
+from selenium.common.exceptions import NoSuchElementException
 from bs4 import BeautifulSoup
 
 
@@ -194,3 +195,57 @@ def agafa_noticies(browser, resultats_desats, resultats):
                         resultats_desats += 1
 
     return (resultats, resultats_desats)
+
+def neteja_descripcio_bing(descripcio_bruta):
+
+    descripcio_neta = descripcio_bruta.replace("fa ", "").replace("LLOC WEB", "").replace("LLOC WEBfa","").replace("Lloc web", "").replace("lloc web", "").replace("Lloc webfa", "").replace("lloc webfa", "").replace("Anunci", "").replace("Resultat del web", "").replace("Mostra'n més", "")
+    return (descripcio_neta)
+
+def cerca_dades_bing(resultat):
+
+    # Element pare del <h2> del resultat
+    element_pare = resultat.find_element(By.XPATH, '..')
+
+    # Agafa el títol si en té
+    titol = None
+    try:
+        titol = resultat.find_element(By.XPATH, './a').text
+
+        if titol.startswith("Notícies sobre") or titol.startswith("Imatges de:"):
+            raise Exception
+    except:
+        return (False, None, None, None)
+
+    # Agafa l'enllaç si en té
+    link = None
+    try:
+        link = element_pare.find_element(By.XPATH, './/cite').text
+        if not link.startswith('http') and not link.startswith('www'):
+            link = 'www.' + link
+    except NoSuchElementException:
+        return (False, None, None, None)
+
+    descripcio_anuncis = None
+    descripcio_wikipedia = None
+    # Agafa la descripció si en té
+    try:
+        descripcio_anuncis_brut = element_pare.find_element(By.XPATH, './/div[@class="b_caption"]/div')
+        if descripcio_anuncis_brut.text == '':
+            descripcio_anuncis_brut = element_pare.find_element(By.XPATH, './/div/p')
+        descripcio_anuncis = neteja_descripcio_bing(descripcio_anuncis_brut.text)
+    except NoSuchElementException:
+        try:
+            descripcio_wikipedia_bruta = element_pare.find_element(By.XPATH, './/div/p')
+            descripcio_wikipedia = neteja_descripcio_bing(descripcio_wikipedia_bruta.text)
+        except NoSuchElementException:
+            pass
+
+    if descripcio_anuncis:
+        descripcio = descripcio_anuncis
+    elif descripcio_wikipedia:
+        descripcio = descripcio_wikipedia
+    else:
+        descripcio = None
+
+    return (True, link, titol, descripcio)
+

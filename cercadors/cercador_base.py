@@ -12,8 +12,7 @@ class CercadorBase(ABC):
             self.browser = config.navegador.browser
             self.id_cercador_db = self.inicia_cercador()
         except:
-            raise ValueError(
-                "Error de configuració del navegador. No es troba el navegador")
+            raise ValueError("Error de configuració del navegador. No es troba el navegador. Potser ha petat abans")
 
     """
     Crea un cercador a partir de la configuració i el navegador.
