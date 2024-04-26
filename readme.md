@@ -6,6 +6,8 @@
 
 Cada sensor té una password i un usuari personalitzat. 
 
+git clone https://github.com/paufundacio/XMCD.git
+
 
 ### Crontab de cada sensor
 
