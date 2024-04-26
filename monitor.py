@@ -11,21 +11,10 @@ from cercadors.cercador_google import GoogleCercador
 from cercadors.cercador_bing import BingCercador
 from repository.repository import Repository
 
-NAVEGADORS_PERMESOS = ["Chrome", "Firefox"]
-CERCADORS_PERMESOS = ["Google", "Bing"]
-
-
 def parseja_arguments():
-    parser = argparse.ArgumentParser(
-        description='Rebutja quin navegador i cercador utilitzarà per paràmetre')
-    parser.add_argument('navegador', choices=NAVEGADORS_PERMESOS,
-                        help='Quin navegador? Chrome / Firefox')
-    parser.add_argument('cercador', choices=CERCADORS_PERMESOS,
-                        help='Quin cercador? Google / Bing')
-    parser.add_argument('-c', '--config', default='config.json',
-                        help='Ruta al fitxer de configuració. Per defecte és "config.json".')
+    parser = argparse.ArgumentParser(description='Agafa els paràmetres del fitxer json')
+    parser.add_argument('-c', '--config', default='config.json', help='Ruta al fitxer de configuració. Per defecte és "config.json".')
     return parser.parse_args()
-
 
 def inicia_base_dades(config: Config) -> Repository:
     try:
@@ -37,32 +26,43 @@ def inicia_base_dades(config: Config) -> Repository:
             f"Error en la connexió a PostgreSQL: {e}", level=logging.ERROR)
         sys.exit(503)
 
-
 def obtenir_sensor() -> str:
     sensor = nom_sensor()
     if not sensor:
         config.write_log(
             "No s'ha pogut obtenir el nom del sensor", level=logging.ERROR)
-
         sys.exit(1)
     return sensor
 
+def crea_navegador(navegador: int, navegador_text: str, config: Config):
 
-def crea_navegador(tipus: str, config: Config):
-    if tipus not in NAVEGADORS_PERMESOS:
-        config.write_log(
-            f"El navegador {tipus} no està suportat", level=logging.ERROR)
+    # Retorna el navegador Chrome si 1
+    if navegador == 1:
+        return ChromeNavegador(config)
+
+    # Retorna el navegador Firefox si 2
+    elif navegador == 2:
+        return FirefoxNavegador(config)
+
+    # Si no està plantejat retorna un error
+    else:
+        config.write_log(f"Error: No existeix el navegador {navegador_text}", level=logging.ERROR)
         sys.exit(1)
-    return ChromeNavegador(config) if tipus == "Chrome" else FirefoxNavegador(config)
 
+def crea_cercador(cercador: int, cercador_text: str, config: Config):
 
-def crea_cercador(tipus: str, config: Config):
-    if tipus not in CERCADORS_PERMESOS:
-        config.write_log(
-            f"El cercador {tipus} no està suportat", level=logging.ERROR)
+    # Retorna Google si 1
+    if cercador == 1:
+        return GoogleCercador(config)
+
+    # Retorna Bing si 2
+    elif cercador == 2:
+        return BingCercador(config)
+
+    # Si no està plantejat retorna un error
+    else:
+        config.write_log(f"Error: No existeix el cercador {cercador_text}", level=logging.ERROR)
         sys.exit(1)
-    return GoogleCercador(config) if tipus == "Google" else BingCercador(config)
-
 
 def executa_crawler(config: Config, cerca: str, id_cerca: int):
     try:
@@ -87,48 +87,59 @@ def executa_crawler(config: Config, cerca: str, id_cerca: int):
 
 if __name__ == "__main__":
     args = parseja_arguments()
-    # inicialitza configuració, base de dades, sensor, cercador i navegador
-    # es posa tot a la configuració
     # Carrega la configuració utilitzant el fitxer especificat o el fitxer per defecte
     config = Config.carrega_config(args.config)
     repo = inicia_base_dades(config)
     try:
+
+        # Inici del sensor
         sensor = obtenir_sensor()
-        config.set_repository(repo)
+        config.set_repository(repo) # BD
         config.set_sensor(sensor)
-        config.write_log(
-            f"Sensor {sensor} iniciat correctament", level=logging.INFO)
-        # Crea el navegador i el cercador
-        config.write_log(
-            f"Creant el navegador {args.navegador} ...", level=logging.INFO
-        )
-        navegador = crea_navegador(args.navegador, config)
+        config.write_log(f"Sensor {sensor} iniciat correctament", level=logging.INFO)
+
+        # Selecciona el navegador
+        int_navegador = repo.selecciona_navegador()
+        navegador_text = "Chrome" if int_navegador == 1 else "Firefox" if int_navegador == 2 else "Navegador desconegut"
+        # Crea'l
+        config.write_log(f"Creant el navegador {navegador_text} ...", level=logging.INFO)
+        navegador = crea_navegador(int_navegador, navegador_text, config)
         config.set_navegador(navegador)
-        config.write_log(
-            f"Navegador {args.navegador} creat correctament", level=logging.INFO
-        )
-        config.write_log(
-            f"Creant el cercador {args.cercador} ...", level=logging.INFO
-        )
+        config.write_log(f"Navegador {navegador_text} creat correctament", level=logging.INFO)
 
-        cercador = crea_cercador(args.cercador, config)
+        # Selecciona el cercador
+        int_cercador = repo.selecciona_cercador()
+        cercador_text = "Google" if int_cercador == 1 else "Bing" if int_cercador == 2 else "Navegador desconegut"
+        # Crea'l
+        config.write_log(f"Creant el cercador {cercador_text} ...", level=logging.INFO)
+        cercador = crea_cercador(int_cercador, cercador_text, config)
         config.set_cercador(cercador)
-        config.write_log(
-            f"Cercador {args.cercador} creat correctament", level=logging.INFO
-        )
+        config.write_log(f"Cercador {cercador_text} creat correctament", level=logging.INFO)
 
-        nombre_cerques = getattr(config, 'nombre_de_cerques_per_execucio', 1)
-        config.write_log(
-            f"Nombre de cerques per executar: {nombre_cerques}", level=logging.INFO)
+        # Selecciona el dispositiu? --> S'hauria de seleccionar abans del navegador per a definir les mides
+        #int_cercador = repo.selecciona_cercador()
+        #cercador_text = "Google" if int_cercador == 1 else "Bing" if int_cercador == 2 else "Navegador desconegut"
+        # Crea'l
+        #config.write_log(f"Creant el cercador {cercador_text} ...", level=logging.INFO)
+        #cercador = crea_cercador(int_cercador, cercador_text, config)
+        #config.set_cercador(cercador)
+        #config.write_log(f"Cercador {cercador_text} creat correctament", level=logging.INFO)
 
-        for _ in range(nombre_cerques):
-            id_cerca, cerca = repo.seguent_cerca(sensor)
-            if cerca:
-                executa_crawler(config, cerca, id_cerca)
-            else:
-                config.write_log("No s'ha obtingut cap cerca",
-                                 level=logging.WARNING)
-                break
+        # Selecciona el accept_lang? --> S'hauria de seleccionar abans del cercador segur, potser abans del navegador? 
+        #int_cercador = repo.selecciona_cercador()
+        #cercador_text = "Google" if int_cercador == 1 else "Bing" if int_cercador == 2 else "Navegador desconegut"
+        # Crea'l
+        #config.write_log(f"Creant el cercador {cercador_text} ...", level=logging.INFO)
+        #cercador = crea_cercador(int_cercador, cercador_text, config)
+        #config.set_cercador(cercador)
+        #config.write_log(f"Cercador {cercador_text} creat correctament", level=logging.INFO)
+
+        id_cerca, cerca = repo.seguent_cerca(sensor)
+        if cerca:
+            config.write_log(f"Cerca a executar: {cerca}", level=logging.INFO)
+            executa_crawler(config, cerca, id_cerca)
+        else:
+            config.write_log("No s'ha obtingut cap cerca",level=logging.WARNING)
 
     except Exception as e:
         config.write_log(f"Error durant l'execució: {e}", level=logging.ERROR)

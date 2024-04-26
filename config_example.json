@@ -1,0 +1,15 @@
+{
+  "temps_espera_processos": 1,
+  "temps_espera_cerques": 5,
+  "nombre_de_cerques_per_execucio": 1,
+  "fitxer_logs": "logs/monitor.log",
+  "nivell_logging": "INFO",
+  "directori_Imatges": "Captures",
+  "CHROME_DRIVER_PATH": "chromedriver",
+  "FIREFOX_DRIVER_PATH": "geckodriver",
+  "host": "192.168.0.1",
+  "port": "5432",
+  "database": "XMCD",
+  "user": "XMCD",
+  "password": "XMCD"
+}

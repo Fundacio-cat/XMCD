@@ -71,7 +71,6 @@ class GoogleCercador(CercadorBase):
             nom_captura = f"{nom_base}.png"
 
         assegura_directori_existeix(os.path.dirname(nom_captura))
-        print(nom_captura)
 
         return nom_captura
 

@@ -109,14 +109,12 @@ class Repository:
     def seguent_cerca(self, sensor):
         try:
             # Executar la instrucció SQL per obtenir l'ID de la següent cerca
-            select_integral = "SELECT següent_cerca_per_sensor('{}');".format(
-                sensor)
+            select_integral = "SELECT seguent_cerca_filtrada('{}');".format(sensor)
             self.cursor.execute(select_integral)
             int_cerca = self.cursor.fetchone()[0]
 
-            # Executar la instrucció SQL per obtenir la consulta de cerca
-            select_cerca = "SELECT consulta FROM cerques WHERE cerqId = {};".format(
-                int_cerca)
+            # Executar la instrucció SQL per obtenir la consulta str de la cerca
+            select_cerca = "SELECT consulta FROM cerques WHERE cerqId = {};".format(int_cerca)
             self.cursor.execute(select_cerca)
             cerca = self.cursor.fetchone()[0]
             return int_cerca, cerca
@@ -124,50 +122,35 @@ class Repository:
             self.config.write_log(
                 f"Error en la connexió a PostgreSQL: {db_error}", level=logging.ERROR)
             return None, None
+        
 
-    '''
-    def seguent_cerca_v2(self, sensor):
+    def selecciona_navegador(self):
         try:
             # Executar la instrucció SQL per obtenir l'ID de la següent cerca
-            select_integral = "SELECT següent_cerca_per_sensor_v2('{}');".format(
-                sensor)
-            self.cursor.execute(select_integral)
-            int_cerca = self.cursor.fetchone()[0]
-            int_cercador = self.cursor.fetchone()[1]
-            # Executar la instrucció SQL per obtenir la consulta de cerca
-            select_cerca = "SELECT consulta FROM cerques WHERE cerqId = {};".format(
-                int_cerca)
-            self.cursor.execute(select_cerca)
-            cerca = self.cursor.fetchone()[0]
-            return int_cerca, cerca, int_cercador
+            select_navegador = "SELECT selecciona_navegador();"
+            self.cursor.execute(select_navegador)
+            int_navegador = self.cursor.fetchone()[0]
+
+            return int_navegador
+
         except psycopg2.Error as db_error:
             self.config.write_log(
                 f"Error en la connexió a PostgreSQL: {db_error}", level=logging.ERROR)
-            return None, None, None
-    '''
-
-    def seguent_cerca_v2(self, sensor):
+            return None, None
+        
+    def selecciona_cercador(self):
         try:
             # Executar la instrucció SQL per obtenir l'ID de la següent cerca
-            select_integral = "SELECT * FROM següent_cerca_per_sensor_v2(%s);"
-            self.cursor.execute(select_integral, (sensor,))  # Utilitza paràmetres per prevenir injeccions SQL
-            result = self.cursor.fetchone()  # Guarda tot el resultat en una variable
-            if result:
-                int_cerca, int_cercador, _ = result  # Desempaqueta els valors
-    
-                # Executar la instrucció SQL per obtenir la consulta de cerca
-                select_cerca = "SELECT consulta FROM cerques WHERE cerqId = %s;"
-                self.cursor.execute(select_cerca, (int_cerca,))
-                cerca = self.cursor.fetchone()
-                if cerca:
-                    return int_cerca, cerca[0], int_cercador  # Retorna els valors
-                else:
-                    return None, None, None
-            else:
-                return None, None, None  # Retorna None si no hi ha resultats
+            select_navegador = "SELECT selecciona_cercador();"
+            self.cursor.execute(select_navegador)
+            int_cercador = self.cursor.fetchone()[0]
+
+            return int_cercador
+
         except psycopg2.Error as db_error:
-            self.config.write_log(f"Error en la connexió a PostgreSQL: {db_error}", level=logging.ERROR)
-            return None, None, None
+            self.config.write_log(
+                f"Error en la connexió a PostgreSQL: {db_error}", level=logging.ERROR)
+            return None, None
 
     def close_connection(self):
         if self.conn is not None:
