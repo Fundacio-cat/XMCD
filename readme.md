@@ -12,7 +12,7 @@ git clone https://github.com/paufundacio/XMCD.git
 ### Crontab de cada sensor
 
 ```bash
-0 9-21 * * 1-5 bash /home/catalanet/XMCD/executa_catalanet.bash
+*/15 9-21 * * 1-5 bash /home/catalanet/XMCD/executa_catalanet.bash
 0 1 * * * sudo /sbin/shutdown -r # Reinicia a la 1 de la matinada cada dia
 ```
 
