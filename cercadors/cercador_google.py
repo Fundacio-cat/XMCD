@@ -23,6 +23,7 @@ class GoogleCercador(CercadorBase):
         try:
             acceptat = False
             self.browser.get('https://www.google.com')
+            sleep(self.config.temps_espera_cerques)
             buttons = self.browser.find_elements(By.XPATH, '//button')
             for button in buttons:
                 try:
@@ -33,10 +34,13 @@ class GoogleCercador(CercadorBase):
                 except NoSuchElementException:
                     pass
             if not acceptat:
-                self.config.write_log(
-                    "No s'ha pogut acceptar les cookies de Google", level=logging.ERROR)
-                raise ValueError(
-                    "No s'han pogut acceptar les cookies de Google")
+                textarea = self.browser.find_element(By.TAG_NAME, value='textarea')
+                if not textarea:
+                    self.config.write_log("No s'ha pogut acceptar les cookies de Google. No es pot seguir", level=logging.ERROR)
+                    raise ValueError("No s'han pogut acceptar les cookies de Google")
+                else:
+                    self.config.write_log("No s'ha pogut acceptar les cookies de Google. Continuant...", level=logging.ERROR)
+
         except Exception as e:
             try:
                 # Intenta obtenir la informació de la versió del navegador i del driver
@@ -56,14 +60,14 @@ class GoogleCercador(CercadorBase):
 
         return id_cercador_db
 
-    def composa_nom_captura(self, cerca, suffix=None):
+    def composa_nom_captura(self, cerca, navegador_text, suffix=None):
         # Obtenim el directori actual del fitxer de configuració
         current_directory = self.config.current_directory
         # Eliminem els espais del nom de cerca i obtenim el format de data-hora
         cerca_sense_espais = cerca.replace(' ', '_')
         data_hora_actual = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         # Composem el nom del fitxer amb os.path.join
-        nom_base = f"{current_directory}{sep}{self.config.directori_Imatges}{sep}{self.config.sensor}_Google_{cerca_sense_espais}_{data_hora_actual}"
+        nom_base = f"{current_directory}{sep}{self.config.directori_Imatges}{sep}{self.config.sensor}_{navegador_text}_Google_{cerca_sense_espais}_{data_hora_actual}"
         # Comprovem si hi ha un sufix i l'afegim si existeix
         if suffix:
             nom_captura = f"{nom_base}_{suffix}.png"
@@ -74,7 +78,7 @@ class GoogleCercador(CercadorBase):
 
         return nom_captura
 
-    def guarda_resultats(self, cerca):
+    def guarda_resultats(self, cerca, navegador_text):
         navegador = self.config.navegador
         browser = self.browser
 
@@ -84,10 +88,7 @@ class GoogleCercador(CercadorBase):
         sleep(self.config.temps_espera_processos)
         try:
             textarea = self.browser.find_element(By.TAG_NAME, value='textarea')
-            # Selecciona tot el text del textarea
-            # En Mac, usa Keys.COMMAND en comptes de Keys.CONTROL
             textarea.send_keys(Keys.CONTROL, 'a')
-            # Esborra el text seleccionat
             textarea.send_keys(Keys.DELETE)
             # Envia la nova cerca
             textarea.send_keys(cerca + Keys.ENTER)
@@ -96,8 +97,8 @@ class GoogleCercador(CercadorBase):
 
         while resultats_desats <= 10:
             sleep(self.config.temps_espera_processos)
-            nom_captura_1 = self.composa_nom_captura(cerca)
-            nom_captura_2 = self.composa_nom_captura(cerca, suffix="2a")
+            nom_captura_1 = self.composa_nom_captura(cerca, navegador_text)
+            nom_captura_2 = self.composa_nom_captura(cerca, navegador_text, suffix="2a")
 
             navegador.captura_pantalla(nom_captura_1)
             resultats_cerca = browser.find_elements(By.XPATH, '//a[h3]')

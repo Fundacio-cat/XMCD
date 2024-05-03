@@ -6,14 +6,17 @@ from utils.config import Config
 
 class NavegadorBase(ABC):
 
-    def __init__(self, config: Config):
+    def __init__(self, config: Config, amplada: int, altura: int):
         """
         Inicialitza les variables de classe i crida a la funció init_navegador, implementada per les classes filles.
         """
         try:
             self.config = config
             self.repository = config.repository
+            self.amplada = amplada
+            self.altura = altura
             self.id_navegador_db, self.browser = self.init_navegador()
+
         except:
             raise ValueError(
                 "Error de configuració del navegador. No es troba el repository")

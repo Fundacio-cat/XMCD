@@ -14,17 +14,16 @@ class FirefoxNavegador(NavegadorBase):
         id_navegador_db = 2
         user_agent = self.repository.cerca_userAgent(id_navegador_db)
 
-        user_agent = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36.'
-
         if user_agent:
             options = Options()
-            #options.add_argument(f"user-agent={user_agent}")
+            options.add_argument(f"user-agent={user_agent}")
             options.set_preference('intl.accept_languages', 'ca')
-            driver_path = os.path.join(
-                self.config.current_directory, "Controladors", self.config.FIREFOX_DRIVER_PATH)
+
+            driver_path = os.path.join(self.config.current_directory, "Controladors", self.config.FIREFOX_DRIVER_PATH)
             service = Service(driver_path)
             try:
                 browser = webdriver.Firefox(service=service, options=options)
+                browser.set_window_size(self.amplada, self.altura)
             except Exception as e:
                 self.config.write_log(
                     f"Error iniciant el navegador Firefox: {e}", level=logging.ERROR)

@@ -48,7 +48,7 @@ class Repository:
             self.config.write_log(f"Error en la connexió a PostgreSQL: {db_error}",
                                   level=logging.ERROR)
 
-    def guarda_bd(self, int_cerca, posicio, titol, url, descripcio, noticia):
+    def guarda_bd(self, int_cerca, posicio, titol, url, descripcio, noticia, mida):
         try:
             now = datetime.now()
             if titol is not None:
@@ -57,10 +57,10 @@ class Repository:
             if descripcio is not None:
                 descripcio = descripcio.replace("'", "''")
 
-            insert_query = "INSERT INTO resultats (sensor, hora, navegador, cercador, cerca, posicio, titol, url, descripcio, noticia) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+            insert_query = "INSERT INTO resultats (sensor, hora, navegador, cercador, cerca, posicio, titol, url, descripcio, noticia, mida) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
             values = (self.config.sensor, now, self.config.navegador.id_navegador_db,
                       self.config.cercador.id_cercador_db,
-                      int_cerca, posicio, titol, url, descripcio, noticia)
+                      int_cerca, posicio, titol, url, descripcio, noticia, mida)
 
             self.cursor.execute(insert_query, values)
             self.conn.commit()
@@ -68,7 +68,7 @@ class Repository:
             self.config.write_log(f"Error en la connexió a PostgreSQL: {db_error}",
                                   level=logging.ERROR)
 
-    def mock_guarda_bd(self, int_cerca, posicio, titol, url, descripcio, noticia):
+    def mock_guarda_bd(self, int_cerca, posicio, titol, url, descripcio, noticia, mida):
         try:
             now = datetime.now()
             if titol is not None:
@@ -77,11 +77,11 @@ class Repository:
             if descripcio is not None:
                 descripcio = descripcio.replace("'", "''")
 
-            insert_query = "INSERT INTO resultats (sensor, hora, navegador, cercador, cerca, posicio, titol, url, descripcio, noticia) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+            insert_query = "INSERT INTO resultats (sensor, hora, navegador, cercador, cerca, posicio, titol, url, descripcio, noticia, mida) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
             values = (self.config.sensor, now,
                       self.config.navegador.id_navegador_db,
                       self.config.cercador.id_cercador_db,
-                      int_cerca, posicio, titol, url, descripcio, noticia)
+                      int_cerca, posicio, titol, url, descripcio, noticia, mida)
 
             # self.cursor.execute(insert_query, values)
             # self.conn.commit()
@@ -123,6 +123,27 @@ class Repository:
                 f"Error en la connexió a PostgreSQL: {db_error}", level=logging.ERROR)
             return None, None
         
+    def selecciona_mides(self):
+        try:
+            # Executar la instrucció SQL per obtenir l'ID de la següent cerca
+            select_mides = "SELECT selecciona_mides();"
+            self.cursor.execute(select_mides)
+            int_mida = self.cursor.fetchone()[0]
+
+            select_amplada = f"SELECT amplada FROM mides WHERE midaid = {int_mida};"
+            self.cursor.execute(select_amplada)
+            amplada = self.cursor.fetchone()[0]
+
+            select_altura = f"SELECT altura FROM mides WHERE midaid = {int_mida};"
+            self.cursor.execute(select_altura)
+            altura = self.cursor.fetchone()[0]
+
+            return int_mida, amplada, altura
+
+        except psycopg2.Error as db_error:
+            self.config.write_log(
+                f"Error en la connexió a PostgreSQL: {db_error}", level=logging.ERROR)
+            return None, None
 
     def selecciona_navegador(self):
         try:
@@ -151,6 +172,8 @@ class Repository:
             self.config.write_log(
                 f"Error en la connexió a PostgreSQL: {db_error}", level=logging.ERROR)
             return None, None
+        
+
 
     def close_connection(self):
         if self.conn is not None:

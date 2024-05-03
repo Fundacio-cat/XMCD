@@ -19,22 +19,26 @@ class BingCercador(CercadorBase):
         super().__init__(config)
 
     def inicia_cercador(self):
-
+        # Configura el valor de self.navegador com a 2 (Bing)
         id_cercador_db = 2
-
         try:
             # Aqui arriba
             acceptat = False
             self.browser.get("https://www.bing.com/?setlang=ca")
-            sleep(5)
+            sleep(self.config.temps_espera_cerques)
             boto_cookies = self.browser.find_element(By.ID, "bnp_btn_accept")
             if boto_cookies:
                 boto_cookies.click()
                 acceptat=True
 
             if not acceptat:
-                self.config.write_log("No s'ha pogut acceptar les cookies de Bing", level=logging.ERROR)
-                raise ValueError("No s'han pogut acceptar les cookies de Google")
+                textarea = self.browser.find_element(By.TAG_NAME, value='textarea')
+                if not textarea:
+                    self.config.write_log("No s'ha pogut acceptar les cookies de Bing. No es pot seguir", level=logging.ERROR)
+                    raise ValueError("No s'han pogut acceptar les cookies de Bing")
+                else:
+                    self.config.write_log("No s'ha pogut acceptar les cookies de Bing. Continuant...", level=logging.ERROR)
+
         except Exception as e:
             try:
                 # Intenta obtenir la informació de la versió del navegador i del driver
@@ -54,14 +58,14 @@ class BingCercador(CercadorBase):
 
         return id_cercador_db
 
-    def composa_nom_captura(self, cerca, suffix=None):
+    def composa_nom_captura(self, cerca, navegador_text, suffix=None):
         # Obtenim el directori actual del fitxer de configuració
         current_directory = self.config.current_directory
         # Eliminem els espais del nom de cerca i obtenim el format de data-hora
         cerca_sense_espais = cerca.replace(' ', '_')
         data_hora_actual = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         # Composem el nom del fitxer amb os.path.join
-        nom_base = f"{current_directory}{sep}{self.config.directori_Imatges}{sep}{self.config.sensor}_Google_{cerca_sense_espais}_{data_hora_actual}"
+        nom_base = f"{current_directory}{sep}{self.config.directori_Imatges}{sep}{self.config.sensor}_{navegador_text}__Bing_{cerca_sense_espais}_{data_hora_actual}"
         # Comprovem si hi ha un sufix i l'afegim si existeix
         if suffix:
             nom_captura = f"{nom_base}_{suffix}.png"
@@ -72,7 +76,7 @@ class BingCercador(CercadorBase):
 
         return nom_captura
 
-    def guarda_resultats(self, cerca):
+    def guarda_resultats(self, cerca, navegador_text):
         navegador = self.config.navegador
         browser = self.browser
 
@@ -93,8 +97,8 @@ class BingCercador(CercadorBase):
 
         while resultats_desats <= 10:
             sleep(self.config.temps_espera_cerques)
-            nom_captura_1 = self.composa_nom_captura(cerca)
-            nom_captura_2 = self.composa_nom_captura(cerca, suffix="2a")
+            nom_captura_1 = self.composa_nom_captura(cerca, navegador_text)
+            nom_captura_2 = self.composa_nom_captura(cerca, navegador_text, suffix="2a")
 
             navegador.captura_pantalla(nom_captura_1)
             taula_resultats = browser.find_element(By.ID, "b_results")

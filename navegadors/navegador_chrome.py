@@ -19,23 +19,12 @@ class ChromeNavegador(NavegadorBase):
         if user_agent:
             options = Options()
             options.add_argument(f"user-agent={user_agent}")
-            # NO FUNCIONA:
-            #options.add_argument("--lang=en")
-            #options.add_argument("--headless")
-            # NO S'HA PROVAT REALMENT
-            #options.add_argument("--no-sandbox")
-            #options.add_argument("--disable-dev-shm-usage")
-            #options.add_argument("--disable-gpu")
-            #options.add_argument("--remote-debugging-port=9222")
-
-            # posar driver_path = config.current_directory+"/Controladors/" + config.CHROME_DRIVER_PATH
-            driver_path = os.path.join(
-                self.config.current_directory, "Controladors", self.config.CHROME_DRIVER_PATH)
-
+            options.add_argument("--lang=ca")
+            driver_path = os.path.join(self.config.current_directory, "Controladors", self.config.CHROME_DRIVER_PATH)
             service = Service(driver_path)
-
             try:
                 browser = webdriver.Chrome(service=service, options=options)
+                browser.set_window_size(self.amplada, self.altura)
             except Exception as e:
                 self.config.write_log(
                     f"Error iniciant el navegador Chrome: {e}", level=logging.ERROR)
