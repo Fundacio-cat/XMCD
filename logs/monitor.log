@@ -84,3 +84,26 @@ divendres, 3 de maig de 2024, 10:00:01 CEST
 2024-05-03 10:00:59,729 [INFO] [monitor.py:74] - Guardant a la base de dades la posició 9, amb el sensor kakkz
 2024-05-03 10:00:59,832 [INFO] [monitor.py:74] - Guardant a la base de dades la posició 10, amb el sensor kakkz
 2024-05-03 10:01:04,698 [INFO] [config.py:62] - Crawler finalitzat (Cridat des de /home/catalanet/XMCD/monitor.py línia 157 funció <module>)
+divendres, 3 de maig de 2024, 10:15:02 CEST
+2024-05-03 10:15:06,158 [INFO] [config.py:62] - Sensor kakkz iniciat correctament (Cridat des de /home/catalanet/XMCD/monitor.py línia 99 funció <module>)
+2024-05-03 10:15:06,302 [INFO] [config.py:62] - S'utilitzarà la mida de sobretaula ... (Cridat des de /home/catalanet/XMCD/monitor.py línia 104 funció <module>)
+2024-05-03 10:15:06,339 [INFO] [config.py:62] - Creant el navegador Firefox ... (Cridat des de /home/catalanet/XMCD/monitor.py línia 110 funció <module>)
+2024-05-03 10:15:31,639 [INFO] [config.py:62] - Navegador Firefox creat correctament (Cridat des de /home/catalanet/XMCD/monitor.py línia 113 funció <module>)
+2024-05-03 10:15:31,694 [INFO] [config.py:62] - Creant el cercador Google ... (Cridat des de /home/catalanet/XMCD/monitor.py línia 119 funció <module>)
+2024-05-03 10:15:42,577 [INFO] [config.py:62] - Cercador Google creat correctament (Cridat des de /home/catalanet/XMCD/monitor.py línia 122 funció <module>)
+2024-05-03 10:15:42,830 [INFO] [config.py:62] - Cerca a executar: festival grec (Cridat des de /home/catalanet/XMCD/monitor.py línia 135 funció <module>)
+2024-05-03 10:15:59,074 [INFO] [cercador_google.py:111] - Obtenint la segona pàgina de festival grec...
+2024-05-03 10:16:10,888 [INFO] [cercador_google.py:129] - S'han agafat els 10 resultats a la segona pàgina de festival grec...
+2024-05-03 10:16:11,911 [INFO] [cercador_google.py:167] - Valorant els resultats de festival grec...
+2024-05-03 10:16:11,912 [INFO] [monitor.py:72] - Guardant a la base de dades els resultats per la cerca festival grec
+2024-05-03 10:16:11,913 [INFO] [monitor.py:74] - Guardant a la base de dades la posició 1, amb el sensor kakkz
+2024-05-03 10:16:12,045 [INFO] [monitor.py:74] - Guardant a la base de dades la posició 2, amb el sensor kakkz
+2024-05-03 10:16:12,151 [INFO] [monitor.py:74] - Guardant a la base de dades la posició 3, amb el sensor kakkz
+2024-05-03 10:16:12,257 [INFO] [monitor.py:74] - Guardant a la base de dades la posició 4, amb el sensor kakkz
+2024-05-03 10:16:12,361 [INFO] [monitor.py:74] - Guardant a la base de dades la posició 5, amb el sensor kakkz
+2024-05-03 10:16:12,467 [INFO] [monitor.py:74] - Guardant a la base de dades la posició 6, amb el sensor kakkz
+2024-05-03 10:16:12,575 [INFO] [monitor.py:74] - Guardant a la base de dades la posició 7, amb el sensor kakkz
+2024-05-03 10:16:12,680 [INFO] [monitor.py:74] - Guardant a la base de dades la posició 8, amb el sensor kakkz
+2024-05-03 10:16:12,786 [INFO] [monitor.py:74] - Guardant a la base de dades la posició 9, amb el sensor kakkz
+2024-05-03 10:16:12,901 [INFO] [monitor.py:74] - Guardant a la base de dades la posició 10, amb el sensor kakkz
+2024-05-03 10:16:18,657 [INFO] [config.py:62] - Crawler finalitzat (Cridat des de /home/catalanet/XMCD/monitor.py línia 157 funció <module>)
