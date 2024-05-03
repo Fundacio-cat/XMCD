@@ -1,7 +1,7 @@
 # La configuració privada i personal de cada un dels sensors
 config.json
 
-# Fitxers generats per Python
+# Fitxers generats per Python que no calen
 **/__pycache__/
 
 # Fitxer de logs
