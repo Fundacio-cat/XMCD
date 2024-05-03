@@ -2,11 +2,7 @@
 config.json
 
 # Fitxer de Python
-cercadors/__pycache__/
-navegadors/__pycache__/
-utils/__pycache__/
-repository/__pycache__/
-repository/__pycache__
+**/__pycache__/
 
 # Fitxer de logs
 logs/monitor.log
