@@ -53,3 +53,4 @@ La comunicació entre el servidor central i els sensors es fa a través de la VP
 
 ##### Fundació .cat
 ##### Versió 1.0 posada en marxa el 29-04-24
+###
