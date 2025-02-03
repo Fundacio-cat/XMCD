@@ -140,6 +140,8 @@ class GoogleCercador(CercadorBase):
                                 'titol': titol, 'url': link, 'description': description}
                             resultats_desats += 1
 
+            logging.info(f"Resultats: {resultats}")
+
             if resultats_desats < 11:
                 try:
                     browser.find_elements(
