@@ -84,6 +84,7 @@ class GoogleCercador(CercadorBase):
 
         resultats = {}
         resultats_desats = 1
+        intents = 0
 
         sleep(self.config.temps_espera_processos)
         try:
@@ -95,7 +96,8 @@ class GoogleCercador(CercadorBase):
         except:
             raise ValueError("No s'ha pogut fer la cerca")
 
-        while resultats_desats <= 10:
+        while resultats_desats <= 10 and intents < 3:
+            intents += 1
             sleep(self.config.temps_espera_processos)
             nom_captura_1 = self.composa_nom_captura(cerca, navegador_text)
             nom_captura_2 = self.composa_nom_captura(cerca, navegador_text, suffix="2a")
@@ -177,15 +179,18 @@ class GoogleCercador(CercadorBase):
                     pass
 
                 finally:
-                    resultats_desats = 1
-                    resultats = {}
-                    browser.get('https://google.com')
-                    sleep(self.config.temps_espera_cerques)
-                    textarea = browser.find_element(
-                        By.TAG_NAME, value='textarea')
-                    textarea.send_keys(cerca + Keys.ENTER)
-                    sleep(self.config.temps_espera_processos)
-                    logging.info(f"Torna a realitzar la cerca")
+                    if intents < 3:
+                        resultats_desats = 1
+                        resultats = {}
+                        browser.get('https://google.com')
+                        sleep(self.config.temps_espera_cerques)
+                        textarea = browser.find_element(By.TAG_NAME, value='textarea')
+                        textarea.send_keys(cerca + Keys.ENTER)
+                        sleep(self.config.temps_espera_processos)
+                        logging.info(f"Torna a realitzar la cerca. Intent {intents + 1} de 3")
+                    else:
+                        logging.error(f"No s'han pogut obtenir resultats després de 3 intents per la cerca: {cerca}")
+                        raise ValueError(f"No s'han pogut obtenir resultats després de 3 intents per la cerca: {cerca}")
 
             else:
                 return resultats
