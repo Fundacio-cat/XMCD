@@ -171,7 +171,7 @@ class GoogleCercador(CercadorBase):
             if resultats_desats < 11:
                 logging.info(
                     f"No s'han obtingut els 10 resultats de {cerca}...")
-                remove(nom_captura_1)
+                #remove(nom_captura_1)
 
                 try:
                     remove(nom_captura_2)
