@@ -108,6 +108,8 @@ class Repository:
 
     def seguent_cerca(self, sensor):
         try:
+            self.config.write_log(f"Valorant següent cerca...", level=logging.ERROR)
+
             # Executar la instrucció SQL per obtenir l'ID de la següent cerca
             select_integral = "SELECT seguent_cerca_filtrada('{}');".format(sensor)
             self.cursor.execute(select_integral)
@@ -117,7 +119,11 @@ class Repository:
             select_cerca = "SELECT consulta FROM cerques WHERE cerqId = {};".format(int_cerca)
             self.cursor.execute(select_cerca)
             cerca = self.cursor.fetchone()[0]
+
+            self.config.write_log(f"Cerca a executar: {int_cerca} {cerca}", level=logging.ERROR)
+
             return int_cerca, cerca
+
         except psycopg2.Error as db_error:
             self.config.write_log(
                 f"Error en la connexió a PostgreSQL: {db_error}", level=logging.ERROR)
