@@ -7,6 +7,8 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium_stealth import stealth
 from fake_useragent import UserAgent  # Necessitaràs instal·lar: pip install fake-useragent
 import undetected_chromedriver as uc  # Necessitaràs instal·lar: pip install undetected-chromedriver
+from stem import Signal
+from stem.control import Controller
 
 import time
 import random
@@ -17,7 +19,7 @@ CERCA = "la vanguardia avui"
 def h3_modul_preguntes(h3):
 
     try:
-        div_preguntes = h3.find_element(By.XPATH, './parent::span/parent::div/parent::div/parent::div/parent::div/parent::div/parent::div/parent::div/parent::div/parent::div/parent::div/parent::div/parent::div/parent::div/parent::div')
+        div_preguntes = h3.find_element(By.XPATH, './parent::span/parent::div/parent::div/parent::div/parent::div/parent::div/parent::div/parent::div/parent::div/parent::div/parent::div/parent::div/parent::div/parent::div')
         div_mes_preguntes = div_preguntes.find_element(By.XPATH, './div/div[1]/div/div')
         mes_preguntes = div_mes_preguntes.find_element(By.XPATH, './/span')
         if "preguntes" in mes_preguntes.text.lower():
@@ -92,43 +94,25 @@ def cerca_dades(element_cercar):
 options = Options()
 ua = UserAgent()
 
-# Millores en les opcions de Firefox
-options.set_preference("general.useragent.override", ua.random)
-options.set_preference("dom.webdriver.enabled", False)
-options.set_preference("useAutomationExtension", False)
-options.set_preference("privacy.trackingprotection.enabled", False)
-options.set_preference("network.http.referer.spoofSource", True)
-options.set_preference("network.cookie.cookieBehavior", 0)
-options.set_preference("browser.cache.disk.enable", True)
-options.set_preference("browser.cache.memory.enable", True)
-options.set_preference("browser.cache.offline.enable", True)
-options.set_preference("network.http.referer.XOriginPolicy", 0)
-options.set_preference("webgl.disabled", True)
-options.set_preference("media.navigator.enabled", False)
-options.set_preference("media.peerconnection.enabled", False)
+# Configuració del proxy Tor
+PROXY_HOST = "127.0.0.1"
+PROXY_PORT = 9050
+options.set_preference('network.proxy.type', 1)
+options.set_preference('network.proxy.socks', PROXY_HOST)
+options.set_preference('network.proxy.socks_port', PROXY_PORT)
+options.set_preference('network.proxy.socks_version', 5)
 
-# Afegir headers aleatoris
-options.set_preference("general.platform.override", "Win32")
-options.set_preference("general.appversion.override", "5.0 (Windows)")
+def canvia_ip_tor():
+    with Controller.from_port(port=9051) as controller:
+        controller.authenticate(password="el_teu_password_tor")  # Canvia això pel teu password de Tor
+        controller.signal(Signal.NEWNYM)
+        time.sleep(5)  # Espera per assegurar que la nova identitat s'ha establert
 
 # Executa el driver
 driver = webdriver.Firefox(options=options)
 
 # Obrir Google
 driver.get("https://www.google.com")
-
-# Simular comportament més humà
-def simula_comportament_huma():
-    time.sleep(random.uniform(2, 5))
-    # Simula moviment del ratolí
-    actions = webdriver.ActionChains(driver)
-    element = driver.find_element(By.TAG_NAME, "body")
-    actions.move_to_element_with_offset(element, random.randint(0, 500), random.randint(0, 500))
-    actions.perform()
-    time.sleep(random.uniform(0.5, 2))
-
-# Simula comportament humà
-simula_comportament_huma()
 
 # Acceptar cookies si cal
 buttons = driver.find_elements(By.XPATH, '//button')
@@ -161,6 +145,11 @@ intents = 0
 time.sleep(3)
 
 while resultats_desats <= 10 and intents < 3:
+    try:
+        canvia_ip_tor()  # Canvia la IP abans de cada intent
+    except:
+        print("No s'ha pogut canviar la IP de Tor")
+    
     intents += 1
 
     resultats_cerca = driver.find_elements(By.XPATH, '//a[h3]')
@@ -225,9 +214,6 @@ while resultats_desats <= 10 and intents < 3:
 
     else:
         break
-
-    # Després de cada acció important, afegeix:
-    simula_comportament_huma()
 
 for resultat in resultats:
     print(f"{resultat}: {resultats[resultat]['titol']}, {resultats[resultat]['url']}, {resultats[resultat]['description']}")

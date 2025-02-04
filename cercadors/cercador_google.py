@@ -102,7 +102,7 @@ class GoogleCercador(CercadorBase):
             nom_captura_1 = self.composa_nom_captura("error", navegador_text)
             nom_captura_2 = self.composa_nom_captura(cerca, navegador_text, suffix="2a")
 
-            logging.info(f"Fen la captura de {nom_captura_1}...")
+            logging.info(f"Fent la captura de {nom_captura_1}...")
 
             navegador.captura_pantalla(nom_captura_1)
             resultats_cerca = browser.find_elements(By.XPATH, '//a[h3]')
