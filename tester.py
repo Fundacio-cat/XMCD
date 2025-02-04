@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.firefox.service import Service
 from bs4 import BeautifulSoup
 from selenium.common.exceptions import NoSuchElementException
 from stem import Signal
@@ -11,6 +12,8 @@ import time
 import random
 
 CERCA = "la vanguardia avui"
+PROXY_HOST = "127.0.0.1"
+PROXY_PORT = 9050
 
 # Defineix si un títol h3 està dins d'un mòdul de "Més preguntes"
 def h3_modul_preguntes(h3):
@@ -87,16 +90,6 @@ def cerca_dades(element_cercar):
 
     return [link, titol, description]
 
-# Configurar el driver de Firefox
-options = Options()
-
-# Configuració del proxy Tor
-PROXY_HOST = "127.0.0.1"
-PROXY_PORT = 9050
-options.set_preference('network.proxy.type', 1)
-options.set_preference('network.proxy.socks', PROXY_HOST)
-options.set_preference('network.proxy.socks_port', PROXY_PORT)
-options.set_preference('network.proxy.socks_version', 5)
 def canvia_ip_tor():
     try:
         # Per generar la password de Tor:
@@ -109,12 +102,24 @@ def canvia_ip_tor():
         print(f"Error canviant la IP de Tor: {str(e)}")
         return False
 
+# Configurar el driver de Firefox
+options = Options()
+
+# Configuració del proxy Tor
+options.set_preference('network.proxy.type', 1)
+options.set_preference('network.proxy.socks', PROXY_HOST)
+options.set_preference('network.proxy.socks_port', PROXY_PORT)
+options.set_preference('network.proxy.socks_version', 5)
+
+driver_path = ("/home/catalanet/XMCD/Controladors/geckodriver")
+service = Service(driver_path)
+
 # Intenta canviar la IP de Tor abans d'iniciar el navegador
 if not canvia_ip_tor():
     print("No s'ha pogut canviar la IP de Tor. Continuant amb la IP actual...")
 
 # Executa el driver
-driver = webdriver.Firefox(options=options)
+driver = webdriver.Firefox(service=service, options=options)
 
 # Obrir Google
 driver.get("https://www.google.com")
