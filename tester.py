@@ -108,7 +108,7 @@ def canvia_ip_tor():
         # 2. Afegeix la línia: HashedControlPassword $(tor --hash-password "la_teva_password")
         # 3. Reinicia el servei Tor
         with Controller.from_port(port=9051) as controller:
-            controller.authenticate(password="la_teva_password")  # Posa aquí la mateixa password que has fet servir abans
+            controller.authenticate(password="prova123")  # Posa aquí la mateixa password que has fet servir abans
             controller.signal(Signal.NEWNYM)
             time.sleep(5)  # Espera per assegurar que la nova identitat s'ha establert
             return True
