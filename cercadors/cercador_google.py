@@ -79,8 +79,6 @@ class GoogleCercador(CercadorBase):
         return nom_captura
 
     def guarda_resultats(self, cerca, navegador_text):
-
-        logging.info(f"Ha entrat a la funció de guardar resultats")
         navegador = self.config.navegador
         browser = self.browser
 
@@ -97,8 +95,6 @@ class GoogleCercador(CercadorBase):
             textarea.send_keys(cerca + Keys.ENTER)
         except:
             raise ValueError("No s'ha pogut fer la cerca")
-
-        logging.info(f"Iniciant el bucle de cerca de {cerca}...")
 
         while resultats_desats <= 10 and intents < 3:
             intents += 1

@@ -108,8 +108,6 @@ class Repository:
 
     def seguent_cerca(self, sensor):
         try:
-            self.config.write_log(f"Valorant següent cerca...", level=logging.ERROR)
-
             # Executar la instrucció SQL per obtenir l'ID de la següent cerca
             select_integral = "SELECT seguent_cerca_filtrada('{}');".format(sensor)
             self.cursor.execute(select_integral)

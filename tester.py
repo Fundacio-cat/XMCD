@@ -6,6 +6,7 @@ from bs4 import BeautifulSoup
 from selenium.common.exceptions import NoSuchElementException
 from selenium_stealth import stealth
 from fake_useragent import UserAgent  # Necessitaràs instal·lar: pip install fake-useragent
+import undetected_chromedriver as uc  # Necessitaràs instal·lar: pip install undetected-chromedriver
 
 import time
 import random
@@ -88,15 +89,27 @@ def cerca_dades(element_cercar):
     return [link, titol, description]
 
 # Configurar el driver de Firefox
-# Configura Firefox
 options = Options()
 ua = UserAgent()
-options.set_preference("general.useragent.override", ua.random)  # User-Agent aleatori
-options.set_preference("dom.webdriver.enabled", False)  # Amaga el WebDriver
-options.set_preference("useAutomationExtension", False)  # Evita detecció com a bot
-options.set_preference("dom.webnotifications.enabled", False)  # Desactiva notificacions emergents
-options.set_preference("privacy.trackingprotection.enabled", False)  # Evita bloqueig de rastrejadors
 
+# Millores en les opcions de Firefox
+options.set_preference("general.useragent.override", ua.random)
+options.set_preference("dom.webdriver.enabled", False)
+options.set_preference("useAutomationExtension", False)
+options.set_preference("privacy.trackingprotection.enabled", False)
+options.set_preference("network.http.referer.spoofSource", True)
+options.set_preference("network.cookie.cookieBehavior", 0)
+options.set_preference("browser.cache.disk.enable", True)
+options.set_preference("browser.cache.memory.enable", True)
+options.set_preference("browser.cache.offline.enable", True)
+options.set_preference("network.http.referer.XOriginPolicy", 0)
+options.set_preference("webgl.disabled", True)
+options.set_preference("media.navigator.enabled", False)
+options.set_preference("media.peerconnection.enabled", False)
+
+# Afegir headers aleatoris
+options.set_preference("general.platform.override", "Win32")
+options.set_preference("general.appversion.override", "5.0 (Windows)")
 
 # Executa el driver
 driver = webdriver.Firefox(options=options)
@@ -104,10 +117,18 @@ driver = webdriver.Firefox(options=options)
 # Obrir Google
 driver.get("https://www.google.com")
 
-# Simula comportament humà
-time.sleep(random.uniform(2, 5))  # Espera aleatòria
+# Simular comportament més humà
+def simula_comportament_huma():
+    time.sleep(random.uniform(2, 5))
+    # Simula moviment del ratolí
+    actions = webdriver.ActionChains(driver)
+    element = driver.find_element(By.TAG_NAME, "body")
+    actions.move_to_element_with_offset(element, random.randint(0, 500), random.randint(0, 500))
+    actions.perform()
+    time.sleep(random.uniform(0.5, 2))
 
-time.sleep(3)
+# Simula comportament humà
+simula_comportament_huma()
 
 # Acceptar cookies si cal
 buttons = driver.find_elements(By.XPATH, '//button')
@@ -204,6 +225,9 @@ while resultats_desats <= 10 and intents < 3:
 
     else:
         break
+
+    # Després de cada acció important, afegeix:
+    simula_comportament_huma()
 
 for resultat in resultats:
     print(f"{resultat}: {resultats[resultat]['titol']}, {resultats[resultat]['url']}, {resultats[resultat]['description']}")
