@@ -99,7 +99,7 @@ class GoogleCercador(CercadorBase):
         while resultats_desats <= 10 and intents < 3:
             intents += 1
             sleep(self.config.temps_espera_processos)
-            nom_captura_1 = self.composa_nom_captura(cerca, navegador_text)
+            nom_captura_1 = self.composa_nom_captura("error", navegador_text)
             nom_captura_2 = self.composa_nom_captura(cerca, navegador_text, suffix="2a")
 
             navegador.captura_pantalla(nom_captura_1)
@@ -139,8 +139,6 @@ class GoogleCercador(CercadorBase):
                             resultats[resultats_desats] = {
                                 'titol': titol, 'url': link, 'description': description}
                             resultats_desats += 1
-
-            logging.info(f"Resultats: {resultats}")
 
             if resultats_desats < 11:
                 try:
