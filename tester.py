@@ -101,12 +101,24 @@ options.set_preference('network.proxy.type', 1)
 options.set_preference('network.proxy.socks', PROXY_HOST)
 options.set_preference('network.proxy.socks_port', PROXY_PORT)
 options.set_preference('network.proxy.socks_version', 5)
-
 def canvia_ip_tor():
-    with Controller.from_port(port=9051) as controller:
-        controller.authenticate(password="el_teu_password_tor")  # Canvia això pel teu password de Tor
-        controller.signal(Signal.NEWNYM)
-        time.sleep(5)  # Espera per assegurar que la nova identitat s'ha establert
+    try:
+        # Per generar la password de Tor:
+        # 1. Obre el fitxer torrc (normalment a /etc/tor/torrc)
+        # 2. Afegeix la línia: HashedControlPassword $(tor --hash-password "la_teva_password")
+        # 3. Reinicia el servei Tor
+        with Controller.from_port(port=9051) as controller:
+            controller.authenticate(password="la_teva_password")  # Posa aquí la mateixa password que has fet servir abans
+            controller.signal(Signal.NEWNYM)
+            time.sleep(5)  # Espera per assegurar que la nova identitat s'ha establert
+            return True
+    except Exception as e:
+        print(f"Error canviant la IP de Tor: {str(e)}")
+        return False
+
+# Intenta canviar la IP de Tor abans d'iniciar el navegador
+if not canvia_ip_tor():
+    print("No s'ha pogut canviar la IP de Tor. Continuant amb la IP actual...")
 
 # Executa el driver
 driver = webdriver.Firefox(options=options)
@@ -145,11 +157,7 @@ intents = 0
 time.sleep(3)
 
 while resultats_desats <= 10 and intents < 3:
-    try:
-        canvia_ip_tor()  # Canvia la IP abans de cada intent
-    except:
-        print("No s'ha pogut canviar la IP de Tor")
-    
+
     intents += 1
 
     resultats_cerca = driver.find_elements(By.XPATH, '//a[h3]')
