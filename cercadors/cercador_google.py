@@ -79,6 +79,8 @@ class GoogleCercador(CercadorBase):
         return nom_captura
 
     def guarda_resultats(self, cerca, navegador_text):
+
+        logging.info(f"Ha entrat a la funció de guardar resultats")
         navegador = self.config.navegador
         browser = self.browser
 
@@ -96,11 +98,15 @@ class GoogleCercador(CercadorBase):
         except:
             raise ValueError("No s'ha pogut fer la cerca")
 
+        logging.info(f"Iniciant el bucle de cerca de {cerca}...")
+
         while resultats_desats <= 10 and intents < 3:
             intents += 1
             sleep(self.config.temps_espera_processos)
             nom_captura_1 = self.composa_nom_captura("error", navegador_text)
             nom_captura_2 = self.composa_nom_captura(cerca, navegador_text, suffix="2a")
+
+            logging.info(f"Fen la captura de {nom_captura_1}...")
 
             navegador.captura_pantalla(nom_captura_1)
             resultats_cerca = browser.find_elements(By.XPATH, '//a[h3]')
