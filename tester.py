@@ -4,9 +4,6 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.firefox.options import Options
 from bs4 import BeautifulSoup
 from selenium.common.exceptions import NoSuchElementException
-from selenium_stealth import stealth
-from fake_useragent import UserAgent  # Necessitaràs instal·lar: pip install fake-useragent
-import undetected_chromedriver as uc  # Necessitaràs instal·lar: pip install undetected-chromedriver
 from stem import Signal
 from stem.control import Controller
 
@@ -92,7 +89,6 @@ def cerca_dades(element_cercar):
 
 # Configurar el driver de Firefox
 options = Options()
-ua = UserAgent()
 
 # Configuració del proxy Tor
 PROXY_HOST = "127.0.0.1"
@@ -104,9 +100,6 @@ options.set_preference('network.proxy.socks_version', 5)
 def canvia_ip_tor():
     try:
         # Per generar la password de Tor:
-        # 1. Obre el fitxer torrc (normalment a /etc/tor/torrc)
-        # 2. Afegeix la línia: HashedControlPassword $(tor --hash-password "la_teva_password")
-        # 3. Reinicia el servei Tor
         with Controller.from_port(port=9051) as controller:
             controller.authenticate(password="prova123")  # Posa aquí la mateixa password que has fet servir abans
             controller.signal(Signal.NEWNYM)
