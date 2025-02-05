@@ -19,7 +19,7 @@ PROXY_PORT = 9050
 def h3_modul_preguntes(h3):
 
     try:
-        div_preguntes = h3.find_element(By.XPATH, './parent::span/parent::div/parent::div/parent::div/parent::div/parent::div/parent::div/parent::div/parent::div/parent::div/parent::div/parent::div/parent::div/parent::div')
+        div_preguntes = h3.find_element(By.XPATH, './parent::span/parent::div/parent::div/parent::div/parent::div/parent::div/parent::div/parent::div/parent::div/parent::div/parent::div/parent::div/parent::div')
         div_mes_preguntes = div_preguntes.find_element(By.XPATH, './div/div[1]/div/div')
         mes_preguntes = div_mes_preguntes.find_element(By.XPATH, './/span')
         if "preguntes" in mes_preguntes.text.lower():
@@ -92,11 +92,11 @@ def cerca_dades(element_cercar):
 
 def canvia_ip_tor():
     try:
-        # Per generar la password de Tor:
         with Controller.from_port(port=9051) as controller:
-            controller.authenticate(password="prova123")  # Posa aquí la mateixa password que has fet servir abans
+            # Utilitza la mateixa contrasenya que has fet servir per generar el hash
+            controller.authenticate(password="prova123")
             controller.signal(Signal.NEWNYM)
-            time.sleep(5)  # Espera per assegurar que la nova identitat s'ha establert
+            time.sleep(5)
             return True
     except Exception as e:
         print(f"Error canviant la IP de Tor: {str(e)}")
