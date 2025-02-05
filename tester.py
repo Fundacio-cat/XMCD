@@ -7,7 +7,7 @@ from bs4 import BeautifulSoup
 from selenium.common.exceptions import NoSuchElementException
 from stem import Signal
 from stem.control import Controller
-
+import requests
 import time
 import random
 
@@ -114,9 +114,24 @@ options.set_preference('network.proxy.socks_version', 5)
 driver_path = ("/home/catalanet/XMCD/Controladors/geckodriver")
 service = Service(driver_path)
 
+
+# Obtenim la IP actual
+try:
+    ip_inicial = requests.get('https://api.ipify.org').text
+    print(f"IP inicial: {ip_inicial}")
+except Exception as e:
+    print(f"No s'ha pogut obtenir la IP inicial: {str(e)}")
+
 # Intenta canviar la IP de Tor abans d'iniciar el navegador
 if not canvia_ip_tor():
     print("No s'ha pogut canviar la IP de Tor. Continuant amb la IP actual...")
+
+# Obtenim la nova IP
+try:
+    ip_final = requests.get('https://api.ipify.org').text
+    print(f"IP final: {ip_final}")
+except Exception as e:
+    print(f"No s'ha pogut obtenir la IP final: {str(e)}")
 
 # Executa el driver
 driver = webdriver.Firefox(service=service, options=options)
