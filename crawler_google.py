@@ -136,7 +136,7 @@ class GoogleCrawler:
 
             # Acceptar cookies si apareix el popup
             try:
-                accept_button = await self.page.wait_for_selector('button[id="L2AGLb"], button[aria-label*="Accept"], button[aria-label*="Aceptar todo"]', timeout=5000)
+                accept_button = await self.page.wait_for_selector('button[aria-label*="Acceptar-ho tot"], button[aria-label*="Aceptar todo"]', timeout=5000)
                 if accept_button:
                     await accept_button.click()
                     logger.info("Cookies acceptades")
@@ -148,13 +148,11 @@ class GoogleCrawler:
             search_input = None
             try:
                 # Selector específic pel textarea de cerca de Google
-                search_selector = 'textarea[name="cerca"]'
-                
-                search_input = await self.page.wait_for_selector(search_selector, timeout=5000)
+                search_input = await self.page.wait_for_selector('textarea', timeout=5000)
                 if search_input:
                     logger.info("Caixa de cerca trobada amb el selector específic")
                 else:
-                    logger.warning("No s'ha trobat la caixa de cerca de Google")
+                    logger.warning("No s'ha trobat la caixa de cerca de Google") 
                     return False
 
             except Exception as e:
