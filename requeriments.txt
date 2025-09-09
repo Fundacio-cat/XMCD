@@ -1,0 +1,9 @@
+selenium==4.15.2
+selenium-stealth==1.0.6
+webdriver-manager==4.0.1
+beautifulsoup4==4.12.2
+python-dotenv==1.0.0
+requests==2.31.0
+openai==1.97.1
+camoufox[geoip]>=0.4.11
+camoufox-captcha>=0.1.3 
