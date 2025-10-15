@@ -14,25 +14,21 @@ class CamoufoxNavegador(NavegadorBase):
         if user_agent:
             try:
                 # Inicialitza Camoufox amb les opcions necessàries
-                # Utilitza l'API de Playwright de Camoufox però adaptat per a ús amb Selenium
+                # Camoufox retorna directament un BrowserContext de Playwright
                 browser = Camoufox(
                     headless=False,
-                    humanize={'mouse': True, 'typing': True},  # Afegeix comportament humà
+                    humanize=True,  # Afegeix comportament humà
                     locale='ca-ES',  # Català
-                    user_agent=user_agent,
-                    addons=[]
+                    user_agent=user_agent
                 )
-
-                # Crea una nova pàgina
-                context = browser.new_context(
-                    viewport={'width': self.amplada, 'height': self.altura},
-                    locale='ca-ES', # Català
-                    timezone_id='Europe/Madrid' # Temps local
-                )
-                page = context.new_page()
                 
-                # Guarda les referències per utilitzar-les més tard
-                self.context = context
+                # Crea una nova pàgina directament (Camoufox és un BrowserContext)
+                page = browser.new_page()
+                
+                # Estableix la mida de la finestra
+                page.set_viewport_size({'width': self.amplada, 'height': self.altura})
+                
+                # Guarda la referència a la pàgina per utilitzar-la més tard
                 self.page = page
                 
             except Exception as e:
@@ -52,8 +48,6 @@ class CamoufoxNavegador(NavegadorBase):
         try:
             if hasattr(self, 'page') and self.page:
                 self.page.close()
-            if hasattr(self, 'context') and self.context:
-                self.context.close()
             if self.browser:
                 self.browser.close()
         except Exception as e:

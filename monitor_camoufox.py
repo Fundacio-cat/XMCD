@@ -52,15 +52,24 @@ def crea_navegador(navegador: int, navegador_text: str, amplada: int, altura: in
         config.write_log(f"Error: No existeix el navegador {navegador_text}", level=logging.ERROR)
         sys.exit(1)
 
-def crea_cercador(cercador: int, cercador_text: str, config: Config):
-
-    # Retorna Google si 1
-    if cercador == 1:
-        return GoogleCercador(config)
-
-    # Retorna Bing si 2
-    elif cercador == 2:
-        return BingCercador(config)
+def crea_cercador(cercador: int, cercador_text: str, config: Config, navegador: int):
+    
+    # Per a Camoufox, utilitza el cercador específic de Camoufox (API Playwright)
+    if navegador == 3:
+        if cercador == 1:
+            return GoogleCercadorCamoufox(config)
+        elif cercador == 2:
+            config.write_log("Bing amb Camoufox encara no està implementat", level=logging.ERROR)
+            sys.exit(1)
+    
+    # Per a Chrome i Firefox, utilitza els cercadors normals (API Selenium)
+    else:
+        # Retorna Google si 1
+        if cercador == 1:
+            return GoogleCercador(config)
+        # Retorna Bing si 2
+        elif cercador == 2:
+            return BingCercador(config)
 
     # Si no està plantejat retorna un error
     config.write_log(f"Error: No existeix el cercador {cercador_text}", level=logging.ERROR)
@@ -120,7 +129,7 @@ if __name__ == "__main__":
         cercador_text = "Google" if int_cercador == 1 else "Bing" if int_cercador == 2 else "Navegador desconegut"
         # Crea'l
         config.write_log(f"Creant el cercador {cercador_text} ...", level=logging.INFO)
-        cercador = crea_cercador(int_cercador, cercador_text, config)
+        cercador = crea_cercador(int_cercador, cercador_text, config, int_navegador)
         config.set_cercador(cercador)
         config.write_log(f"Cercador {cercador_text} creat correctament", level=logging.INFO)
 
