@@ -15,18 +15,19 @@ class CamoufoxNavegador(NavegadorBase):
             try:
                 # Inicialitza Camoufox - retorna un context manager
                 # Cal utilitzar-lo sense 'with' per mantenir-lo obert
+                # No podem passar user_agent aquí, ho farem després
                 camoufox_instance = Camoufox(
                     headless=False,
                     humanize=True,  # Afegeix comportament humà
-                    locale='ca-ES',  # Català
-                    user_agent=user_agent
+                    locale='ca-ES'  # Català
                 )
                 
                 # Camoufox utilitza __enter__ per inicialitzar
+                # Retorna un Playwright Browser object
                 browser = camoufox_instance.__enter__()
                 
-                # Ara browser és un BrowserContext i té new_page()
-                page = browser.new_page()
+                # Crea una nova pàgina amb user_agent personalitzat
+                page = browser.new_page(user_agent=user_agent)
                 
                 # Estableix la mida de la finestra
                 page.set_viewport_size({'width': self.amplada, 'height': self.altura})
