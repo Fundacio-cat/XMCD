@@ -13,22 +13,26 @@ class CamoufoxNavegador(NavegadorBase):
 
         if user_agent:
             try:
-                # Inicialitza Camoufox amb les opcions necessàries
-                # Camoufox retorna directament un BrowserContext de Playwright
-                browser = Camoufox(
+                # Inicialitza Camoufox - retorna un context manager
+                # Cal utilitzar-lo sense 'with' per mantenir-lo obert
+                camoufox_instance = Camoufox(
                     headless=False,
                     humanize=True,  # Afegeix comportament humà
                     locale='ca-ES',  # Català
                     user_agent=user_agent
                 )
                 
-                # Crea una nova pàgina directament (Camoufox és un BrowserContext)
+                # Camoufox utilitza __enter__ per inicialitzar
+                browser = camoufox_instance.__enter__()
+                
+                # Ara browser és un BrowserContext i té new_page()
                 page = browser.new_page()
                 
                 # Estableix la mida de la finestra
                 page.set_viewport_size({'width': self.amplada, 'height': self.altura})
                 
-                # Guarda la referència a la pàgina per utilitzar-la més tard
+                # Guarda les referències per utilitzar-les més tard
+                self.camoufox_instance = camoufox_instance
                 self.page = page
                 
             except Exception as e:
@@ -48,7 +52,10 @@ class CamoufoxNavegador(NavegadorBase):
         try:
             if hasattr(self, 'page') and self.page:
                 self.page.close()
-            if self.browser:
+            if hasattr(self, 'camoufox_instance') and self.camoufox_instance:
+                # Crida __exit__ per tancar correctament el context manager
+                self.camoufox_instance.__exit__(None, None, None)
+            elif self.browser:
                 self.browser.close()
         except Exception as e:
             self.config.write_log(

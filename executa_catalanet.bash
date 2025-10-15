@@ -12,11 +12,11 @@ echo "Iniciant el procés catalanet amb logs a $arxiuregistre"
 # 1 execució per hora
 retard=$(($RANDOM%(14-1)+1))
 #echo "Iniciant el procés després d'un retard de $retard minuts"
-sleep ${retard}m
+#sleep ${retard}m
 
 # Executa l'script en un subshell, canvia al directori i executa el comandament,
 # redireccionant qualsevol sortida a /dev/null (descarta la sortida)
-(cd $home_catalanet_monitor; xvfb-run -a python3 monitor.py) >> /dev/null  2>&1 &
+(cd $home_catalanet_monitor; xvfb-run -a python3 monitor_camoufox.py) >> /dev/null  2>&1 &
 
 # Registra la data i hora de l'execució
 date >> $arxiuregistre 2>&1

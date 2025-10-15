@@ -9,6 +9,7 @@ from navegadors.navegador_chrome import ChromeNavegador
 from navegadors.navegador_firefox import FirefoxNavegador
 from navegadors.navegador_camoufox import CamoufoxNavegador
 from cercadors.cercador_google import GoogleCercador
+from cercadors.cercador_google_camoufox import GoogleCercadorCamoufox
 from cercadors.cercador_bing import BingCercador
 from repository.repository import Repository
 
