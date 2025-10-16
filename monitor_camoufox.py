@@ -46,7 +46,7 @@ def crea_navegador(navegador_text: str, amplada: int, altura: int, config: Confi
         config.write_log(f"Error en la creació del navegador {navegador_text}: {e}", level=logging.ERROR)
         sys.exit(1)
 
-def crea_cercador(cercador: int, cercador_text: str, config: Config, navegador: int):
+def crea_cercador(cercador: int, cercador_text: str, config: Config):
 
     try:
         if cercador == 1:
@@ -109,7 +109,7 @@ if __name__ == "__main__":
         cercador_text = "Google" if int_cercador == 1 else "Bing" if int_cercador == 2 else "Navegador desconegut"
         # Crea'l
         config.write_log(f"Creant el cercador {cercador_text} ...", level=logging.INFO)
-        cercador = crea_cercador(int_cercador, cercador_text, config, int_navegador)
+        cercador = crea_cercador(int_cercador, cercador_text, config)
         config.set_cercador(cercador)
         config.write_log(f"Cercador {cercador_text} creat correctament", level=logging.INFO)
 
