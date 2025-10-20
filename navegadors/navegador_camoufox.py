@@ -18,7 +18,6 @@ class CamoufoxNavegador(NavegadorBase):
                     headless=False,
                     humanize=True,  # Afegeix comportament humà
                     locale='ca-ES',  # Català
-                    stealth=True,    # Activa mode stealth
                     block_resources=['image', 'stylesheet', 'font'],  # Bloca recursos per velocitat
                     extra_args=[
                         '--disable-blink-features=AutomationControlled',

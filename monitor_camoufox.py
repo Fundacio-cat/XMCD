@@ -77,6 +77,7 @@ if __name__ == "__main__":
     # Carrega la configuració utilitzant el fitxer especificat o el fitxer per defecte
     config = Config.carrega_config(args.config)
     repo = inicia_base_dades(config)
+    navegador = None  # Inicialitza la variable navegador
     try:
         # Inici del sensor
         sensor = obtenir_sensor()
@@ -121,7 +122,8 @@ if __name__ == "__main__":
     finally:
         # Intenta tancar el navegador i la connexió amb la base de dades, independentment de si hi ha hagut errors o no.
         try:
-            navegador.tanca_navegador()
+            if navegador:
+                navegador.tanca_navegador()
         except Exception as e:
             config.write_log(f"Error tancant el navegador: {e}", level=logging.ERROR)
 
