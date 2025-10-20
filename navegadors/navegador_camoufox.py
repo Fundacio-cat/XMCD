@@ -13,64 +13,11 @@ class CamoufoxNavegador(NavegadorBase):
 
         if user_agent:
             try:
-                # Inicialitza Camoufox amb configuració avançada anti-detecció
+                # Inicialitza Camoufox amb configuració bàsica compatible
                 camoufox_instance = Camoufox(
                     headless=False,
                     humanize=True,  # Afegeix comportament humà
-                    locale='ca-ES',  # Català
-                    block_resources=['image', 'stylesheet', 'font'],  # Bloca recursos per velocitat
-                    extra_args=[
-                        '--disable-blink-features=AutomationControlled',
-                        '--disable-features=VizDisplayCompositor',
-                        '--disable-web-security',
-                        '--disable-features=TranslateUI',
-                        '--disable-ipc-flooding-protection',
-                        '--no-first-run',
-                        '--no-default-browser-check',
-                        '--disable-default-apps',
-                        '--disable-popup-blocking',
-                        '--disable-extensions-file-access-check',
-                        '--disable-extensions-http-throttling',
-                        '--disable-extensions-except',
-                        '--disable-sync',
-                        '--metrics-recording-only',
-                        '--no-report-upload',
-                        '--disable-background-timer-throttling',
-                        '--disable-renderer-backgrounding',
-                        '--disable-backgrounding-occluded-windows',
-                        '--disable-client-side-phishing-detection',
-                        '--disable-component-extensions-with-background-pages',
-                        '--disable-domain-reliability',
-                        '--disable-features=AudioServiceOutOfProcess',
-                        '--disable-hang-monitor',
-                        '--disable-prompt-on-repost',
-                        '--disable-background-networking',
-                        '--disable-breakpad',
-                        '--disable-component-update',
-                        '--disable-dev-shm-usage',
-                        '--disable-features=VizDisplayCompositor',
-                        '--disable-hang-monitor',
-                        '--disable-logging',
-                        '--disable-low-res-tiling',
-                        '--disable-notifications',
-                        '--disable-offer-store-unmasked-wallet-cards',
-                        '--disable-print-preview',
-                        '--disable-speech-api',
-                        '--disable-speech-synthesis-api',
-                        '--hide-scrollbars',
-                        '--ignore-gpu-blacklist',
-                        '--mute-audio',
-                        '--no-zygote',
-                        '--use-mock-keychain',
-                        '--disable-gpu-sandbox',
-                        '--disable-software-rasterizer',
-                        '--disable-background-timer-throttling',
-                        '--disable-backgrounding-occluded-windows',
-                        '--disable-renderer-backgrounding',
-                        '--disable-features=TranslateUI',
-                        '--disable-ipc-flooding-protection',
-                        '--disable-features=VizDisplayCompositor'
-                    ]
+                    locale='ca-ES'  # Català
                 )
                 
                 # Camoufox utilitza __enter__ per inicialitzar
