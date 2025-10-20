@@ -16,8 +16,21 @@ class GoogleCercadorCamoufox(CercadorBase):
         try:
             acceptat = False
             page = self.navegador.page
+            
+            # Simula comportament humà abans d'anar a Google
+            # Va primer a una pàgina neutral per semblar més natural
+            page.goto('https://www.wikipedia.org')
+            sleep(2)  # Espera curta per semblar natural
+            
+            # Ara va a Google
             page.goto('https://www.google.com')
             sleep(self.config.temps_espera_cerques)
+            
+            # Simula moviment del ratolí per semblar més humà
+            page.mouse.move(100, 100)
+            sleep(0.5)
+            page.mouse.move(200, 150)
+            sleep(0.5)
             
             # Intenta acceptar les cookies
             buttons = page.query_selector_all('button')
@@ -78,16 +91,26 @@ class GoogleCercadorCamoufox(CercadorBase):
             if not textarea:
                 raise ValueError("No s'ha trobat el camp de cerca")
             
-            # Neteja i envia la cerca
+            # Simula comportament humà més realista
+            # Mou el ratolí al camp de cerca
+            textarea.hover()
+            sleep(0.3)
+            
+            # Neteja i envia la cerca amb comportament més humà
             textarea.click()
+            sleep(0.2)
             textarea.fill('')  # Neteja el camp
-            textarea.type(cerca)
+            sleep(0.3)
+            
+            # Escriu la cerca caràcter per caràcter per semblar més humà
+            for char in cerca:
+                textarea.type(char)
+                sleep(0.05)  # Petita pausa entre caràcters
+            
+            sleep(0.5)  # Pausa abans d'enviar
             textarea.press('Enter')
 
             sleep(self.config.temps_espera_cerques)
-            
-            # Superar el challenge de cloudfare si apareix:
-            pass
             
         except Exception as e:
             raise ValueError(f"No s'ha pogut fer la cerca: {e}")
@@ -121,6 +144,9 @@ class GoogleCercadorCamoufox(CercadorBase):
                     if titol and link:
                         if titol == "Més resultats":
                             logging.info(f"Obtenint la segona pàgina de {cerca}...")
+                            # Simula comportament humà abans de clicar
+                            page.mouse.move(400, 300)
+                            sleep(0.3)
                             page.goto(link)
                             sleep(self.config.temps_espera_processos)
                             navegador.captura_pantalla(nom_captura_2)
@@ -156,6 +182,9 @@ class GoogleCercadorCamoufox(CercadorBase):
                     # Busca el botó de pàgina 2
                     page_2_link = page.query_selector('a[aria-label*="2"]')
                     if page_2_link:
+                        # Simula comportament humà abans de clicar
+                        page_2_link.hover()
+                        sleep(0.5)
                         page_2_link.click()
                         sleep(self.config.temps_espera_processos)
                         navegador.captura_pantalla(nom_captura_2)

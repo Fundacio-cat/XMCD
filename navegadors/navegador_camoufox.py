@@ -13,13 +13,65 @@ class CamoufoxNavegador(NavegadorBase):
 
         if user_agent:
             try:
-                # Inicialitza Camoufox - retorna un context manager
-                # Cal utilitzar-lo sense 'with' per mantenir-lo obert
-                # No podem passar user_agent aquí, ho farem després
+                # Inicialitza Camoufox amb configuració avançada anti-detecció
                 camoufox_instance = Camoufox(
                     headless=False,
                     humanize=True,  # Afegeix comportament humà
-                    locale='ca-ES'  # Català
+                    locale='ca-ES',  # Català
+                    stealth=True,    # Activa mode stealth
+                    block_resources=['image', 'stylesheet', 'font'],  # Bloca recursos per velocitat
+                    extra_args=[
+                        '--disable-blink-features=AutomationControlled',
+                        '--disable-features=VizDisplayCompositor',
+                        '--disable-web-security',
+                        '--disable-features=TranslateUI',
+                        '--disable-ipc-flooding-protection',
+                        '--no-first-run',
+                        '--no-default-browser-check',
+                        '--disable-default-apps',
+                        '--disable-popup-blocking',
+                        '--disable-extensions-file-access-check',
+                        '--disable-extensions-http-throttling',
+                        '--disable-extensions-except',
+                        '--disable-sync',
+                        '--metrics-recording-only',
+                        '--no-report-upload',
+                        '--disable-background-timer-throttling',
+                        '--disable-renderer-backgrounding',
+                        '--disable-backgrounding-occluded-windows',
+                        '--disable-client-side-phishing-detection',
+                        '--disable-component-extensions-with-background-pages',
+                        '--disable-domain-reliability',
+                        '--disable-features=AudioServiceOutOfProcess',
+                        '--disable-hang-monitor',
+                        '--disable-prompt-on-repost',
+                        '--disable-background-networking',
+                        '--disable-breakpad',
+                        '--disable-component-update',
+                        '--disable-dev-shm-usage',
+                        '--disable-features=VizDisplayCompositor',
+                        '--disable-hang-monitor',
+                        '--disable-logging',
+                        '--disable-low-res-tiling',
+                        '--disable-notifications',
+                        '--disable-offer-store-unmasked-wallet-cards',
+                        '--disable-print-preview',
+                        '--disable-speech-api',
+                        '--disable-speech-synthesis-api',
+                        '--hide-scrollbars',
+                        '--ignore-gpu-blacklist',
+                        '--mute-audio',
+                        '--no-zygote',
+                        '--use-mock-keychain',
+                        '--disable-gpu-sandbox',
+                        '--disable-software-rasterizer',
+                        '--disable-background-timer-throttling',
+                        '--disable-backgrounding-occluded-windows',
+                        '--disable-renderer-backgrounding',
+                        '--disable-features=TranslateUI',
+                        '--disable-ipc-flooding-protection',
+                        '--disable-features=VizDisplayCompositor'
+                    ]
                 )
                 
                 # Camoufox utilitza __enter__ per inicialitzar
@@ -31,6 +83,79 @@ class CamoufoxNavegador(NavegadorBase):
                 
                 # Estableix la mida de la finestra
                 page.set_viewport_size({'width': self.amplada, 'height': self.altura})
+                
+                # Afegeix headers addicionals per semblar més humà
+                page.set_extra_http_headers({
+                    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+                    'Accept-Language': 'ca-ES,ca;q=0.9,es;q=0.8,en;q=0.7',
+                    'Accept-Encoding': 'gzip, deflate, br',
+                    'DNT': '1',
+                    'Connection': 'keep-alive',
+                    'Upgrade-Insecure-Requests': '1',
+                    'Sec-Fetch-Dest': 'document',
+                    'Sec-Fetch-Mode': 'navigate',
+                    'Sec-Fetch-Site': 'none',
+                    'Sec-Fetch-User': '?1',
+                    'Cache-Control': 'max-age=0'
+                })
+                
+                # Injecta JavaScript per ocultar traces d'automatització
+                page.add_init_script("""
+                    // Elimina traces de webdriver
+                    Object.defineProperty(navigator, 'webdriver', {
+                        get: () => undefined,
+                    });
+                    
+                    // Modifica la propietat plugins per semblar més real
+                    Object.defineProperty(navigator, 'plugins', {
+                        get: () => [1, 2, 3, 4, 5],
+                    });
+                    
+                    // Modifica la propietat languages
+                    Object.defineProperty(navigator, 'languages', {
+                        get: () => ['ca-ES', 'ca', 'es', 'en'],
+                    });
+                    
+                    // Modifica la propietat platform
+                    Object.defineProperty(navigator, 'platform', {
+                        get: () => 'MacIntel',
+                    });
+                    
+                    // Modifica la propietat hardwareConcurrency
+                    Object.defineProperty(navigator, 'hardwareConcurrency', {
+                        get: () => 8,
+                    });
+                    
+                    // Modifica la propietat deviceMemory
+                    Object.defineProperty(navigator, 'deviceMemory', {
+                        get: () => 8,
+                    });
+                    
+                    // Elimina traces de Chrome automation
+                    window.chrome = {
+                        runtime: {},
+                    };
+                    
+                    // Modifica la propietat permissions
+                    const originalQuery = window.navigator.permissions.query;
+                    window.navigator.permissions.query = (parameters) => (
+                        parameters.name === 'notifications' ?
+                            Promise.resolve({ state: Notification.permission }) :
+                            originalQuery(parameters)
+                    );
+                    
+                    // Modifica la propietat getParameter
+                    const getParameter = WebGLRenderingContext.getParameter;
+                    WebGLRenderingContext.prototype.getParameter = function(parameter) {
+                        if (parameter === 37445) {
+                            return 'Intel Inc.';
+                        }
+                        if (parameter === 37446) {
+                            return 'Intel Iris OpenGL Engine';
+                        }
+                        return getParameter(parameter);
+                    };
+                """)
                 
                 # Guarda les referències per utilitzar-les més tard
                 self.camoufox_instance = camoufox_instance
