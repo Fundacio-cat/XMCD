@@ -82,7 +82,7 @@ class GoogleCercadorCamoufox(CercadorBase):
             textarea.click()
             textarea.fill('')  # Neteja el camp
             textarea.type(cerca)
-            page.keyboard.press('Enter')
+            textarea.press('Enter')
             
         except Exception as e:
             raise ValueError(f"No s'ha pogut fer la cerca: {e}")

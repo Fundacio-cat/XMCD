@@ -70,8 +70,7 @@ def executa_crawler(config: Config, cerca: str, id_cerca: int, navegador_text: s
                 int_mida
             )
     except Exception as e:
-        config.write_log(
-            f"Error en l'execució del crawler per la cerca {cerca}: {e}", level=logging.ERROR)
+        config.write_log(f"Error en l'execució del crawler per la cerca {cerca}: {e}", level=logging.ERROR)
 
 if __name__ == "__main__":
     args = parseja_arguments()
