@@ -83,6 +83,11 @@ class GoogleCercadorCamoufox(CercadorBase):
             textarea.fill('')  # Neteja el camp
             textarea.type(cerca)
             textarea.press('Enter')
+
+            sleep(self.config.temps_espera_cerques)
+            
+            # Superar el challenge de cloudfare si apareix:
+            pass
             
         except Exception as e:
             raise ValueError(f"No s'ha pogut fer la cerca: {e}")
