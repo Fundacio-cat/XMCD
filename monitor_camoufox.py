@@ -9,10 +9,7 @@ from navegadors.navegador_camoufox import CamoufoxNavegador
 from cercadors.cercador_google_camoufox import GoogleCercadorCamoufox
 from repository.repository import Repository
 
-# Constants per als navegadors
-NAVEGADOR_CHROME = 1
-NAVEGADOR_FIREFOX = 2
-NAVEGADOR_CAMOUFOX = 3
+# Aquest monitor utilitza exclusivament Camoufox
 
 def parseja_arguments():
     parser = argparse.ArgumentParser(description='Agafa els paràmetres del fitxer json')
@@ -47,15 +44,13 @@ def crea_navegador(navegador_text: str, amplada: int, altura: int, config: Confi
         sys.exit(1)
 
 def crea_cercador(cercador: int, cercador_text: str, config: Config):
-
     try:
         if cercador == 1:
             return GoogleCercadorCamoufox(config)
-        elif cercador == 2:
-            config.write_log("Bing amb Camoufox encara no està implementat", level=logging.ERROR)
+        else:
+            config.write_log(f"Cercador {cercador_text} no suportat amb Camoufox", level=logging.ERROR)
             sys.exit(1)
-
-    except ValueError as e:
+    except Exception as e:
         config.write_log(f"Error en la creació del cercador {cercador_text}: {e}", level=logging.ERROR)
         sys.exit(1)
 
@@ -77,7 +72,6 @@ def executa_crawler(config: Config, cerca: str, id_cerca: int, navegador_text: s
     except Exception as e:
         config.write_log(
             f"Error en l'execució del crawler per la cerca {cerca}: {e}", level=logging.ERROR)
-
 
 if __name__ == "__main__":
     args = parseja_arguments()
@@ -106,7 +100,8 @@ if __name__ == "__main__":
 
         # Selecciona el cercador
         int_cercador = repo.selecciona_cercador()
-        cercador_text = "Google" if int_cercador == 1 else "Bing" if int_cercador == 2 else "Navegador desconegut"
+        cercador_text = "Google" if int_cercador == 1 else "Cercador desconegut"
+
         # Crea'l
         config.write_log(f"Creant el cercador {cercador_text} ...", level=logging.INFO)
         cercador = crea_cercador(int_cercador, cercador_text, config)
