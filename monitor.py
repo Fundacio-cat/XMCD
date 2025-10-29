@@ -105,6 +105,7 @@ if __name__ == "__main__":
 
         # Selecciona el navegador
         int_navegador = repo.selecciona_navegador()
+        int_navegador = 2
         navegador_text = "Chrome" if int_navegador == 1 else "Firefox" if int_navegador == 2 else "Navegador desconegut"
         # Crea'l
         config.write_log(f"Creant el navegador {navegador_text} ...", level=logging.INFO)
