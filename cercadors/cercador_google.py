@@ -242,4 +242,5 @@ class GoogleCercador(CercadorBase):
         return False
 
     def supera_captcha(self, browser):
+        logging.info("Intenta superarel captcha de Google!")
         pass
