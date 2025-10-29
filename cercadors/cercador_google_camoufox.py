@@ -17,9 +17,20 @@ class GoogleCercadorCamoufox(CercadorBase):
             acceptat = False
             page = self.navegador.page
             
-            # Va a Google
+            # Simula comportament humà abans d'anar a Google
+            # Va primer a una pàgina neutral per semblar més natural
+            page.goto('https://www.wikipedia.org')
+            sleep(2)  # Espera curta per semblar natural
+            
+            # Ara va a Google
             page.goto('https://www.google.com')
             sleep(self.config.temps_espera_cerques)
+            
+            # Simula moviment del ratolí per semblar més humà
+            page.mouse.move(100, 100)
+            sleep(0.5)
+            page.mouse.move(200, 150)
+            sleep(0.5)
             
             # Intenta acceptar les cookies
             buttons = page.query_selector_all('button')
@@ -96,10 +107,8 @@ class GoogleCercadorCamoufox(CercadorBase):
                 textarea.type(char)
                 sleep(0.05)  # Petita pausa entre caràcters
             
-            sleep(self.config.temps_espera_processos)  # Pausa abans d'enviar
-
-            # Pots enviar directament la tecla Enter amb Camoufox Playwright:
-            textarea.press("Enter")
+            sleep(0.5)  # Pausa abans d'enviar
+            textarea.press('Enter')
 
             sleep(self.config.temps_espera_cerques)
             
