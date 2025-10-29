@@ -152,8 +152,7 @@ class GoogleCercador(CercadorBase):
 
             if resultats_desats < 11:
                 try:
-                    browser.find_elements(
-                        By.XPATH, '//a[@aria-label=\'Page 2\']')[0].click()
+                    browser.find_elements(By.XPATH, '//a[@aria-label=\'Page 2\']')[0].click()
                     sleep(self.config.temps_espera_processos)
                     navegador.captura_pantalla(nom_captura_2)
                     a_elements_with_h3 = browser.find_elements(
@@ -173,14 +172,12 @@ class GoogleCercador(CercadorBase):
                             break
                 except:
                     sleep(self.config.temps_espera_cerques)
-                    logging.error(
-                        f"No s'ha pogut fer la petició de la segona pàgina de {cerca}")
+                    logging.error(f"No s'ha pogut fer la petició de la segona pàgina de {cerca}")
 
             logging.info(f"Valorant els resultats de {cerca}...")
 
             if resultats_desats < 11:
-                logging.info(
-                    f"No s'han obtingut els 10 resultats de {cerca}...")
+                logging.info(f"No s'han obtingut els 10 resultats de {cerca}...")
                 #remove(nom_captura_1)
 
                 try:
@@ -192,6 +189,7 @@ class GoogleCercador(CercadorBase):
                     if intents < 3:
                         resultats_desats = 1
                         resultats = {}
+                        intents += 1
                         browser.get('https://google.com')
                         sleep(self.config.temps_espera_cerques)
                         textarea = browser.find_element(By.TAG_NAME, value='textarea')
@@ -245,4 +243,11 @@ class GoogleCercador(CercadorBase):
 
     def supera_captcha(self, browser):
         logging.info("Intenta superarel captcha de Google!")
+
+        # Guardar el codi de la pàgina per a valorar-lo
+        page_source = browser.page_source
+        with open('page_source.html', 'w') as f:
+            f.write(page_source)
+
+        
         pass
