@@ -96,8 +96,11 @@ class GoogleCercadorCamoufox(CercadorBase):
                 textarea.type(char)
                 sleep(0.05)  # Petita pausa entre caràcters
             
-            sleep(0.5)  # Pausa abans d'enviar
-            textarea.press('Enter')
+            sleep(self.config.temps_espera_processos)  # Pausa abans d'enviar
+            # No ha funcionat això. Retorna un elementHandle.press("Enter") Call log
+            # Utilitzem una alternativa: enviem Enter amb evaluate
+            page.evaluate("(el) => el.dispatchEvent(new KeyboardEvent('keydown', {key: 'Enter', keyCode: 13, which: 13, code: 'Enter'}))", textarea)
+            page.evaluate("(el) => el.dispatchEvent(new KeyboardEvent('keyup', {key: 'Enter', keyCode: 13, which: 13, code: 'Enter'}))", textarea)
 
             sleep(self.config.temps_espera_cerques)
             
