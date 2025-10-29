@@ -33,6 +33,7 @@ def obtenir_sensor() -> str:
         sys.exit(1)
     return sensor
 
+# Només retorna el navegador Camoufox
 def crea_navegador(navegador_text: str, amplada: int, altura: int, config: Config):
     
     try:

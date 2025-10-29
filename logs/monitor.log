@@ -1,1 +1,13 @@
 
+2025-10-20 12:04:23,503 [ERROR] [config.py:62] - Error en la connexió a PostgreSQL: connection to server at "10.66.66.1", port 51432 failed: Operation timed out
+	Is the server running on that host and accepting TCP/IP connections?
+ (Cridat des de /Users/puntcat/Library/CloudStorage/OneDrive-FundaciópuntCAT/XMCD/repository/repository.py línia 37 funció connecta_bd)
+2025-10-20 12:04:23,506 [ERROR] [config.py:62] - Error en la connexió a PostgreSQL: Error en la connexió a PostgreSQL: connection to server at "10.66.66.1", port 51432 failed: Operation timed out
+	Is the server running on that host and accepting TCP/IP connections?
+ (Cridat des de /Users/puntcat/Library/CloudStorage/OneDrive-FundaciópuntCAT/XMCD/monitor_camoufox.py línia 25 funció inicia_base_dades)
+2025-10-20 12:09:29,358 [ERROR] [config.py:62] - Error en la connexió a PostgreSQL: connection to server at "168.119.121.121", port 51432 failed: Operation timed out
+	Is the server running on that host and accepting TCP/IP connections?
+ (Cridat des de /Users/puntcat/Library/CloudStorage/OneDrive-FundaciópuntCAT/XMCD/repository/repository.py línia 37 funció connecta_bd)
+2025-10-20 12:09:29,361 [ERROR] [config.py:62] - Error en la connexió a PostgreSQL: Error en la connexió a PostgreSQL: connection to server at "168.119.121.121", port 51432 failed: Operation timed out
+	Is the server running on that host and accepting TCP/IP connections?
+ (Cridat des de /Users/puntcat/Library/CloudStorage/OneDrive-FundaciópuntCAT/XMCD/monitor_camoufox.py línia 25 funció inicia_base_dades)

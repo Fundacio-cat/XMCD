@@ -17,20 +17,9 @@ class GoogleCercadorCamoufox(CercadorBase):
             acceptat = False
             page = self.navegador.page
             
-            # Simula comportament humà abans d'anar a Google
-            # Va primer a una pàgina neutral per semblar més natural
-            page.goto('https://www.wikipedia.org')
-            sleep(2)  # Espera curta per semblar natural
-            
-            # Ara va a Google
+            # Va a Google
             page.goto('https://www.google.com')
             sleep(self.config.temps_espera_cerques)
-            
-            # Simula moviment del ratolí per semblar més humà
-            page.mouse.move(100, 100)
-            sleep(0.5)
-            page.mouse.move(200, 150)
-            sleep(0.5)
             
             # Intenta acceptar les cookies
             buttons = page.query_selector_all('button')
