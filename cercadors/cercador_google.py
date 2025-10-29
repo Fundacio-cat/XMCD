@@ -96,8 +96,14 @@ class GoogleCercador(CercadorBase):
         except:
             raise ValueError("No s'ha pogut fer la cerca")
 
+        # Si hi ha un captcha de Cloudflare, espera a que es resolgui.
+        if self.detecta_captcha(browser):
+            self.supera_captcha(browser)
+
+
+        sleep(self.config.temps_espera_processos)
+        
         while resultats_desats <= 10 and intents < 3:
-            intents += 1
             sleep(self.config.temps_espera_processos)
             nom_captura_1 = self.composa_nom_captura("error", navegador_text)
             nom_captura_2 = self.composa_nom_captura(cerca, navegador_text, suffix="2a")
@@ -196,3 +202,44 @@ class GoogleCercador(CercadorBase):
 
             else:
                 return resultats
+
+    def detecta_captcha(self, browser):
+        selectors_xpath = [
+            '//iframe[contains(@src, "recaptcha")]',
+            '//div[contains(@class, "g-recaptcha")]',
+            '//div[@id="captcha-form"]',
+            '//form[contains(@action, "CaptchaRedirect")]',
+            '//div[contains(@aria-label, "verificació")]'
+        ]
+
+        textos_captcha = [
+            'our systems have detected unusual traffic',
+            'hem detectat un trànsit inusual',
+            'abans de continuar',
+            "before you continue",
+            "i'm not a robot",
+            "no soc un robot",
+            'per comprovar que ets una persona'
+        ]
+
+        try:
+            for selector in selectors_xpath:
+                elements = browser.find_elements(By.XPATH, selector)
+                if elements:
+                    logging.warning(
+                        f"Captcha de Google detectat mitjançant selector: {selector}")
+                    return True
+
+            page_source = browser.page_source.lower()
+            if any(text in page_source for text in textos_captcha):
+                logging.warning("Captcha de Google detectat mitjançant text a la pàgina")
+                return True
+
+        except Exception as e:
+            self.config.write_log(
+                f"Error detectant el captcha de Google: {e}", level=logging.WARNING)
+
+        return False
+
+    def supera_captcha(self, browser):
+        pass
