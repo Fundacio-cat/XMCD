@@ -18,7 +18,7 @@ class CamoufoxNavegador(NavegadorBase):
                 context_ua = self._obte_context_user_agent(user_agent)
 
                 camoufox_instance = Camoufox(
-                    headless=False,
+                    headless=True,
                     humanize=True,
                     locale=context_ua["locale"]
                 )
