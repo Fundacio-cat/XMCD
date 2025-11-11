@@ -27,7 +27,22 @@ class GoogleCercadorCamoufox(CercadorBase):
             sleep(2)  # Espera curta per semblar natural
             
             # Ara va a Google
-            page.goto('https://www.google.com')
+            try:
+                page.goto(
+                    'https://www.google.com',
+                    wait_until='domcontentloaded',
+                    timeout=max(60000, self.config.temps_espera_cerques * 1000)
+                )
+            except PlaywrightTimeoutError:
+                self.config.write_log(
+                    "Timeout carregant google.com; intentant de nou amb URL alternativa.",
+                    level=logging.WARNING
+                )
+                page.goto(
+                    self._genera_url_cerca(''),
+                    wait_until='domcontentloaded',
+                    timeout=max(60000, self.config.temps_espera_cerques * 1000)
+                )
             page.wait_for_load_state('domcontentloaded')
             sleep(self.config.temps_espera_cerques)
             
