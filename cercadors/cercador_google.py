@@ -3,7 +3,9 @@ import logging
 from cercadors.cercador_base import CercadorBase
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-from selenium.common.exceptions import NoSuchElementException, WebDriverException
+from selenium.common.exceptions import NoSuchElementException, WebDriverException, TimeoutException
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from datetime import datetime
 import logging
 from utils.selenium_helpers import cerca_dades
@@ -96,13 +98,13 @@ class GoogleCercador(CercadorBase):
         except:
             raise ValueError("No s'ha pogut fer la cerca")
 
-
-        sleep(120)
+        sleep(self.config.temps_espera_cerques)
 
         # Si hi ha un captcha de Cloudflare, espera a que es resolgui.
         if self.detecta_captcha(browser):
-            sleep(600)
             self.supera_captcha(browser)
+
+            sleep(300)
 
         sleep(self.config.temps_espera_cerques + 20)
         
@@ -205,35 +207,10 @@ class GoogleCercador(CercadorBase):
                 return resultats
 
     def detecta_captcha(self, browser):
-        selectors_xpath = [
-            '//iframe[contains(@src, "recaptcha")]',
-            '//div[contains(@class, "g-recaptcha")]',
-            '//div[@id="captcha-form"]',
-            '//form[contains(@action, "CaptchaRedirect")]',
-            '//div[contains(@aria-label, "verificació")]'
-        ]
-
-        textos_captcha = [
-            'our systems have detected unusual traffic',
-            'hem detectat un trànsit inusual',
-            'abans de continuar',
-            "before you continue",
-            "i'm not a robot",
-            "no soc un robot",
-            'per comprovar que ets una persona'
-        ]
-
         try:
-            for selector in selectors_xpath:
-                elements = browser.find_elements(By.XPATH, selector)
-                if elements:
-                    logging.warning(
-                        f"Captcha de Google detectat mitjançant selector: {selector}")
-                    return True
-
-            page_source = browser.page_source.lower()
-            if any(text in page_source for text in textos_captcha):
-                logging.warning("Captcha de Google detectat mitjançant text a la pàgina")
+            elements = browser.find_elements(By.CSS_SELECTOR, 'div.rc-anchor-logo-text')
+            if any(element.text.strip().lower() == 'recaptcha' for element in elements):
+                logging.warning("Captcha de Google detectat mitjançant l'element rc-anchor-logo-text")
                 return True
 
         except Exception as e:
@@ -250,5 +227,40 @@ class GoogleCercador(CercadorBase):
         with open('page_source.html', 'w') as f:
             f.write(page_source)
 
-        
-        pass
+        iframe = None
+        try:
+            iframe = WebDriverWait(
+                browser,
+                self.config.temps_espera_processos
+            ).until(
+                EC.presence_of_element_located(
+                    (By.CSS_SELECTOR, 'iframe[src*="recaptcha"]')
+                )
+            )
+            browser.switch_to.frame(iframe)
+
+            checkbox = WebDriverWait(
+                browser,
+                self.config.temps_espera_processos
+            ).until(
+                EC.element_to_be_clickable(
+                    (By.CSS_SELECTOR, 'div.recaptcha-checkbox-border')
+                )
+            )
+            checkbox.click()
+            logging.info("Checkbox del reCAPTCHA clicat correctament.")
+        except TimeoutException:
+            logging.warning(
+                "No s'ha pogut trobar o clicar el checkbox del reCAPTCHA abans del temps límit."
+            )
+        except Exception as e:
+            self.config.write_log(
+                f"Error intentant superar el captcha de Google: {e}",
+                level=logging.WARNING
+            )
+        finally:
+            if iframe:
+                try:
+                    browser.switch_to.default_content()
+                except Exception:
+                    pass
