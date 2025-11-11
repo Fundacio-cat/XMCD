@@ -96,11 +96,12 @@ class GoogleCercador(CercadorBase):
         except:
             raise ValueError("No s'ha pogut fer la cerca")
 
-        sleep(self.config.temps_espera_cerques + 20)
+
+        sleep(120)
 
         # Si hi ha un captcha de Cloudflare, espera a que es resolgui.
         if self.detecta_captcha(browser):
-            sleep(120)
+            sleep(600)
             self.supera_captcha(browser)
 
         sleep(self.config.temps_espera_cerques + 20)
