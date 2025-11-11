@@ -1,6 +1,8 @@
 from camoufox.sync_api import Camoufox
 from navegadors.navegador_base import NavegadorBase
 import logging
+import re
+from typing import Dict
 
 
 class CamoufoxNavegador(NavegadorBase):
@@ -13,100 +15,32 @@ class CamoufoxNavegador(NavegadorBase):
 
         if user_agent:
             try:
-                # Inicialitza Camoufox amb configuració bàsica compatible
+                context_ua = self._obte_context_user_agent(user_agent)
+
                 camoufox_instance = Camoufox(
                     headless=False,
-                    humanize=True,  # Afegeix comportament humà
-                    locale='ca-ES'  # Català
+                    humanize=True,
+                    locale=context_ua["locale"],
+                    timezone=context_ua["timezone"]
                 )
-                
-                # Camoufox utilitza __enter__ per inicialitzar
-                # Retorna un Playwright Browser object
+
                 browser = camoufox_instance.__enter__()
-                
-                # Crea una nova pàgina amb user_agent personalitzat
-                page = browser.new_page(user_agent=user_agent)
-                
-                # Estableix la mida de la finestra
-                page.set_viewport_size({'width': self.amplada, 'height': self.altura})
-                
-                # Afegeix headers addicionals per semblar més humà
-                page.set_extra_http_headers({
-                    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
-                    'Accept-Language': 'ca-ES,ca;q=0.9,es;q=0.8,en;q=0.7',
-                    'Accept-Encoding': 'gzip, deflate, br',
-                    'DNT': '1',
-                    'Connection': 'keep-alive',
-                    'Upgrade-Insecure-Requests': '1',
-                    'Sec-Fetch-Dest': 'document',
-                    'Sec-Fetch-Mode': 'navigate',
-                    'Sec-Fetch-Site': 'none',
-                    'Sec-Fetch-User': '?1',
-                    'Cache-Control': 'max-age=0'
-                })
-                
-                # Injecta JavaScript per ocultar traces d'automatització
-                page.add_init_script("""
-                    // Elimina traces de webdriver
-                    Object.defineProperty(navigator, 'webdriver', {
-                        get: () => undefined,
-                    });
-                    
-                    // Modifica la propietat plugins per semblar més real
-                    Object.defineProperty(navigator, 'plugins', {
-                        get: () => [1, 2, 3, 4, 5],
-                    });
-                    
-                    // Modifica la propietat languages
-                    Object.defineProperty(navigator, 'languages', {
-                        get: () => ['ca-ES', 'ca', 'es', 'en'],
-                    });
-                    
-                    // Modifica la propietat platform
-                    Object.defineProperty(navigator, 'platform', {
-                        get: () => 'MacIntel',
-                    });
-                    
-                    // Modifica la propietat hardwareConcurrency
-                    Object.defineProperty(navigator, 'hardwareConcurrency', {
-                        get: () => 8,
-                    });
-                    
-                    // Modifica la propietat deviceMemory
-                    Object.defineProperty(navigator, 'deviceMemory', {
-                        get: () => 8,
-                    });
-                    
-                    // Elimina traces de Chrome automation
-                    window.chrome = {
-                        runtime: {},
-                    };
-                    
-                    // Modifica la propietat permissions
-                    const originalQuery = window.navigator.permissions.query;
-                    window.navigator.permissions.query = (parameters) => (
-                        parameters.name === 'notifications' ?
-                            Promise.resolve({ state: Notification.permission }) :
-                            originalQuery(parameters)
-                    );
-                    
-                    // Modifica la propietat getParameter
-                    const getParameter = WebGLRenderingContext.getParameter;
-                    WebGLRenderingContext.prototype.getParameter = function(parameter) {
-                        if (parameter === 37445) {
-                            return 'Intel Inc.';
-                        }
-                        if (parameter === 37446) {
-                            return 'Intel Iris OpenGL Engine';
-                        }
-                        return getParameter(parameter);
-                    };
-                """)
-                
-                # Guarda les referències per utilitzar-les més tard
+
+                context = browser.new_context(
+                    user_agent=user_agent,
+                    locale=context_ua["locale"],
+                    viewport={'width': self.amplada, 'height': self.altura},
+                    timezone_id=context_ua["timezone"],
+                    extra_http_headers=self._http_headers(context_ua)
+                )
+
+                page = context.new_page()
+                self._aplica_mode_stealth(page, context_ua, user_agent)
+
                 self.camoufox_instance = camoufox_instance
+                self.context = context
                 self.page = page
-                
+
             except Exception as e:
                 self.config.write_log(
                     f"Error iniciant el navegador Camoufox: {e}", level=logging.ERROR)
@@ -123,7 +57,15 @@ class CamoufoxNavegador(NavegadorBase):
         """
         try:
             if hasattr(self, 'page') and self.page:
-                self.page.close()
+                try:
+                    self.page.close()
+                except Exception:
+                    pass
+            if hasattr(self, 'context') and self.context:
+                try:
+                    self.context.close()
+                except Exception:
+                    pass
             if hasattr(self, 'camoufox_instance') and self.camoufox_instance:
                 # Crida __exit__ per tancar correctament el context manager
                 self.camoufox_instance.__exit__(None, None, None)
@@ -146,4 +88,130 @@ class CamoufoxNavegador(NavegadorBase):
         except Exception as e:
             self.config.write_log(
                 f"Error capturant la pantalla: {e}", level=logging.ERROR)
+
+    def _http_headers(self, context_ua: Dict[str, str]) -> Dict[str, str]:
+        return {
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+            'Accept-Language': context_ua["accept_languages"],
+            'Accept-Encoding': 'gzip, deflate, br',
+            'DNT': '1',
+            'Connection': 'keep-alive',
+            'Upgrade-Insecure-Requests': '1',
+            'Sec-Fetch-Dest': 'document',
+            'Sec-Fetch-Mode': 'navigate',
+            'Sec-Fetch-Site': 'none',
+            'Sec-Fetch-User': '?1',
+            'Cache-Control': 'max-age=0'
+        }
+
+    def _aplica_mode_stealth(self, page, context_ua: Dict[str, str], user_agent: str) -> None:
+        """Injecta JavaScript per eliminar rastres d'automatització."""
+        try:
+            user_agent_js = user_agent.replace("\\", "\\\\").replace("'", "\\'")
+            platform_js = context_ua["platform"].replace("\\", "\\\\").replace("'", "\\'")
+            oscpu_js = context_ua["oscpu"].replace("\\", "\\\\").replace("'", "\\'")
+            languages_array = "[" + ", ".join(f"'{lang}'" for lang in context_ua["navigator_languages"]) + "]"
+
+            script = f"""
+                (() => {{
+                    const patch = (object, property, value) => {{
+                        try {{
+                            Object.defineProperty(object, property, {{
+                                configurable: true,
+                                get: () => value
+                            }});
+                        }} catch (error) {{
+                            console.warn('No s\\'ha pogut sobrescriure', property, error);
+                        }}
+                    }};
+
+                    patch(navigator, 'webdriver', undefined);
+                    patch(navigator, 'userAgent', '{user_agent_js}');
+                    patch(navigator, 'platform', '{platform_js}');
+                    patch(navigator, 'oscpu', '{oscpu_js}');
+                    patch(navigator, 'language', '{context_ua["navigator_languages"][0]}');
+                    patch(navigator, 'languages', {languages_array});
+                    patch(navigator, 'vendor', '{context_ua["vendor"]}');
+                    patch(navigator, 'hardwareConcurrency', {context_ua["hardware_concurrency"]});
+                    patch(navigator, 'deviceMemory', {context_ua["device_memory"]});
+                    patch(navigator, 'maxTouchPoints', {context_ua["max_touch_points"]});
+                    patch(navigator, 'plugins', [
+                        {{ name: "PDF Viewer", filename: "internal-pdf-viewer", description: "Portable Document Format" }},
+                        {{ name: "Widevine Content Decryption Module", filename: "widevinecdm", description: "Enables Widevine licenses" }},
+                        {{ name: "Shockwave Flash", filename: "NPSWF32_32_0_0_465.dll", description: "Shockwave Flash 32.0 r0" }}
+                    ]);
+
+                    if (!window.chrome) {{
+                        patch(window, 'chrome', {{ runtime: {{}} }});
+                    }}
+
+                    if (navigator.permissions && navigator.permissions.query) {{
+                        const originalQuery = navigator.permissions.query.bind(navigator.permissions);
+                        navigator.permissions.query = (parameters) => {{
+                            if (parameters && parameters.name === 'notifications' && typeof Notification !== 'undefined') {{
+                                return Promise.resolve({{ state: Notification.permission }});
+                            }}
+                            return originalQuery(parameters);
+                        }};
+                    }}
+                }})();
+            """
+
+            page.add_init_script(script)
+        except Exception as e:
+            self.config.write_log(
+                f"No s'ha pogut aplicar el mode stealth al Camoufox: {e}", level=logging.WARNING)
+
+    def _obte_context_user_agent(self, user_agent: str) -> Dict[str, str]:
+        """Construeix propietats coherents a partir del user-agent."""
+        ua_lower = user_agent.lower()
+        context = {
+            "platform": "Win32",
+            "oscpu": "Windows NT 10.0; Win64; x64",
+            "locale": "ca-ES",
+            "accept_languages": "ca-ES,ca;q=0.9,es;q=0.8,en;q=0.6",
+            "navigator_languages": ["ca-ES", "ca", "es", "en"],
+            "vendor": "",
+            "hardware_concurrency": 8,
+            "device_memory": 8,
+            "max_touch_points": 0,
+            "timezone": "Europe/Madrid"
+        }
+
+        if "mac os x" in ua_lower or "macintosh" in ua_lower:
+            context.update({
+                "platform": "MacIntel",
+                "oscpu": "Intel Mac OS X 10_15_7",
+                "vendor": "Apple Computer, Inc.",
+                "hardware_concurrency": 8,
+                "device_memory": 8,
+                "max_touch_points": 0,
+                "timezone": "Europe/Madrid"
+            })
+        elif "linux" in ua_lower and "android" not in ua_lower:
+            context.update({
+                "platform": "Linux x86_64",
+                "oscpu": "Linux x86_64",
+                "vendor": "",
+                "hardware_concurrency": 12,
+                "device_memory": 16,
+                "max_touch_points": 1,
+                "timezone": "Europe/Madrid"
+            })
+        elif "android" in ua_lower:
+            context.update({
+                "platform": "Linux armv8l",
+                "oscpu": "Linux armv8l",
+                "vendor": "Google Inc.",
+                "hardware_concurrency": 8,
+                "device_memory": 4,
+                "max_touch_points": 5,
+                "timezone": "Europe/Madrid"
+            })
+
+        match = re.search(r"\(([^)]+)\)", user_agent)
+        if match:
+            context["oscpu"] = match.group(1)
+
+        return context
 
