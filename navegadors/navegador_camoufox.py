@@ -2,7 +2,7 @@ from camoufox.sync_api import Camoufox
 from navegadors.navegador_base import NavegadorBase
 import logging
 import re
-from typing import Dict
+from typing import Dict, Set
 
 
 class CamoufoxNavegador(NavegadorBase):
@@ -25,15 +25,21 @@ class CamoufoxNavegador(NavegadorBase):
 
                 browser = camoufox_instance.__enter__()
 
+                viewport = self._calcula_viewport(context_ua)
                 context = browser.new_context(
                     user_agent=user_agent,
-                    locale=context_ua["locale"],
-                    viewport={'width': self.amplada, 'height': self.altura},
+                locale=context_ua["locale"],
+                    viewport=viewport,
+                    device_scale_factor=context_ua["device_scale_factor"],
                     timezone_id=context_ua["timezone"],
                     extra_http_headers=self._http_headers(context_ua)
                 )
 
+                self._configura_context(context, context_ua)
+
                 page = context.new_page()
+                page.set_default_timeout(max(self.config.temps_espera_cerques * 1000, 45000))
+                page.set_default_navigation_timeout(max(self.config.temps_espera_cerques * 1000, 45000))
                 self._aplica_mode_stealth(page, context_ua, user_agent)
 
                 self.camoufox_instance = camoufox_instance
@@ -87,6 +93,44 @@ class CamoufoxNavegador(NavegadorBase):
         except Exception as e:
             self.config.write_log(
                 f"Error capturant la pantalla: {e}", level=logging.ERROR)
+
+    def _configura_context(self, context, context_ua: Dict[str, str]) -> None:
+        """Redueix el consum bloquejant recursos i ajustant user agent i idiomes."""
+        recursos_bloquejats: Set[str] = {"image", "media", "font"}
+
+        def _gestiona_ruta(route):
+            try:
+                resource_type = route.request.resource_type
+                if resource_type in recursos_bloquejats:
+                    return route.abort()
+                return route.continue_()
+            except Exception:
+                return route.continue_()
+
+        try:
+            context.route("**/*", _gestiona_ruta)
+        except Exception as e:
+            self.config.write_log(
+                f"No s'ha pogut configurar el bloqueig de recursos al Camoufox: {e}",
+                level=logging.WARNING
+            )
+
+        try:
+            context.set_extra_http_headers({
+                **self._http_headers(context_ua),
+                "User-Agent": context_ua["user_agent_override"]
+            })
+        except Exception as e:
+            self.config.write_log(
+                f"No s'han pogut establir headers addicionals al context: {e}",
+                level=logging.WARNING
+            )
+
+    def _calcula_viewport(self, context_ua: Dict[str, str]) -> Dict[str, int]:
+        """Ajusta la mida de finestra segons les capacitats del dispositiu."""
+        amplada = max(640, min(self.amplada, context_ua["max_amplada"]))
+        altura = max(360, min(self.altura, context_ua["max_altura"]))
+        return {'width': amplada, 'height': altura}
 
     def _http_headers(self, context_ua: Dict[str, str]) -> Dict[str, str]:
         return {
@@ -174,7 +218,11 @@ class CamoufoxNavegador(NavegadorBase):
             "hardware_concurrency": 8,
             "device_memory": 8,
             "max_touch_points": 0,
-            "timezone": "Europe/Madrid"
+            "timezone": "Europe/Madrid",
+            "device_scale_factor": 1,
+            "max_amplada": 1280,
+            "max_altura": 720,
+            "user_agent_override": user_agent
         }
 
         if "mac os x" in ua_lower or "macintosh" in ua_lower:
@@ -185,7 +233,10 @@ class CamoufoxNavegador(NavegadorBase):
                 "hardware_concurrency": 8,
                 "device_memory": 8,
                 "max_touch_points": 0,
-                "timezone": "Europe/Madrid"
+                "timezone": "Europe/Madrid",
+                "device_scale_factor": 2,
+                "max_amplada": 1280,
+                "max_altura": 720
             })
         elif "linux" in ua_lower and "android" not in ua_lower:
             context.update({
@@ -195,7 +246,10 @@ class CamoufoxNavegador(NavegadorBase):
                 "hardware_concurrency": 12,
                 "device_memory": 16,
                 "max_touch_points": 1,
-                "timezone": "Europe/Madrid"
+                "timezone": "Europe/Madrid",
+                "device_scale_factor": 1,
+                "max_amplada": 1280,
+                "max_altura": 720
             })
         elif "android" in ua_lower:
             context.update({
@@ -205,7 +259,10 @@ class CamoufoxNavegador(NavegadorBase):
                 "hardware_concurrency": 8,
                 "device_memory": 4,
                 "max_touch_points": 5,
-                "timezone": "Europe/Madrid"
+                "timezone": "Europe/Madrid",
+                "device_scale_factor": 1.5,
+                "max_amplada": 720,
+                "max_altura": 1280
             })
 
         match = re.search(r"\(([^)]+)\)", user_agent)
