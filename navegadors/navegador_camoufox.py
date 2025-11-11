@@ -20,8 +20,7 @@ class CamoufoxNavegador(NavegadorBase):
                 camoufox_instance = Camoufox(
                     headless=False,
                     humanize=True,
-                    locale=context_ua["locale"],
-                    timezone=context_ua["timezone"]
+                    locale=context_ua["locale"]
                 )
 
                 browser = camoufox_instance.__enter__()
