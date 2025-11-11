@@ -1,16 +1,18 @@
 import os
 import logging
+import random
 from cercadors.cercador_base import CercadorBase
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common.exceptions import NoSuchElementException, WebDriverException, TimeoutException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from datetime import datetime
-import logging
 from utils.selenium_helpers import cerca_dades
 from utils.utils import assegura_directori_existeix
 from time import sleep
+from urllib.parse import quote_plus
 
 from os.path import sep
 from datetime import datetime
@@ -23,6 +25,10 @@ class GoogleCercador(CercadorBase):
         # Configura el valor de self.navegador com a 1 (Chrome)
         id_cercador_db = 1
         try:
+            if getattr(self.config.navegador, "id_navegador_db", None) == 2:
+                logging.info("Firefox detectat: s'omet la càrrega inicial de google.com")
+                return id_cercador_db
+
             acceptat = False
             self.browser.get('https://www.google.com')
             sleep(self.config.temps_espera_cerques)
@@ -90,13 +96,16 @@ class GoogleCercador(CercadorBase):
 
         sleep(self.config.temps_espera_processos)
         try:
-            textarea = self.browser.find_element(By.TAG_NAME, value='textarea')
-            textarea.send_keys(Keys.CONTROL, 'a')
-            textarea.send_keys(Keys.DELETE)
-            # Envia la nova cerca
-            textarea.send_keys(cerca + Keys.ENTER)
-        except:
-            raise ValueError("No s'ha pogut fer la cerca")
+            if getattr(self.config.navegador, "id_navegador_db", None) == 2:
+                self._executa_cerca_firefox(browser, cerca)
+            else:
+                textarea = self.browser.find_element(By.TAG_NAME, value='textarea')
+                textarea.send_keys(Keys.CONTROL, 'a')
+                textarea.send_keys(Keys.DELETE)
+                # Envia la nova cerca
+                textarea.send_keys(cerca + Keys.ENTER)
+        except Exception as error:
+            raise ValueError("No s'ha pogut fer la cerca") from error
 
         sleep(self.config.temps_espera_cerques)
 
@@ -193,10 +202,14 @@ class GoogleCercador(CercadorBase):
                         resultats_desats = 1
                         resultats = {}
                         intents += 1
-                        browser.get('https://google.com')
+                        if getattr(self.config.navegador, "id_navegador_db", None) == 2:
+                            self._executa_cerca_firefox(browser, cerca)
+                        else:
+                            browser.get('https://google.com')
+                            sleep(self.config.temps_espera_cerques)
+                            textarea = browser.find_element(By.TAG_NAME, value='textarea')
+                            textarea.send_keys(cerca + Keys.ENTER)
                         sleep(self.config.temps_espera_cerques)
-                        textarea = browser.find_element(By.TAG_NAME, value='textarea')
-                        textarea.send_keys(cerca + Keys.ENTER)
                         sleep(self.config.temps_espera_processos)
                         logging.info(f"Torna a realitzar la cerca. Intent {intents + 1} de 3")
                     else:
@@ -205,6 +218,51 @@ class GoogleCercador(CercadorBase):
 
             else:
                 return resultats
+
+    def _executa_cerca_firefox(self, browser, cerca: str) -> None:
+        """
+        Realitza la cerca utilitzant la barra de navegació de Firefox,
+        escrivint caràcter a caràcter per imitar un usuari.
+        """
+        url = f"https://www.google.com/search?q={quote_plus(cerca)}&hl=ca"
+        logging.info(f"Executant la cerca a Firefox mitjançant la barra d'adreces: {url}")
+
+        if not self._focus_barra_adreces(browser):
+            logging.warning("No s'ha pogut enfocar la barra d'adreces. Obrint la URL directament.")
+            browser.get(url)
+            return
+
+        try:
+            # El text existent queda seleccionat després del focus; assegurem que s'esborra.
+            ActionChains(browser).send_keys(Keys.DELETE).perform()
+
+            for caracter in url:
+                ActionChains(browser).send_keys(caracter).perform()
+                sleep(random.uniform(0.05, 0.18))
+
+            ActionChains(browser).send_keys(Keys.ENTER).perform()
+        except Exception as e:
+            self.config.write_log(
+                f"No s'ha pogut escriure la cerca a la barra d'adreces de Firefox: {e}",
+                level=logging.WARNING
+            )
+            browser.get(url)
+
+    def _focus_barra_adreces(self, browser) -> bool:
+        """Intenta enfocar la barra d'adreces utilitzant combinacions de teclat habituals."""
+        combinacions = [Keys.CONTROL, Keys.COMMAND]
+
+        enfocat = False
+        for tecla in combinacions:
+            try:
+                accions = ActionChains(browser)
+                accions.key_down(tecla).send_keys('l').key_up(tecla).perform()
+                sleep(0.2)
+                enfocat = True
+            except Exception:
+                continue
+
+        return enfocat
 
     def detecta_captcha(self, browser):
         try:
