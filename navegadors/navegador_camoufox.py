@@ -1,59 +1,44 @@
 from camoufox.sync_api import Camoufox
 from navegadors.navegador_base import NavegadorBase
 import logging
-import re
-from typing import Dict, Set
 
 
 class CamoufoxNavegador(NavegadorBase):
 
     def init_navegador(self):
-        browser = None
         # Configura el valor de self.navegador com a 3 (Camoufox)
         id_navegador_db = 3
         user_agent = self.repository.cerca_userAgent(id_navegador_db)
 
-        if user_agent:
-            try:
-                context_ua = self._obte_context_user_agent(user_agent)
-
-                camoufox_instance = Camoufox(
-                    headless=True,
-                    humanize=True,
-                    locale=context_ua["locale"]
-                )
-
-                browser = camoufox_instance.__enter__()
-
-                viewport = self._calcula_viewport(context_ua)
-                context = browser.new_context(
-                    user_agent=user_agent,
-                locale=context_ua["locale"],
-                    viewport=viewport,
-                    device_scale_factor=context_ua["device_scale_factor"],
-                    timezone_id=context_ua["timezone"],
-                    extra_http_headers=self._http_headers(context_ua)
-                )
-
-                self._configura_context(context, context_ua)
-
-                page = context.new_page()
-                page.set_default_timeout(max(self.config.temps_espera_cerques * 1000, 45000))
-                page.set_default_navigation_timeout(max(self.config.temps_espera_cerques * 1000, 45000))
-                self._aplica_mode_stealth(page, context_ua, user_agent)
-
-                self.camoufox_instance = camoufox_instance
-                self.context = context
-                self.page = page
-
-            except Exception as e:
-                self.config.write_log(
-                    f"Error iniciant el navegador Camoufox: {e}", level=logging.ERROR)
-                raise ValueError("Error iniciant el navegador Camoufox")
-        else:
+        if not user_agent:
             self.config.write_log(
                 "No hi ha user agent disponible.", level=logging.ERROR)
             raise ValueError("No hi ha user agent disponible.")
+
+        try:
+            camoufox_instance = Camoufox(
+                headless=False,
+                humanize=True,
+                locale='ca-ES'
+            )
+
+            browser = camoufox_instance.__enter__()
+            page = browser.new_page(user_agent=user_agent)
+            page.set_viewport_size({'width': self.amplada, 'height': self.altura})
+            page.set_default_timeout(max(self.config.temps_espera_cerques * 1000, 45000))
+            page.set_default_navigation_timeout(max(self.config.temps_espera_cerques * 1000, 45000))
+
+            self._aplica_mode_stealth(page, user_agent)
+
+            self.camoufox_instance = camoufox_instance
+            self.browser = browser
+            self.page = page
+
+        except Exception as e:
+            self.config.write_log(
+                f"Error iniciant el navegador Camoufox: {e}", level=logging.ERROR)
+            raise ValueError("Error iniciant el navegador Camoufox")
+
         return id_navegador_db, browser
     
     def tanca_navegador(self):
@@ -64,11 +49,6 @@ class CamoufoxNavegador(NavegadorBase):
             if hasattr(self, 'page') and self.page:
                 try:
                     self.page.close()
-                except Exception:
-                    pass
-            if hasattr(self, 'context') and self.context:
-                try:
-                    self.context.close()
                 except Exception:
                     pass
             if hasattr(self, 'camoufox_instance') and self.camoufox_instance:
@@ -94,67 +74,10 @@ class CamoufoxNavegador(NavegadorBase):
             self.config.write_log(
                 f"Error capturant la pantalla: {e}", level=logging.ERROR)
 
-    def _configura_context(self, context, context_ua: Dict[str, str]) -> None:
-        """Redueix el consum bloquejant recursos i ajustant user agent i idiomes."""
-        recursos_bloquejats: Set[str] = {"image", "media", "font"}
-
-        def _gestiona_ruta(route):
-            try:
-                resource_type = route.request.resource_type
-                if resource_type in recursos_bloquejats:
-                    return route.abort()
-                return route.continue_()
-            except Exception:
-                return route.continue_()
-
-        try:
-            context.route("**/*", _gestiona_ruta)
-        except Exception as e:
-            self.config.write_log(
-                f"No s'ha pogut configurar el bloqueig de recursos al Camoufox: {e}",
-                level=logging.WARNING
-            )
-
-        try:
-            context.set_extra_http_headers({
-                **self._http_headers(context_ua),
-                "User-Agent": context_ua["user_agent_override"]
-            })
-        except Exception as e:
-            self.config.write_log(
-                f"No s'han pogut establir headers addicionals al context: {e}",
-                level=logging.WARNING
-            )
-
-    def _calcula_viewport(self, context_ua: Dict[str, str]) -> Dict[str, int]:
-        """Ajusta la mida de finestra segons les capacitats del dispositiu."""
-        amplada = max(640, min(self.amplada, context_ua["max_amplada"]))
-        altura = max(360, min(self.altura, context_ua["max_altura"]))
-        return {'width': amplada, 'height': altura}
-
-    def _http_headers(self, context_ua: Dict[str, str]) -> Dict[str, str]:
-        return {
-            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
-            'Accept-Language': context_ua["accept_languages"],
-            'Accept-Encoding': 'gzip, deflate, br',
-            'DNT': '1',
-            'Connection': 'keep-alive',
-            'Upgrade-Insecure-Requests': '1',
-            'Sec-Fetch-Dest': 'document',
-            'Sec-Fetch-Mode': 'navigate',
-            'Sec-Fetch-Site': 'none',
-            'Sec-Fetch-User': '?1',
-            'Cache-Control': 'max-age=0'
-        }
-
-    def _aplica_mode_stealth(self, page, context_ua: Dict[str, str], user_agent: str) -> None:
-        """Injecta JavaScript per eliminar rastres d'automatització."""
+    def _aplica_mode_stealth(self, page, user_agent: str) -> None:
+        """Injecta JavaScript per ocultar rastres d'automatització bàsics."""
         try:
             user_agent_js = user_agent.replace("\\", "\\\\").replace("'", "\\'")
-            platform_js = context_ua["platform"].replace("\\", "\\\\").replace("'", "\\'")
-            oscpu_js = context_ua["oscpu"].replace("\\", "\\\\").replace("'", "\\'")
-            languages_array = "[" + ", ".join(f"'{lang}'" for lang in context_ua["navigator_languages"]) + "]"
-
             script = f"""
                 (() => {{
                     const patch = (object, property, value) => {{
@@ -170,19 +93,14 @@ class CamoufoxNavegador(NavegadorBase):
 
                     patch(navigator, 'webdriver', undefined);
                     patch(navigator, 'userAgent', '{user_agent_js}');
-                    patch(navigator, 'platform', '{platform_js}');
-                    patch(navigator, 'oscpu', '{oscpu_js}');
-                    patch(navigator, 'language', '{context_ua["navigator_languages"][0]}');
-                    patch(navigator, 'languages', {languages_array});
-                    patch(navigator, 'vendor', '{context_ua["vendor"]}');
-                    patch(navigator, 'hardwareConcurrency', {context_ua["hardware_concurrency"]});
-                    patch(navigator, 'deviceMemory', {context_ua["device_memory"]});
-                    patch(navigator, 'maxTouchPoints', {context_ua["max_touch_points"]});
-                    patch(navigator, 'plugins', [
-                        {{ name: "PDF Viewer", filename: "internal-pdf-viewer", description: "Portable Document Format" }},
-                        {{ name: "Widevine Content Decryption Module", filename: "widevinecdm", description: "Enables Widevine licenses" }},
-                        {{ name: "Shockwave Flash", filename: "NPSWF32_32_0_0_465.dll", description: "Shockwave Flash 32.0 r0" }}
-                    ]);
+                    patch(navigator, 'languages', ['ca-ES', 'ca', 'es', 'en']);
+                    patch(navigator, 'language', 'ca-ES');
+                    patch(navigator, 'vendor', '');
+                    patch(navigator, 'platform', navigator.platform || 'Win32');
+                    patch(navigator, 'hardwareConcurrency', navigator.hardwareConcurrency || 4);
+                    patch(navigator, 'deviceMemory', navigator.deviceMemory || 4);
+                    patch(navigator, 'maxTouchPoints', navigator.maxTouchPoints || 0);
+                    patch(navigator, 'plugins', [1, 2, 3, 4]);
 
                     if (!window.chrome) {{
                         patch(window, 'chrome', {{ runtime: {{}} }});
@@ -199,75 +117,7 @@ class CamoufoxNavegador(NavegadorBase):
                     }}
                 }})();
             """
-
             page.add_init_script(script)
         except Exception as e:
             self.config.write_log(
                 f"No s'ha pogut aplicar el mode stealth al Camoufox: {e}", level=logging.WARNING)
-
-    def _obte_context_user_agent(self, user_agent: str) -> Dict[str, str]:
-        """Construeix propietats coherents a partir del user-agent."""
-        ua_lower = user_agent.lower()
-        context = {
-            "platform": "Win32",
-            "oscpu": "Windows NT 10.0; Win64; x64",
-            "locale": "ca-ES",
-            "accept_languages": "ca-ES,ca;q=0.9,es;q=0.8,en;q=0.6",
-            "navigator_languages": ["ca-ES", "ca", "es", "en"],
-            "vendor": "",
-            "hardware_concurrency": 8,
-            "device_memory": 8,
-            "max_touch_points": 0,
-            "timezone": "Europe/Madrid",
-            "device_scale_factor": 1,
-            "max_amplada": 1280,
-            "max_altura": 720,
-            "user_agent_override": user_agent
-        }
-
-        if "mac os x" in ua_lower or "macintosh" in ua_lower:
-            context.update({
-                "platform": "MacIntel",
-                "oscpu": "Intel Mac OS X 10_15_7",
-                "vendor": "Apple Computer, Inc.",
-                "hardware_concurrency": 8,
-                "device_memory": 8,
-                "max_touch_points": 0,
-                "timezone": "Europe/Madrid",
-                "device_scale_factor": 2,
-                "max_amplada": 1280,
-                "max_altura": 720
-            })
-        elif "linux" in ua_lower and "android" not in ua_lower:
-            context.update({
-                "platform": "Linux x86_64",
-                "oscpu": "Linux x86_64",
-                "vendor": "",
-                "hardware_concurrency": 12,
-                "device_memory": 16,
-                "max_touch_points": 1,
-                "timezone": "Europe/Madrid",
-                "device_scale_factor": 1,
-                "max_amplada": 1280,
-                "max_altura": 720
-            })
-        elif "android" in ua_lower:
-            context.update({
-                "platform": "Linux armv8l",
-                "oscpu": "Linux armv8l",
-                "vendor": "Google Inc.",
-                "hardware_concurrency": 8,
-                "device_memory": 4,
-                "max_touch_points": 5,
-                "timezone": "Europe/Madrid",
-                "device_scale_factor": 1.5,
-                "max_amplada": 720,
-                "max_altura": 1280
-            })
-
-        match = re.search(r"\(([^)]+)\)", user_agent)
-        if match:
-            context["oscpu"] = match.group(1)
-
-        return context
-
